@@ -7,6 +7,7 @@ use BrizyPlaceholders\AbstractPlaceholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 use Exception;
+use Twig_Environment;
 
 abstract class PlaceholderAbstract extends AbstractPlaceholder
 {
@@ -16,12 +17,18 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
     protected $name = '';
 
     /**
+     * @var Twig_Environment
+     */
+    protected $twig;
+
+    /**
      * @var MonkCms
      */
     protected $monkCMS;
 
-    public function __construct(MonkCms $monkCMS)
+    public function __construct(MonkCms $monkCMS, Twig_Environment $twig)
     {
+        $this->twig    = $twig;
         $this->monkCMS = $monkCMS;
     }
 

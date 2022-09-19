@@ -42,7 +42,7 @@ class SermonListPlaceholder extends PlaceholderAbstract
         }
 
         $twigHtml = file_get_contents(
-            __DIR__ . '/../../Resources/views/Placeholder/Ekklesia360/sermon_list.html.twig'
+            __DIR__ . '/../views/sermon_list.html.twig'
         );
 
         $template = $this->twig->createTemplate($twigHtml);

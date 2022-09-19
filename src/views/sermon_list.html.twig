@@ -1,0 +1,140 @@
+<div id="brz_sermon_list_wrap" class="brz_sermon_list_wrap">
+
+    {% if content.show|length > 0 %}
+    <div class="brz_sermon_list" data-columncount="{{ column_count }}"
+         data-columncount-tablet="{{ column_count_tablet }}" data-columncount-mobile="{{ column_count_mobile }}">
+        {% for key, item in content.show %}
+            <article>
+                <div class=\"info\">
+                    {% if show_images and item.imageurl is defined and not show_video %}
+                        {% if detail_url %}
+                            <a href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
+                        {% endif %}
+
+                        <div class="image"><img src="{{ item.imageurl }}" alt="\"/></div>
+
+                        {% if detail_url %}
+                            </a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if show_video %}
+                        {% if item.videoembed %}
+                            <div class="brz_sermon_media_responsive video">{{ item.videoembed }}</div>
+                        {% elseif item.videourl %}
+                            <div class="brz_sermon_media_responsive">
+                                <video src="{{ item.videourl }}" controls preload="none"
+                                width="1024" height="576" poster="{{ item.imageurl }}"
+                                type="video/{{ item.videourl|split('.')|last }}"><p>The Video could not be played.
+                                    Please <a
+                                            href="{{ item.videourl }}" target="_blank">download it here</a></p></video>
+                            </div>
+
+                        {% elseif show_image and item.imageurl %}
+                            <div class="image"><img src="{{ item.imageurl }}" alt="\"/></div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if show_audio and item.audiourl %}
+                        <div class="brz_sermon_media_audio">
+                            <audio src="{{ item.audiourl }}" controls preload="none"></audio>
+                        </div>
+                    {% endif %}
+
+
+                    {% if show_title %}
+                        <h4 class="brz_sermon_list_heading">
+                            {% if detail_url %}
+                            <a href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
+                                {% endif %}
+
+                                {{ item.title }}
+                                {{ detail_url ? "</a>" }}
+                        </h4>
+                    {% endif %}
+
+                    {% if show_date and item.date %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Date: " }}
+                            {{ item.date }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_category and item.category %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Category: " }}
+                            {{ item.category }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_group and item.group %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Group: " }}
+                            {{ item.group }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_series and item.series %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Series: " }}
+                            {{ item.series }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_preacher and item.preacher %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Speaker: " }}
+                            {{ item.preacher }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_passage and item.passages %}
+                        <h6 class="brz_sermon_list_meta">
+                            {{ show_meta_headings ? "Passages: " }}
+                            {{ item.passages }}
+                        </h6>
+                    {% endif %}
+
+                    {% if show_media_links %}
+                        <ul class="brz_sermon_list_media">
+                            {% if item.videoplayer %}
+                                <li class="brz_sermon_list_media_videoplayer">{{ preg_replace('/<a(.+?)>.+?<\/a>/i',"<a$1><i class=\"fas fa-desktop\"></i></a>", item.videoplayer) }}</li>
+                            {% endif %}
+
+                            {% if item.audioplayer %}
+                                <li class="brz_sermon_list_media_audioplayer">{{ preg_replace('/<a(.+?)>.+?<\/a>/i',"<a$1><i class=\"fas fa-volume-up\"></i></a>", item.audioplayer) }}</li>
+                            {% endif %}
+
+                            {% if item.notes %}
+                                <li class="brz_sermon_list_media_notes"><a href="{{ item.notes }}"
+                                                                           target="_blank"><i
+                                                class="fas fa-file-alt"></i></a></li>
+                            {% endif %}
+
+                        </ul>
+                    {% endif %}
+
+                    {% if show_preview and item.preview %}
+                        <p class="brz_sermon_list_preview">{{ item.preview }}</p>
+                    {% endif %}
+
+                    {% if detail_url and detail_page_button_text %}
+                        <p class="brz_sermon_list_detail_button"><a
+                                    href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}"
+                                    class="elementor-button-link elementor-button elementor-size-sm"><span
+                                        class="elementor-button-text">{{ detail_page_button_text }}</span></a></p>
+                    {% endif %}
+
+                </div>
+            </article>
+            </div>
+
+            {% if show_pagination and content.after_show.pagination %}
+                {{ content.after_show.pagination|replace({'id="pagination"': 'id="brz_sermon_list_pagination" class="brz_pagination"', 'page=':"brz_sermon_list_page="}) }}
+            {% endif %}
+
+        {% endfor %}
+    {% else %}
+        <p>There are no sermons available.</p>
+    {% endif %}
+</div>
