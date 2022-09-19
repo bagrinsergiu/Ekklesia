@@ -127,10 +127,10 @@ class EventListPlaceholder extends PlaceholderAbstract
                         }
                         if ($show_registration && ($item['registrationurl'] || $item['externalregistrationurl'])) {
                             if ($item['registrationurl']) {
-                                echo "<p class=\"ekklesia360_event_list_meta\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                                echo "<p class=\"ekklesia360_event_list_meta\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
                             }
                             if ($item['externalregistrationurl']) {
-                                echo "<p class=\"ekklesia360_event_list_meta\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                                echo "<p class=\"ekklesia360_event_list_meta\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
                             }
                         }
                         if ($show_preview && $item['preview']) {
@@ -138,7 +138,7 @@ class EventListPlaceholder extends PlaceholderAbstract
                             echo "<p class=\"ekklesia360_event_list_preview\">{$item['preview']}</p>";
                         }
                         if ($detail_url && $detail_page_button_text) {
-                            echo "<p class=\"ekklesia360_event_list_detail_button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slug}\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"ekklesia360_event_list_detail_button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slug}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                         }
                         echo "</div>";
                         echo "</article>";

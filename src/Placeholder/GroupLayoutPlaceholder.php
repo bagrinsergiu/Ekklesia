@@ -365,7 +365,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                             echo "<p class=\"ekklesia360_group_layout_preview\">{$item['description']}</p>";
                         }
                         if ($detail_url && $detail_page_button_text) {
-                            echo "<p class=\"ekklesia360_group_layout_detail_button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"ekklesia360_group_layout_detail_button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                         }
                         echo "</div>";
                         echo "</article>";

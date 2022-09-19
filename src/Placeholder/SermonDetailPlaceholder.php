@@ -146,10 +146,10 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
                             if (strpos($item['videoplayer'], 'class=')) {
                                 $item['videoplayer'] = str_replace("Launch Player", "Watch", $item['videoplayer']);
                                 $item['videoplayer'] = str_replace("Watch Video", "Watch", $item['videoplayer']);
-                                $item['videoplayer'] = str_replace('mcms_videoplayer', 'mcms_videoplayer elementor-button-link elementor-button elementor-size-sm ', $item['videoplayer']);
+                                $item['videoplayer'] = str_replace('mcms_videoplayer', 'mcms_videoplayer brz-button-link brz-button brz-size-sm ', $item['videoplayer']);
                             } else {
-                                $item['videoplayer'] = str_replace(">Launch Player", " class=\"elementor-button-link elementor-button elementor-size-sm\">Watch", $item['videoplayer']);
-                                $item['videoplayer'] = str_replace(">Watch Video", " class=\"elementor-button-link elementor-button elementor-size-sm\">Watch", $item['videoplayer']);
+                                $item['videoplayer'] = str_replace(">Launch Player", " class=\"brz-button-link brz-button brz-size-sm\">Watch", $item['videoplayer']);
+                                $item['videoplayer'] = str_replace(">Watch Video", " class=\"brz-button-link brz-button brz-size-sm\">Watch", $item['videoplayer']);
                             }
 
                             echo "<li class=\"ekklesia360_sermon_detail_media_videoplayer\">{$item['videoplayer']}</li>";
@@ -157,16 +157,16 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
 
                         if ($show_media_links_audio && !empty($item['audioplayer'])) {
                             $item['audioplayer'] = str_replace("Launch Player", "Listen", $item['audioplayer']);
-                            $item['audioplayer'] = str_replace('mcms_audioplayer', 'mcms_audioplayer elementor-button-link elementor-button elementor-size-sm ', $item['audioplayer']);
+                            $item['audioplayer'] = str_replace('mcms_audioplayer', 'mcms_audioplayer brz-button-link brz-button brz-size-sm ', $item['audioplayer']);
                             echo "<li class=\"ekklesia360_sermon_detail_media_audioplayer\">{$item['audioplayer']}</li>";
                         }
 
                         if ($show_media_links_download && !empty($item['audio'])) {
-                            echo "<li class=\"ekklesia360_sermon_detail_media_audiodownload\"><a href=\"{$item['audio']}\" class=\"elementor-button-link elementor-button elementor-size-sm\">Download Audio</a></li>";
+                            echo "<li class=\"ekklesia360_sermon_detail_media_audiodownload\"><a href=\"{$item['audio']}\" class=\"brz-button-link brz-button brz-size-sm\">Download Audio</a></li>";
                         }
 
                         if ($show_media_links_notes && !empty($item['notes'])) {
-                            echo "<li class=\"ekklesia360_sermon_detail_media_notes\"><a href=\"{$item['notes']}\" class=\"elementor-button-link elementor-button elementor-size-sm\" target=\"_blank\">Notes</a></li>";
+                            echo "<li class=\"ekklesia360_sermon_detail_media_notes\"><a href=\"{$item['notes']}\" class=\"brz-button-link brz-button brz-size-sm\" target=\"_blank\">Notes</a></li>";
                         }
 
                         echo "</ul>";

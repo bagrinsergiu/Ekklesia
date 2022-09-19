@@ -142,10 +142,10 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                         echo "</h6>";
                     }
                     if ($show_registration && $item['registrationurl']) {
-                        echo "<p class=\"ekklesia360_event_detail_meta\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                        echo "<p class=\"ekklesia360_event_detail_meta\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
                     }
                     if ($show_registration && $item['externalregistrationurl']) {
-                        echo "<p class=\"ekklesia360_event_detail_meta\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                        echo "<p class=\"ekklesia360_event_detail_meta\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
                     }
                     if ($show_description && $item['text']) {
                         echo "<div class=\"ekklesia360_event_detail_content\">{$item['text']}</div>";
