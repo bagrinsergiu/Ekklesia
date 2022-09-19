@@ -26,6 +26,11 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
      */
     protected $monkCMS;
 
+    /**
+     * @var null
+     */
+    protected $group;
+
     public function __construct(MonkCms $monkCMS, Twig_Environment $twig)
     {
         $this->twig    = $twig;
@@ -62,5 +67,13 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
      */
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder) {
         throw new Exception('Rewrite it in the child class: ' . get_called_class());
+    }
+
+    /**
+     * This function is required only for the wp installations.
+     * @return null
+     */
+    public function getGroup() {
+        return $this->group;
     }
 }
