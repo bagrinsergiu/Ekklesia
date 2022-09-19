@@ -1,0 +1,214 @@
+<?php
+
+namespace BrizyEkklesia\Placeholder\Ekklesia360;
+
+use BrizyPlaceholders\ContentPlaceholder;
+use BrizyPlaceholders\ContextInterface;
+
+class EventFeaturedPlaceholder extends PlaceholderAbstract
+{
+    protected $name = 'ekk_event_featured';
+
+    public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
+    {
+        $options = [
+            'show_image'              => true,
+            'show_title'              => true,
+            'show_date'               => true,
+            'show_category'           => true,
+            'show_group'              => true,
+            'show_meta_headings'      => true,
+            'show_location'           => true,
+            'show_room'               => true,
+            'show_coordinator'        => true,
+            'show_coordinator_email'  => false,
+            'show_coordinator_phone'  => false,
+            'show_cost'               => true,
+            'show_website'            => false,
+            'show_registration'       => true,
+            'show_description'        => true,
+            'event_latest'            => true,
+            'event_recent_list'       => 'none',
+            'event_slug'              => false,
+            'category'                => 'all',
+            'group'                   => 'all',
+            'features'                => '',
+            'nonfeatures'             => '',
+            'show_preview'            => true,
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        extract($settings);
+
+        $cms               = $this->monkCMS;
+        $event_recent_list = $settings['event_recent_list'] != 'none' ? $settings['event_recent_list'] : '';
+        $category          = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group             = $settings['group'] != 'all' ? $settings['group'] : '';
+        $detail_url        = $settings['detail_page'] ? home_url($settings['detail_page']) : false; // TODO - replace this wordpress function and find in the project all of them
+        $slugLink          = false;
+        $slug              = false;
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        //make content
+        if ($event_latest != '') {
+            $content = $cms->get([
+                'module'        => 'event',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'howmany'       => 1,
+                'find_category' => $category,
+                'find_group'    => $group,
+                'features'      => $features,
+                'nonfeatures'   => $nonfeatures,
+                'emailencode'   => 'no',
+            ])['show'][0];
+            $slugLink = $content["slug"];
+        } else {
+            if ($event_slug) {
+                $slug = $event_slug;
+                $slugLink = $slug;
+            } elseif ($event_recent_list != '') {
+                $slug = $event_recent_list;
+                $slugLink = $slug;
+            }
+        }
+
+        if ($slug) {
+            $content = $cms->get([
+                'module'      => 'event',
+                'display'     => 'detail',
+                'find'        => $slug,
+                'emailencode' => 'no',
+            ])['show'];
+        }
+        ?>
+
+        <div class="ekklesia360_event_featured_wrap">
+
+            <?php //output
+            if (count($content) > 0) {
+                $item = $content;
+                ?>
+
+                <div class="ekklesia360_event_featured">
+                    <?php
+                    echo "<article>";
+                    echo "<div class=\"info\">";
+                    if ($show_title) {
+                        echo "<h2 class=\"ekklesia360_event_featured_heading\">";
+                        if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\">";
+                        echo "{$item['title']}";
+                        if ($detail_url) echo "</a>";
+                        echo "</h4>";
+                    }
+                    if ($show_date) {
+                        echo "<h5 class=\"ekklesia360_event_featured_times\">{$item['eventtimes']}</h5>";
+                    }
+                    if ($show_image && $item['imageurl']) {
+                        if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\">";
+                        echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                        if ($detail_url) echo "</a>";
+
+                    }
+                    if ($show_category && $item['category']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Category: ";
+                        echo "{$item['category']}";
+                        echo "</h6>";
+                    }
+                    if ($show_group && $item['group']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Group: ";
+                        echo "{$item['group']}";
+                        echo "</h6>";
+                    }
+
+                    if ($show_location && $item['location']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">Location: {$item['location']}</h6>";
+                        if ($item['fulladdress']) {
+                            echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                            if ($show_meta_headings) echo "Address: ";
+                            echo "<a href=\"http://maps.google.com/maps?q={$item["fulladdress"]}\" target=\"_blank\">{$item['fulladdress']}</a>";
+                            echo "</h6>";
+                        }
+                    }
+                    if ($show_room && $item['room']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Room: ";
+                        echo "{$item['room']}";
+                        echo "</h6>";
+                    }
+                    if ($show_coordinator && $item['coordname']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Coordinator: ";
+                        echo "{$item['coordname']}";
+                        echo "</h6>";
+                        if ($show_coordinator_email && $item['coordemail']) {
+                            echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                            if ($show_meta_headings) echo "Coordinator Email: ";
+                            echo "<a href=\"mailto:{$item['coordemail']}\">{$item['coordemail']}</a>";
+                            echo "</h6>";
+                        }
+                        if ($show_coordinator_phone && $item['coordphone']) {
+                            echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                            if ($show_meta_headings) echo "Coordinator Phone: ";
+                            echo "{$item['coordphone']}";
+                            echo "</h6>";
+                        }
+                    }
+                    if ($show_cost && $item['cost']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Cost: ";
+                        echo "{$item['cost']}";
+                        echo "</h6>";
+                    }
+                    if ($show_website && $item['website']) {
+                        echo "<h6 class=\"ekklesia360_event_featured_meta\">";
+                        if ($show_meta_headings) echo "Website: ";
+                        echo "<a href=\"{$item['website']}\">{$item['website']}</a>";
+                        echo "</h6>";
+                    }
+                    if ($show_registration && $item['registrationurl']) {
+                        echo "<p class=\"ekklesia360_event_featured_meta\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                    }
+                    if ($show_registration && $item['externalregistrationurl']) {
+                        echo "<p class=\"ekklesia360_event_featured_meta\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">Register</span></a></p>";
+                    }
+                    if ($show_preview && $item['preview']) {
+                        $item['preview'] = substr($item['preview'], 0, 110) . " ...";
+                        echo "<p class=\"ekklesia360_event_featured_preview\">{$item['preview']}</p>";
+                    }
+                    if ($show_description && $item['text']) {
+                        echo "<div class=\"ekklesia360_event_featured_content\">{$item['text']}</div>";
+                    }
+
+                    if ($detail_url && $detail_page_button_text) {
+                        echo "<p class=\"ekklesia360_event_featured_detail_button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">{$detail_page_button_text}</span></a></p>";
+                    }
+
+                    echo "</div>";
+                    echo "</article>";
+                    ?>
+                </div>
+                <?php
+            } //no output
+            else {
+                ?>
+
+                <p>There is no event available.</p>
+
+                <?php
+            }
+            ?>
+        </div>
+        <?php
+    }
+}
