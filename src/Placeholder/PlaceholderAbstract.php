@@ -2,12 +2,11 @@
 
 namespace BrizyEkklesia\Placeholder\Ekklesia360;
 
-use AppBundle\Services\MinistryBrands\MonkCMS\MonkCMSService;
+use BrizyEkklesia\MonkCms;
 use BrizyPlaceholders\AbstractPlaceholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 use Exception;
-use Twig_Environment;
 
 abstract class PlaceholderAbstract extends AbstractPlaceholder
 {
@@ -17,18 +16,12 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
     protected $name = '';
 
     /**
-     * @var Twig_Environment
-     */
-    protected $twig;
-
-    /**
-     * @var MonkCMSService
+     * @var MonkCms
      */
     protected $monkCMS;
 
-    public function __construct($twig, MonkCMSService $monkCMS)
+    public function __construct(MonkCms $monkCMS)
     {
-        $this->twig    = $twig;
         $this->monkCMS = $monkCMS;
     }
 

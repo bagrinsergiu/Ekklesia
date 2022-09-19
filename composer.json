@@ -10,7 +10,6 @@
   ],
   "require": {
     "php": ">=5.6.0",
-    "twig/twig": "^1.0||^2.0",
     "bodnar1212/monkcms-php": "v1.0.0",
     "bagrinsergiu/content-placeholder": "2.0.6"
   },
