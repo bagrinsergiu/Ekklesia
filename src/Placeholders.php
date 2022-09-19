@@ -2,20 +2,20 @@
 
 namespace BrizyEkklesia;
 
-use BrizyEkklesia\Placeholder\Ekklesia360\EventCalendarPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\EventDetailPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\EventFeaturedPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\EventLayoutPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\EventListPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\GroupDetailPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\GroupFeaturedPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\GroupLayoutPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\GroupListPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\GroupSliderPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\SermonDetailPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\SermonFeaturedPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\SermonLayoutPlaceholder;
-use BrizyEkklesia\Placeholder\Ekklesia360\SermonListPlaceholder;
+use BrizyEkklesia\Placeholder\EventCalendarPlaceholder;
+use BrizyEkklesia\Placeholder\EventDetailPlaceholder;
+use BrizyEkklesia\Placeholder\EventFeaturedPlaceholder;
+use BrizyEkklesia\Placeholder\EventLayoutPlaceholder;
+use BrizyEkklesia\Placeholder\EventListPlaceholder;
+use BrizyEkklesia\Placeholder\GroupDetailPlaceholder;
+use BrizyEkklesia\Placeholder\GroupFeaturedPlaceholder;
+use BrizyEkklesia\Placeholder\GroupLayoutPlaceholder;
+use BrizyEkklesia\Placeholder\GroupListPlaceholder;
+use BrizyEkklesia\Placeholder\GroupSliderPlaceholder;
+use BrizyEkklesia\Placeholder\SermonDetailPlaceholder;
+use BrizyEkklesia\Placeholder\SermonFeaturedPlaceholder;
+use BrizyEkklesia\Placeholder\SermonLayoutPlaceholder;
+use BrizyEkklesia\Placeholder\SermonListPlaceholder;
 use Twig_Environment;
 
 class Placeholders

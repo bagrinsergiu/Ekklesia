@@ -1,6 +1,6 @@
 <?php
 
-namespace BrizyEkklesia\Placeholder\Ekklesia360;
+namespace BrizyEkklesia\Placeholder;
 
 use BrizyEkklesia\MonkCms;
 use BrizyPlaceholders\AbstractPlaceholder;

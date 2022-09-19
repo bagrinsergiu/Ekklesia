@@ -1,6 +1,6 @@
 <?php
 
-namespace BrizyEkklesia\Placeholder\Ekklesia360;
+namespace BrizyEkklesia\Placeholder;
 
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
