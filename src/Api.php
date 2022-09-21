@@ -2,96 +2,115 @@
 
 namespace BrizyEkklesia;
 
+use Exception;
+
 class Api {
-	/**
-	 * @var MonkCms
-	 */
-	private $monkCms;
 
-	public function __construct(MonkCms $monkCms)
-	{
-		$this->monkCms = $monkCms;
-	}
+    /**
+     * @var MonkCms
+     */
+    private $monkCms;
 
-	public function getSermonCategories() {
+    public function __construct(MonkCms $monkCms)
+    {
+        $this->monkCms = $monkCms;
+    }
 
-		$categories = $this->monkCms->get(array(
-			'module'  => 'sermon',
-			'display' => 'categories'
-		));
+    public function getCats($module)
+    {
+        $cats = $this->monkCms->get([
+            'module'  => $module,
+            'display' => 'categories'
+        ]);
 
-		$options = [];
+        $options = [];
 
-		foreach($categories['show'] as $category) {
-			$options[$category['slug']] = $category['name'];
-		}
+        foreach ($cats['show'] as $category) {
+            $options[$category['slug']] = $category['name'];
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 
-	public function getEventCategories() {
+    public function getGroups()
+    {
+        $groups = $this->monkCms->get([
+            'module'  => 'group',
+            'display' => 'list'
+        ]);
 
-		$categories = $this->monkCms->get(array(
-			'module'  => 'sermon',
-			'display' => 'categories'
-		));
+        $options = [];
+        foreach ($groups['show'] as $group) {
+            $options[$group['slug']] = $group['title'];
+        }
 
-		$options = [];
+        return $options;
+    }
 
-		foreach($categories['show'] as $category) {
-			$options[$category['slug']] = $category['name'];
-		}
+    public function getSeries()
+    {
+        $series = $this->monkCms->get([
+            'module'  => 'sermon',
+            'display' => 'list',
+            'groupby' => 'series'
+        ]);
 
-		return $options;
-	}
+        $options = [];
 
-	public function getGroups() {
-		$groups = $this->monkCms->get(array(
-			'module'  => 'group',
-			'display' => 'list'
-		));
+        foreach ($series['group_show'] as $serie) {
+            $options[$serie['slug']] = $serie['title'];
+        }
 
-		$options = [];
-		foreach($groups['show'] as $group) {
-			$options[$group['slug']] = $group['title'];
-		}
+        return $options;
+    }
 
-		return $options;
-	}
+    /**
+     * @param string $module - sermon|event
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function getRecent($module)
+    {
+        $recents = $this->monkCms->get([
+            'module'      => $module,
+            'display'     => 'list',
+            'order'       => 'recent',
+            'howmany'     => 20,
+            'emailencode' => 'no',
+        ]);
 
-	public function getSeries() {
-		$series = $this->monkCms->get(array(
-			'module'  => 'sermon',
-			'display' => 'list',
-			'groupby' => 'series'
-		));
+        $options = [];
 
-		$options = [];
+        foreach ($recents['show'] as $recent) {
+            $options[$recent['slug']] = isset($recent['title']) ? $recent['title'] : $recent['name'];
+        }
 
-		foreach($series['group_show'] as $serie) {
-			$options[$serie['slug']] = $serie['title'];
-		}
+        return $options;
+    }
 
-		return $options;
-	}
+    public function getCatsLevels($module)
+    {
+        $cats = $this->monkCms->get([
+            'module'  => $module,
+            'display' => 'categories'
+        ]);
 
-	public function getRecentSermons() {
-		$recentSermons = $this->monkCms->get([
-			'module'      => 'sermon',
-			'display'     => 'list',
-			'order'       => 'recent',
-			'howmany'     => 20,
-			'emailencode' => 'no',
-		]);
+        $parents = [];
+        foreach ($cats['level1'] as $cat) {
+            $parents[$cat['slug']] = $cat['name'];
+        }
+        asort($parents);
 
-		$options = [];
+        $childs = [];
+        foreach ($cats['level2'] as $cat) {
+            $childs[$cat['bid']] = $cat['name'];
+        }
+        asort($childs);
 
-		foreach($recentSermons['show'] as $recent) {
-			$options[$recent['slug']] = $recent['title'];
-		}
-
-		return $options;
-	}
-
-
+        return [
+            'parents' => $parents,
+            'childs'  => $childs,
+        ];
+    }
 }
