@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "008c8049289a9bf9fdbac4b5ded1d30a",
+    "content-hash": "2616bf42b4789ba5012dd929e0433b4f",
     "packages": [
         {
             "name": "bagrinsergiu/content-placeholder",
@@ -47,17 +47,17 @@
             "time": "2021-12-22T12:23:25+00:00"
         },
         {
-            "name": "bodnar1212/monkcms-php",
+            "name": "bagrinsergiu/monkcms-php",
             "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bodnar1212/monkcms-php.git",
-                "reference": "bdbc3cd504229d2d617de2930da191bee0d9835b"
+                "url": "https://github.com/bagrinsergiu/monkcms-php.git",
+                "reference": "66a19f80715e6916eb85021e8af258f6abb385f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bodnar1212/monkcms-php/zipball/bdbc3cd504229d2d617de2930da191bee0d9835b",
-                "reference": "bdbc3cd504229d2d617de2930da191bee0d9835b",
+                "url": "https://api.github.com/repos/bagrinsergiu/monkcms-php/zipball/66a19f80715e6916eb85021e8af258f6abb385f5",
+                "reference": "66a19f80715e6916eb85021e8af258f6abb385f5",
                 "shasum": ""
             },
             "require": {
@@ -135,9 +135,9 @@
             ],
             "support": {
                 "issues": "https://github.com/MonkDev/monkcms-php/issues",
-                "source": "https://github.com/bodnar1212/monkcms-php/tree/v1.0.0"
+                "source": "https://github.com/bagrinsergiu/monkcms-php/tree/v1.0.0"
             },
-            "time": "2022-09-07T16:10:50+00:00"
+            "time": "2022-09-21T15:11:43+00:00"
         },
         {
             "name": "rmccue/requests",
