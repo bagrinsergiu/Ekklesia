@@ -23,7 +23,7 @@ class Api {
             'display' => 'categories'
         ]);
 
-        $options = [];
+        $options = ["all"=>"All"];
 
         foreach ($cats['show'] as $category) {
             $options[$category['slug']] = $category['name'];
@@ -39,7 +39,7 @@ class Api {
             'display' => 'list'
         ]);
 
-        $options = [];
+        $options = ["all"=>"All"];
         foreach ($groups['show'] as $group) {
             $options[$group['slug']] = $group['title'];
         }
@@ -55,7 +55,7 @@ class Api {
             'groupby' => 'series'
         ]);
 
-        $options = [];
+        $options = ["all"=>"All"];
 
         foreach ($series['group_show'] as $serie) {
             $options[$serie['slug']] = $serie['title'];
