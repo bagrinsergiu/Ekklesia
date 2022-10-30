@@ -21,7 +21,6 @@
 						<div class="brz-sermonList__item--media--video">
 							<video src="{{ item.videourl }}" controls preload="none" width="1024" height="576" poster="{{ item.imageurl }}" type="video/{{ item.videourl|split('.')|last }}">
 								<p>The Video could not be played.
-									                                    Please
 									<a href="{{ item.videourl }}" target="_blank">download it here</a>
 								</p>
 							</video>
@@ -86,7 +85,7 @@
 					{% endif %}
 
 					{% if show_passage and item.passages %}
-						<h6 class="brz-sermonList__item--meta brz-sermonList__item--meta--links">
+						<h6 class="brz-sermonList__item--meta">
 							{{ show_meta_headings ? "Passages: " }}
 							{{ item.passages }}
 						</h6>
@@ -96,14 +95,24 @@
 						<ul class="brz-sermonList__item--media">
 
 							{% if item.videoplayer %}
-								<li class="brz-sermonList__item--media--videoplayer brz-sermonList__item--meta--links">
-									{{ preg_replace('/<a(.+?)>.+?<\/a>/i','<a$1><i class=\"fas fa-desktop\"></i></a>', item.videoplayer) }}
+								<li class="brz-sermonList__item--media--videoplayer">
+
+									{# {{ preg_replace('<a(.+?)href=\'(.+?)\'(.+?)?>(.+?)<\/a>', '<div data-href="$2">$4</div>', item.videoplayer|raw) }} #}
+									{# {{ preg_replace('<a(.+?)\'(.+?)\'(.+?)(.)(.)(.)>(.+?)<\/a>', '<div data-href="$3">$7</div>', item.videoplayer) }} #}
+
+									{# {{preg_replace('<a(.+?)\'(.+?)(.)(.)(.)>(.+?)<\/a>', '<div data-href="$2">$6</div>', item.videoplayer )}} #}
+
+								{{ preg_replace('/<a(.+?)>.+?<\/a>/i','<a$1><i class=\"fas fa-desktop\"></i></a>', item.videoplayer) }}
+
+									{# {{item.videoplayer}} #}
 
 								</li>
 							{% endif %}
 
 							{% if item.audioplayer %}
-								<li class="brz-sermonList__item--media--audioplayer brz-sermonList__item--meta--links">{{ preg_replace('/<a(.+?)>.+?<\/a>/i','<a$1><i class=\"fas fa-volume-up\"></i></a>', item.audioplayer) }}</li>
+								<li class="brz-sermonList__item--media--audioplayer">
+									{{ preg_replace('/class="[^"]*\"/', 'class="brz-ministryBrands__item--meta--links"', item.audioplayer) }}
+								</li>
 							{% endif %}
 
 							{% if item.notes %}
@@ -137,7 +146,7 @@
 		</div>
 
 		{% if show_pagination and content.after_show.pagination %}
-			{{ content.after_show.pagination|replace({'id="pagination"': 'id="brz-sermonList__pagination" class="brz-sermonList__pagination"', 'page=':"brz-sermon--list_page="}) }}
+			{{ content.after_show.pagination|replace({'id="pagination"': 'id="brz-sermon--list_pagination" class="brz-ministryBrands__pagination"', 'page=':"brz-sermon--list_page="}) }}
 		{% endif %}
 
 	{% else %}
