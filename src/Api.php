@@ -80,7 +80,7 @@ class Api {
             'emailencode' => 'no',
         ]);
 
-        $options = [];
+        $options = ["all"=>"All"];
 
         foreach ($recents['show'] as $recent) {
             $options[$recent['slug']] = isset($recent['title']) ? $recent['title'] : $recent['name'];
