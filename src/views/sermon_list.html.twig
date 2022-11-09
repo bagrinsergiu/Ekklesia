@@ -4,7 +4,7 @@
 			<div class="brz-sermonList__item">
 				{% if show_images and item.imageurl is defined and not show_video %}
 					{% if detail_url %}
-						<a href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
+						<a class="brz-ministryBrands__item--meta--links" href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
 						{% endif %}
 
 						<div class="brz-sermonList__item--img"><img src="{{ item.imageurl }}" alt="\"/></div>
@@ -21,7 +21,7 @@
 						<div class="brz-sermonList__item--media--video">
 							<video src="{{ item.videourl }}" controls preload="none" width="1024" height="576" poster="{{ item.imageurl }}" type="video/{{ item.videourl|split('.')|last }}">
 								<p>The Video could not be played.
-									<a href="{{ item.videourl }}" target="_blank">download it here</a>
+									<a class="brz-ministryBrands__item--meta--links" href="{{ item.videourl }}" target="_blank">download it here</a>
 								</p>
 							</video>
 						</div>
@@ -41,7 +41,7 @@
 				{% if show_title %}
 					<h4 class="brz-sermonList__item--meta--title">
 						{% if detail_url %}
-							<a href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
+							<a class="brz-ministryBrands__item--meta--links" href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
 							{% endif %}
 
 							{{ item.title }}
@@ -85,9 +85,11 @@
 					{% endif %}
 
 					{% if show_passage and item.passages %}
-						<h6 class="brz-sermonList__item--meta">
-							{{ show_meta_headings ? "Passages: " }}
-							{{ item.passages }}
+						<h6 class="brz-sermonList__item--meta--link">
+							{{ show_meta_headings ? "<span class='brz-sermonList__item--meta'>Passages: </span>" }}
+							<span class="brz-ministryBrands__item--meta--links">
+								{{ item.passages }}
+							</span>
 						</h6>
 					{% endif %}
 
@@ -95,29 +97,22 @@
 						<ul class="brz-sermonList__item--media">
 
 							{% if item.videoplayer %}
-								<li class="brz-sermonList__item--media--videoplayer">
+								<li class="brz-ministryBrands__item--meta--links">
 
-									{# {{ preg_replace('<a(.+?)href=\'(.+?)\'(.+?)?>(.+?)<\/a>', '<div data-href="$2">$4</div>', item.videoplayer|raw) }} #}
-									{# {{ preg_replace('<a(.+?)\'(.+?)\'(.+?)(.)(.)(.)>(.+?)<\/a>', '<div data-href="$3">$7</div>', item.videoplayer) }} #}
-
-									{# {{preg_replace('<a(.+?)\'(.+?)(.)(.)(.)>(.+?)<\/a>', '<div data-href="$2">$6</div>', item.videoplayer )}} #}
-
-								{{ preg_replace('/<a(.+?)>.+?<\/a>/i','<a$1><i class=\"fas fa-desktop\"></i></a>', item.videoplayer) }}
-
-									{# {{item.videoplayer}} #}
+									{{item.videoplayer}}
 
 								</li>
 							{% endif %}
 
 							{% if item.audioplayer %}
-								<li class="brz-sermonList__item--media--audioplayer">
-									{{ preg_replace('/class="[^"]*\"/', 'class="brz-ministryBrands__item--meta--links"', item.audioplayer) }}
+								<li class="brz-ministryBrands__item--meta--links">
+									{{item.videoplayer}}
 								</li>
 							{% endif %}
 
 							{% if item.notes %}
 								<li class="brz-sermonList__item--media--notes">
-									<a href="{{ item.notes }}" target="_blank">
+									<a class="brz-ministryBrands__item--meta--links" href="{{ item.notes }}" target="_blank">
 										<i class="fas fa-file-alt"></i>
 									</a>
 								</li>
@@ -133,7 +128,7 @@
 
 					{% if detail_url and detail_page_button_text %}
 						<p class="brz-sermonList__item--detail-button">
-							<a href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}" class="brz-button-link brz-button brz-size-sm">
+							<a class="brz-ministryBrands__item--meta--links" href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}" class="brz-button-link brz-button brz-size-sm">
 								<span class="brz-button-text">{{ detail_page_button_text }}</span>
 							</a>
 						</p>
