@@ -111,9 +111,9 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
                     echo "</h6>";
                 }
                 if ($show_passage && $item['passages']) {
-                    echo "<h6 class=\"brz-sermonDetail__item--meta\">";
-                    if ($show_meta_headings) echo "Passages: ";
-                    echo "{$item['passages']}";
+                    echo "<h6 class=\"brz-sermonDetail__item--meta--link\">";
+                    if ($show_meta_headings) echo "<span class='brz-sermonDetail__item--meta'>Passages: </span>";
+                    echo "<span class='brz-ministryBrands__item--meta--links'>{$item['passages']}</span>";
                     echo "</h6>";
                 }
                 if ($show_image && $item['imageurl'] && !$show_video) {
