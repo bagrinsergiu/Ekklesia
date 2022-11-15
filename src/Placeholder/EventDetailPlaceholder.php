@@ -72,7 +72,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                     echo "<h2 class=\"brz-eventDetail__item--meta--title\">{$item['title']}</h2>";
                 }
                 if ($show_date) {
-                    echo "<h5 class=\"brz-eventDetail__item--meta\">{$item['eventtimes']}</h5>";
+                    echo "<h5 class=\"brz-eventDetail__item--meta--date\">{$item['eventtimes']}</h5>";
                 }
                 if ($show_image && $item['imageurl']) {
                     echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
@@ -147,8 +147,8 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                 if ($show_description && $item['text']) {
                     echo "<div class=\"brz-eventDetail__item--meta--preview\">{$item['text']}</div>";
                 }
-
-                echo "<p class=\"brz-eventDetail__item--meta--link\"><a class='brz-ministryBrands__item--meta--links' href=\"javascript:history.back();\"><i class=\"fas fa-angle-left\"></i> Previous Page</a></p>";
+                // TODO fix this - > was <a href=\"javascript:history.back();
+                echo "<p class=\"brz-eventDetail__item--meta--link\"><a class='brz-ministryBrands__item--meta--links' href='#'><i class=\"fas fa-angle-left\"></i> Previous Page</a></p>";
 
                 ?>
             <?php

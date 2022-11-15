@@ -97,16 +97,18 @@
 						<ul class="brz-sermonList__item--media">
 
 							{% if item.videoplayer %}
-								<li class="brz-ministryBrands__item--meta--links">
+								<li class="brz-ministryBrands__item--meta--links-a">
 
-									{{item.videoplayer}}
-
+								{# for <a href="'javascript:" void(0);&#039;="" onclick="javascript: window.open( #}
+								{% if "javascript" in item.videoplayer %}
+									{{preg_replace("<a(.+?)(\'https:\/\/.+\')(.+?)>(.+?)<\/a>", '<div class="brz-ministryBrands__item--meta--links" data-url="$2">$4</div>', item.videoplayer)}}
+								{% endif %}
 								</li>
 							{% endif %}
 
 							{% if item.audioplayer %}
 								<li class="brz-ministryBrands__item--meta--links">
-									{{item.videoplayer}}
+									{{item.audioplayer}}
 								</li>
 							{% endif %}
 
