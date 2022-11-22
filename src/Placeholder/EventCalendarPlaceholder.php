@@ -127,14 +127,14 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
            if ($month_format === $start_month_format) {
                $results .= "<a class=\"previous off\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-left'><path d='M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z'></path></svg></a>";
            } else {
-               $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-right'><path d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'></path></svg></a>";
+               $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-left'><path d='M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z'></path></svg></a>";
            }
            //heading
            $results .= "<span class=\"brz-eventCalendar-heading\">{$month_label_format}</span>";
  
            //next
            if ($month_format === $end_month_format) {
-               $results .= "<a class=\"next off\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-left'><path d='M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z'></path></svg></a>";
+               $results .= "<a class=\"next off\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-right'><path d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'></path></svg</a>";
            } else {
                $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 512' class='brz-icon-svg' data-type='fa' data-name='angle-right'><path d='M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z'></path></svg></a>";
            }
