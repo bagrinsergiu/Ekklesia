@@ -19,9 +19,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'view_order_featured'          => 1,
             'view_featured_heading'        => 'Featured Events',
             'howmanyfeatured'              => 9,
-            'column_count_featured'        => 3,
-            'column_count_featured_tablet' => 2,
-            'column_count_featured_mobile' => 1,
+                'column_count_featured'        => 3,
+                'column_count_featured_tablet' => 2,
+                'column_count_featured_mobile' => 1,
             'show_images_featured'         => true,
             'show_title_featured'          => true,
             'show_date_featured'           => true,
@@ -39,6 +39,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'category_filter_list'         => '',
             'category_filter_list_add1'    => '',
             'category_filter_list_add2'    => '',
+            'category_filter_list_add3'    => '',
             'show_category_filter'         => true,
             'category_filter_parent'       => '',
             'category_filter_heading'      => 'Category',
@@ -50,15 +51,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'category_filter_heading_add2' => 'Category',
             'show_category_filter_add3'    => true,
             'category_filter_parent_add3'  => '',
-            'category_filter_list_add3'    => '',
             'category_filter_heading_add3' => 'Category',
             'show_group_filter'            => false,
             'group_filter_heading'         => 'Group',
             'show_search'                  => true,
             'search_placeholder'           => 'Search',
-            'featuredActive'               => '',
-            'listActive'                   => '',
-            'calendarActive'               => '',
+                'featuredActive'               => '',
+                'listActive'                   => '',
+                'calendarActive'               => '',
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -124,7 +124,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         }
 
         //activate featured view
-        ${$view . "Active"} = "active";
+        ${$view . "Active"} = "brz-eventLayout--view-active";
 
         $categories = $cms->get([
             'module'  => 'event',
@@ -211,7 +211,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         }
         ?>
 
-        <div id="ekklesia360_event_layout_view" class="ekklesia360_event_layout_view">
+        <div id="brz-eventLayout--view" class="brz-eventLayout--view">
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
@@ -226,8 +226,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         </div>
 
         <?php if ($view != "featured" || $isPreview): //hide from featured view ?>
-        <div id="ekklesia360_event_layout_filters" class="ekklesia360_event_layout_filters">
-            <form id="ekklesia360_event_layout_form" name="ekklesia360_event_layout_form" action="<?= $baseURL ?>">
+        <div id="brz-eventLayout--filters" class="brz-eventLayout--filters">
+            <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
                 <?php if ($show_group_filter && count($groups['show']) > 0): ?>
                     <select name="group" class='sorter' onchange='filterEkklesia360Events()'>
@@ -403,11 +403,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             </form>
 
             <?php if ($show_search): ?>
-                <form method="get" id="ekklesia360_event_layout_search" name="search" action="<?= $baseURL ?>">
+                <form method="get" id="brz-eventLayout--filters-form-search" class="brz-eventLayout--filters-form-search" name="search" action="<?= $baseURL ?>">
                     <fieldset>
-                        <input type="text" id="ekklesia360_event_layout_search_term" name="search_term" value=""
+                        <input type="text" id="brz-eventLayout--filters-form-search_term" name="search_term" value=""
                                placeholder="<?= $search_placeholder ?>"/>
-                        <button type="submit" name="submit" id="ekklesia360_event_layout_search_submit" value=""><i
+                        <button type="submit" name="submit" id="brz-eventLayout--filters-form-search_submit" value=""><i
                                 class="fas fa-search"></i></button>
                     </fieldset>
                     <input type="hidden" name="view" value="list"/>
@@ -426,15 +426,17 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         //featured view
         if ($show_featured_view && ($view == "featured" || $isPreview)):
             ?>
-            <div class="ekklesia360_event_featured_wrap">
+            <div class="brz-eventLayout--featured__container">
                 <?php //output
                 if (count($content['show']) > 0) {
                     ?>
 
-                    <div class="ekklesia360_event_featured" data-columncount="<?php echo $column_count_featured; ?>"
+                    <div class="brz-eventLayout--featured" data-columncount="<?php echo $column_count_featured; ?>"
                          data-columncount-tablet="<?php echo $column_count_featured_tablet; ?>"
                          data-columncount-mobile="<?php echo $column_count_featured_mobile; ?>">
                         <?php
+
+
                         foreach ($content['show'] as $key => $item) {
                             //__id__-__eventstart format='Y-m-d'__-__slug__
                             $slugDate = date("Y-m-d", strtotime($item["eventstart"]));
@@ -444,22 +446,22 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $item["url"] = str_replace('/event/', "{$detail_url}?ekklesia360_event_slug=", $item['url']);
                             }
 
-                            echo "<article>";
+                            echo "<div class=\"brz-eventLayout--featured__item\">";
                             if ($show_images_featured && $item['imageurl']) {
-                                echo "<div class=\"image\">";
+                                echo "<div class=\"brz-eventLayout--featured__item-image\">";
                                 if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                                 if ($show_preview_featured && $item['preview']) {
                                     $item['preview'] = substr($item['preview'], 0, 75) . " ...";
-                                    echo "<div class=\"ekklesia360_event_featured_preview\"><div><span>{$item['preview']}</span></div></div>";
+                                    echo "<div class=\"brz-eventLayout--featured__preview\"><div><span>{$item['preview']}</span></div></div>";
                                 }
                                 if ($detail_url) echo "</a>";
                                 echo "</div>";
                             }
 
-                            echo "<div class=\"info\">";
+                            echo "<div class=\"brz-eventLayout--featured__item-content\">";
                             if ($show_title_featured) {
-                                echo "<h5 class=\"ekklesia360_event_featured_heading\">";
+                                echo "<h5 class=\"brz-eventLayout--featured__item-title\">";
                                 if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 echo "{$item['title']}";
                                 if ($detail_url) echo "</a>";
@@ -467,10 +469,10 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             }
 
                             if ($show_date_featured) {
-                                echo "<p class=\"ekklesia360_event_featured_meta\">{$item['eventtimes']}</p>";
+                                echo "<p class=\"brz-eventLayout--featured__meta\">{$item['eventtimes']}</p>";
                             }
                             echo "</div>";
-                            echo "</article>";
+                            echo "</div>";
                         }
                         ?>
                     </div>
@@ -493,7 +495,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         //list view
         if ($show_list_view && ($view == "list" || $isPreview)):
             ?>
-            <div class="ekklesia360_event_list_wrap">
+            <div class="brz-eventLayout--list__container">
 
                 <?php //output
                 if (count($content['show']) > 0) {
@@ -503,7 +505,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $grouping_day = date("Y-m-d", strtotime($show["eventstart"]));
                         $events[$grouping_month][$grouping_day][] = $show;//set first dimension to day and then assign all events as second level to that day
                     }
-                    echo "<div class=\"ekklesia360_event_layout_list\">";
+                    echo "<div class=\"brz-eventLayout--list\">";
                     echo self::draw_list($events, $detail_url);
                     echo "</div>";
                 } //no output
@@ -523,7 +525,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         //calendar view
         if ($show_calendar_view && ($view == "calendar" || $isPreview)):
             ?>
-            <div class="ekklesia360_event_calendar_wrap">
+            <div class="brz-eventLayout--calendar__container">
 
                 <?php //output
                 if (count($content['show']) > 0) {
@@ -535,7 +537,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                     }
                     ?>
 
-                    <div class="ekklesia360_event_calendar">
+                    <div class="brz-eventLayout--calendar">
                         <?php
                         echo self::draw_calendar($events, $detail_url);
                         ?>
@@ -556,14 +558,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <script>
             <?php if(count($_GET)): ?>
-            const id = 'ekklesia360_event_layout_view';
+            const id = 'brz-eventLayout--view';
             const yOffset = - <?= $sticky_space ?>;
             const element = document.getElementById( id );
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
             window.scrollTo( {top: y, behavior: 'smooth'} );
             <?php endif; ?>
             function filterEkklesia360Events( val ) {
-                document.getElementById( 'ekklesia360_event_layout_form' ).submit();
+                document.getElementById( 'brz-eventLayout--filters-form' ).submit();
             }
         </script>
 
@@ -623,18 +625,18 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
 
             //open .month div
-            $results .= "<div class=\"ekklesia360_month-view {$month_format}\">";
+            $results .= "<div class=\"brz-eventLayout--list-item {$month_format}\">";
 
             //pagination
-            $results .= "<div class=\"ekklesia360_layout-pagination\">";
+            $results .= "<div class=\"brz-eventLayout__pagination\">";
             //prev
             if($month_format === $start_month_format)
             {
-                $results .= "<a class=\"previous off\"><i class=\"fas fa-angle-left\"></i></a>";
+                $results .= "<a class=\"previous off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
             }
             else
             {
-                $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><i class=\"fas fa-angle-left\"></i></a>";
+                $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
             }
             //heading
             $results .= "<span class=\"heading\">{$month_label_format}</span>";
@@ -642,11 +644,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             //next
             if($month_format === $end_month_format)
             {
-                $results .= "<a class=\"next off\"><i class=\"fas fa-angle-right\"></i></a>";
+                $results .= "<a class=\"next off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
             }
             else
             {
-                $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><i class=\"fas fa-angle-right\"></i></a>";
+                $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
             }
 
             $results .= "</div>";
@@ -665,7 +667,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 {
                     $grouping_day = date("l", strtotime($day));
                     $grouping_date = date("F j, Y", strtotime($day));
-                    $results .= "<h3 class=\"grouping\">{$grouping_day} <span>{$grouping_date}</span></h3>";
+                    $results .= "<h3 class=\"brz-eventLayout--list-item__title\">{$grouping_day} <span>{$grouping_date}</span></h3>";
                     //iterate event
                     foreach($val as $v)
                     {
@@ -675,8 +677,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         {
                             $v["url"] = str_replace('/event/',"{$detail_url}?ekklesia360_event_slug=",$v['url']);
                         }
-                        $results .= "<article>";
-                        $results .= "<div class=\"date\">";
+                        $results .= "<div class=\"brz-eventLayout--list-item__content\">";
+                        $results .= "<div class=\"brz-eventLayout--list-item__content-date\">";
                         $results .= "<div>";
                         $results .= "<span class=\"day\">";
                         $results .= date("d", strtotime($v["eventstart"]));
@@ -686,13 +688,13 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $results .= "</span>";
                         $results .= "</div>";
                         $results .= "</div>";
-                        $results .= "<div class=\"info\">";
-                        $results .= "<h5 class=\"ekklesia360_event_layout_heading\">";
+                        $results .= "<div class=\"brz-eventLayout--list-item__content-info\">";
+                        $results .= "<h5 class=\"brz-eventLayout--list-item__content__heading\">";
                         if($detail_url) $results.= "<a href=\"{$v["url"]}\" title=\"{$v["title"]}\">";
                         $results.= "{$v["title"]}";
                         if($detail_url) $results.= "</a>";
                         $results .= "</h5>";
-                        $results .= "<div class=\"meta\">";
+                        $results .= "<div class=\"brz-eventLayout--list-item__content__meta\">";
                         $results .= "<div class='list-time'>";
                         if($v["isallday"])
                         {
@@ -712,7 +714,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $results .= "</div><!-- end .list-time -->";
                         $results .= "</div>";
                         $results .= "</div>";
-                        $results .= "</article>";
+                        $results .= "</div>";
                     }
                 }
             }//end if
@@ -756,18 +758,18 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
 
             //open .month div
-            $results .= "<div class=\"ekklesia360_month-view {$month_format}\">";
+            $results .= "<div class=\"brz-eventLayout--calendar-item {$month_format}\">";
 
             //pagination
-            $results .= "<div class=\"ekklesia360_layout-pagination\">";
+            $results .= "<div class=\"brz-eventLayout__pagination\">";
             //prev
             if($month_format === $start_month_format)
             {
-                $results .= "<a class=\"previous off\"><i class=\"fas fa-angle-left\"></i></a>";
+                $results .= "<a class=\"previous off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
             }
             else
             {
-                $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><i class=\"fas fa-angle-left\"></i></a>";
+                $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
             }
             //heading
             $results .= "<span class=\"heading\">{$month_label_format}</span>";
@@ -775,11 +777,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             //next
             if($month_format === $end_month_format)
             {
-                $results .= "<a class=\"next off\"><i class=\"fas fa-angle-right\"></i></a>";
+                $results .= "<a class=\"next off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
             }
             else
             {
-                $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><i class=\"fas fa-angle-right\"></i></a>";
+                $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
             }
 
             $results .= "</div>";
@@ -811,12 +813,12 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
     private function draw_calendar_table($month, $year, $events=null, $detail_url=null){
 
         /* draw table */
-        $calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
+        $calendar = '<table cellpadding="0" cellspacing="0" class="brz-eventLayout--calendar-table">';
 
         /* table headings */
         $headings = array('Sun','Mon','Tues','Wed','Thu','Fri','Sat');
 
-        $calendar.= '<tr class="calendar-row weekdays"><th>'.implode('</th><th>',$headings).'</th></tr>';
+        $calendar.= '<tr class="brz-eventLayout--calendar-heading"><th>'.implode('</th><th>',$headings).'</th></tr>';
 
         /* days and weeks vars now ... */
         $running_day = date('w',mktime(0,0,0,$month,1,$year));
@@ -826,11 +828,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $dates_array = array();
 
         /* row for week one */
-        $calendar.= '<tr class="calendar-row">';
+        $calendar.= '<tr class="brz-eventLayout--calendar-row">';
 
         /* print "blank" days until the first of the current week */
         for($x = 0; $x < $running_day; $x++):
-            $calendar.= '<td class="calendar-day-np"> </td>';
+            $calendar.= '<td class="brz-eventLayout--calendar-day-np"> </td>';
             $days_in_this_week++;
         endfor;
 
@@ -839,14 +841,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
             $cur_date = date('Y-m-d', mktime(0, 0, 0, $month, $list_day, $year));
 
-            $calendar.= '<td class="calendar-day">';
+            $calendar.= '<td class="brz-eventLayout--calendar-day">';
             /* add in the day number */
-            $calendar.= '<div class="day-number"><span>'.$list_day.'</span></div>';
+            $calendar.= '<div class="brz-eventLayout--calendar-day__number"><span>'.$list_day.'</span></div>';
 
             /** QUERY FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
             //$calendar.= str_repeat('<p> </p>',2);
             if (isset($events) && isset($events[$cur_date])) {
-                $calendar.= "<ul class=\"calendar-links\">";
+                $calendar.= "<ul class=\"brz-eventLayout--calendar-day__links\">";
                 foreach($events[$cur_date] as $v)
                 {
                     if($detail_url)
@@ -868,7 +870,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             if($running_day == 6):
                 $calendar.= '</tr>';
                 if(($day_counter+1) != $days_in_month):
-                    $calendar.= '<tr class="calendar-row">';
+                    $calendar.= '<tr class="brz-eventLayout--calendar-row">';
                 endif;
                 $running_day = -1;
                 $days_in_this_week = 0;
@@ -879,7 +881,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         /* finish the rest of the days in the week */
         if($days_in_this_week < 8):
             for($x = 1; $x <= (8 - $days_in_this_week); $x++):
-                $calendar.= '<td class="calendar-day-np"> </td>';
+                $calendar.= '<td class="brz-eventLayout--calendar-day-np"> </td>';
             endfor;
         endif;
 
