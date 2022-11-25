@@ -54,7 +54,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
 
         $cms            = $this->monkCMS;
         $detail_url     = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
-        $page           = isset($_GET['ekklesia360_group_layout_page']) ? $_GET['ekklesia360_group_list_page'] : 1;
+        $page           = isset($_GET['ekklesia360_group_layout_page']) ? $_GET['ekklesia360_group_layout_page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
         $filterCount    = count(array_filter($filterCountArr));
@@ -147,8 +147,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         }
         ?>
 
-        <div id="ekklesia360_group_layout_filters" class="ekklesia360_group_layout_filters">
-            <form id="ekklesia360_group_layout_form" name="ekklesia360_group_layout_form" action="<?= $baseURL ?>"
+        <div id="brz-groupLayout__filters" class="brz-groupLayout__filters">
+            <form id="brz-groupLayout__filters--form" name="brz-groupLayout__filters--form" class="brz-groupLayout__filters--form" action="<?= $baseURL ?>"
                   data-count="<?= $filterCount ?>">
 
                 <?php if ($show_group_filter && !empty($groups['group_show'])): ?>
@@ -270,24 +270,23 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             </form>
 
             <?php if ($show_search): ?>
-                <form method="get" id="ekklesia360_group_layout_search" name="search" action="<?= $baseURL ?>"
+                <form method="get" id="brz-groupLayout__filters--form-search" name="search" class="brz-groupLayout__filters--form-search" action="<?= $baseURL ?>"
                       data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="ekklesia360_group_layout_search_term" name="search_term" value=""
+                        <input type="text" id="brz-groupLayout__filters--form-search_term" name="search_term" value=""
                                placeholder="<?= $search_placeholder ?>"/>
-                        <button type="submit" name="submit" id="ekklesia360_group_layout_search_submit" value=""><i
-                                class="fas fa-search"></i></button>
+                        <button type="submit" name="submit" id="brz-groupLayout__filters--form-search_submit" value=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="search"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button>
                     </fieldset>
                 </form>
             <?php endif; ?>
         </div>
 
         <?php if (isset($_GET['search_term'])) {
-        echo "<h4 class=\"ekklesia360_group_layout_results_heading\"><a href=\"{$baseURL}\"><i class=\"fas fa-times\"></i></a> Search results for \"{$_GET['search_term']}\"</h4>";
+        echo "<h4 class=\"ekklesia360_group_layout_results_heading\"><a href=\"{$baseURL}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['search_term']}\"</h4>";
     }
         ?>
 
-        <div id="ekklesia360_group_layout_wrap" class="ekklesia360_group_layout_wrap">
+        <div id="brz-groupLayout__container" class="brz-groupLayout__container">
 
             <?php
             //setup pagination
@@ -298,7 +297,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             if (count($resultsPagination) > 0) {
                 ?>
 
-                <div class="ekklesia360_group_layout" data-columncount="<?php echo $column_count; ?>"
+                <div class="brz-groupLayout__content" data-columncount="<?php echo $column_count; ?>"
                      data-columncount-tablet="<?php echo $column_count_tablet; ?>"
                      data-columncount-mobile="<?php echo $column_count_mobile; ?>">
                     <?php
@@ -314,67 +313,69 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         $item['group'] = str_replace("Site Group, ", "", $item['group']);
                         $item['group'] = str_replace("Site Group", "", $item['group']);
 
-                        echo "<article>";
-                        echo "<div class=\"info\">";
+                        echo "<div class=\"brz-groupLayout--item\">";
+                        echo "<div class=\"brz-groupLayout--item__content\">";
                         if ($show_images && $item['imageurl']) {
                             if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\">";
                             echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             if ($detail_url) echo "</a>";
                         }
 
-                        echo "<h4 class=\"ekklesia360_group_layout_heading\">";
+                        echo "<h4 class=\"brz-groupLayout--item__content-heading\">";
                         if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\">";
                         echo "{$item['name']}";
                         if ($detail_url) echo "</a>";
                         echo "</h4>";
 
                         if ($show_day && $item['dayoftheweek']) {
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Meeting Day: {$item['dayoftheweek']}</h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Meeting Day: {$item['dayoftheweek']}</h6>";
                         }
                         if ($show_times && ($item['starttime'] || $item['endtime'])) {
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Meeting Time: ";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Meeting Time: ";
                             if ($item['starttime']) echo "{$item['starttime']}";
                             if ($item['endtime']) echo " - {$item['endtime']}";
                             echo "</h6>";
                         }
                         if ($show_category && $item['category']) {
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Category: {$item['category']}</h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Category: {$item['category']}</h6>";
                         }
                         if ($show_group && $item['group']) {
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Group: {$item['group']}</h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Group: {$item['group']}</h6>";
                         }
                         if ($show_status && $item['groupstatus']) {
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Status: {$item['groupstatus']}</h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Status: {$item['groupstatus']}</h6>";
                         }
                         if ($show_childcare) {
                             $childcare = "No";
                             if ($item['childcareprovided']) {
                                 $childcare = "Yes";
                             }
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Childcare Provided: {$childcare}</h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Childcare Provided: {$childcare}</h6>";
                         }
                         if ($show_resourcelink && $item['resourcelink']) {
                             $resource_target = "";
                             if ($item['iflinknewwindow']) {
                                 $resource_target = " target=\"_blank\"";
                             }
-                            echo "<h6 class=\"ekklesia360_group_layout_meta\">Resource: <a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a></h6>";
+                            echo "<h6 class=\"brz-groupLayout--item__content-meta\">Resource: <a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a></h6>";
                         }
                         if ($show_preview && $item['description']) {
                             $item['description'] = substr($item['description'], 0, 110) . " ...";
-                            echo "<p class=\"ekklesia360_group_layout_preview\">{$item['description']}</p>";
+                            $item['description'] = str_replace("<p>","<p class=\"brz-groupLayout--item__content-preview\">",$item['description']);
+
+                            echo $item['description'];
                         }
                         if ($detail_url && $detail_page_button_text) {
-                            echo "<p class=\"ekklesia360_group_layout_detail_button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"brz-groupLayout--item__content-detailButton\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                         }
                         echo "</div>";
-                        echo "</article>";
+                        echo "</div>";
                     }
                     ?>
                 </div>
                 <?php
                 if ($show_pagination) {
-                    $paginationOutput = '<p id="ekklesia360_group_layout_pagination" class="ekklesia360_pagination">' . $pagination->getLinks($_GET) . '</p>';
+                    $paginationOutput = '<p id="brz-groupLayout__pagination" class="brz-groupLayout__pagination">' . $pagination->getLinks($_GET) . '</p>';
                     $paginationOutput = str_replace('page=', 'ekklesia360_group_layout_page=', $paginationOutput);
                     //if complexity grows consider http_build_query
 
@@ -416,14 +417,14 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         </div>
         <script>
             <?php if(count($_GET)): ?>
-            const id = 'ekklesia360_group_layout_filters';
+            const id = 'brz-groupLayout__filters';
             const yOffset = - <?= $sticky_space ?>;
             const element = document.getElementById( id );
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
             window.scrollTo( {top: y, behavior: 'smooth'} );
             <?php endif; ?>
             function filterEkklesia360Groups( val ) {
-                document.getElementById( 'ekklesia360_group_layout_form' ).submit();
+                document.getElementById( 'brz-groupLayout__filters--form' ).submit();
             }
         </script>
         <?php
