@@ -66,7 +66,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms             = $this->monkCMS;
-        $isPreview       = true; // TODO - check from wordpress and from cloud
+        $isPreview       = !is_preview(); // TODO - check from wordpress and from cloud
         $baseURL         = (strtok($_SERVER["REQUEST_URI"], '?') !== FALSE) ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $detail_url      = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
         $parent_category = [];
@@ -215,13 +215,13 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
-                        href="<?= $baseURL ?>?view=featured"><?= $view_featured_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=featured<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_featured_heading ?></a></li><?php endif; ?>
                 <?php if ($show_list_view): ?>
                     <li class="<?= $listActive ?>" data-order="<?= $view_order_list ?>"><a
-                        href="<?= $baseURL ?>?view=list"><?= $view_list_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=list<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_list_heading ?></a></li><?php endif; ?>
                 <?php if ($show_calendar_view): ?>
                     <li class="<?= $calendarActive ?>" data-order="<?= $view_order_calendar ?>"><a
-                        href="<?= $baseURL ?>?view=calendar"><?= $view_calendar_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=calendar<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_calendar_heading ?></a></li><?php endif; ?>
             </ul>
         </div>
 
@@ -230,7 +230,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
                 <?php if ($show_group_filter && count($groups['show']) > 0): ?>
-                    <select name="group" class='sorter' onchange='filterEkklesia360Events()'>
+                    <select name="group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -247,7 +247,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if ($show_category_filter): ?>
-                    <select name="category" class='sorter' onchange='filterEkklesia360Events()'>
+                    <select name="category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -300,7 +300,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if ($show_category_filter_add1 && ($category_filter_parent_add1 != "" || is_array($category_filter_list_add1))): ?>
-                    <select name="category_add1" class='sorter' onchange='filterEkklesia360Events()'>
+                    <select name="category_add1" class='sorter' >
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
                         <?php
@@ -334,7 +334,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if ($show_category_filter_add2 && ($category_filter_parent_add2 != "" || is_array($category_filter_list_add2))): ?>
-                    <select name="category_add2" class='sorter' onchange='filterEkklesia360Events()'>
+                    <select name="category_add2" class='sorter' >
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
                         <?php
@@ -368,7 +368,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if ($show_category_filter_add3 && ($category_filter_parent_add3 != "" || is_array($category_filter_list_add3))): ?>
-                    <select name="category_add3" class='sorter' onchange='filterEkklesia360Events()'>
+                    <select name="category_add3" class='sorter' >
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
                         <?php
@@ -554,20 +554,6 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             </div>
         <?php endif; //end calendar view
         ?>
-
-        <script>
-            <?php if(count($_GET)): ?>
-            const id = 'brz-eventLayout--view';
-            const yOffset = - <?= $sticky_space ?>;
-            const element = document.getElementById( id );
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo( {top: y, behavior: 'smooth'} );
-            <?php endif; ?>
-            function filterEkklesia360Events( val ) {
-                document.getElementById( 'brz-eventLayout--filters-form' ).submit();
-            }
-        </script>
-
         <?php
     }
 
