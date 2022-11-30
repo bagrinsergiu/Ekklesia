@@ -134,7 +134,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <form id="brz-sermonLayout__filter--form" name="brz-sermonLayout__filter--form" class="brz-sermonLayout__filter--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
 
                 <?php if($show_group_filter && count($groups['group_show']) > 0): ?>
-                    <select name="group" class='sorter' onchange='filterEkklesia360Sermons()'>
+                    <select name="group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -152,7 +152,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_category_filter && count($categories['group_show']) > 0): ?>
-                    <select name="category" class='sorter' onchange='filterEkklesia360Sermons()'>
+                    <select name="category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -170,7 +170,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
-                    <select name="series" class='sorter' onchange='filterEkklesia360Sermons()'>
+                    <select name="series" class='sorter' >
                         <option value=""><?= $series_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -188,7 +188,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_speaker_filter && count($speakers['group_show']) > 0): ?>
-                    <select name="speaker" class='sorter' onchange='filterEkklesia360Sermons()'>
+                    <select name="speaker" class='sorter' >
                         <option value=""><?= $speaker_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -319,7 +319,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         if($show_passage && $item['passages'])
                         {
-                            echo "<h6 class=\"brz-sermonLayout__item--meta-passages\">";
+                            echo "<h6 class=\"brz-sermonLayout__item--meta brz-sermonLayout__item--meta-passages\">";
 
                             
                             if($show_meta_headings) echo "Passages: ";
@@ -409,18 +409,6 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 echo $paginationOutput;
             }
         ?>
-        <script>
-            <?php if(count($_GET)): ?>
-            const id = 'ekklesia360_sermon_layout_filters';
-            const yOffset = -<?= $sticky_space ?>;
-            const element = document.getElementById(id);
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
-            <?php endif; ?>
-            function filterEkklesia360Sermons(val) {
-                document.getElementById('brz-sermonLayout__filter--form').submit();
-            }
-        </script>
         <?php
     }
 }
