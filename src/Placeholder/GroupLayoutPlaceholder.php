@@ -53,7 +53,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms            = $this->monkCMS;
-        $detail_url     = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        // home_url($settings['detail_page'])
+        $detail_url     = $settings['detail_page'] ? $settings['detail_page'] : false;
         $page           = isset($_GET['ekklesia360_group_layout_page']) ? $_GET['ekklesia360_group_layout_page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
@@ -415,18 +416,6 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             }
             ?>
         </div>
-        <script>
-            <?php if(count($_GET)): ?>
-            const id = 'brz-groupLayout__filters';
-            const yOffset = - <?= $sticky_space ?>;
-            const element = document.getElementById( id );
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo( {top: y, behavior: 'smooth'} );
-            <?php endif; ?>
-            function filterEkklesia360Groups( val ) {
-                document.getElementById( 'brz-groupLayout__filters--form' ).submit();
-            }
-        </script>
         <?php
     }
 
