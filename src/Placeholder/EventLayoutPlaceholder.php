@@ -68,7 +68,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $cms             = $this->monkCMS;
         $isPreview       = !is_preview(); // TODO - check from wordpress and from cloud
         $baseURL         = (strtok($_SERVER["REQUEST_URI"], '?') !== FALSE) ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
-        $detail_url      = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        $detail_url      = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
         $parent_category = [];
         $calendarStart   = date('Y-m-d');
         $calendarEnd     = date('Y-m-d', strtotime("+{$howmanymonths} months"));
