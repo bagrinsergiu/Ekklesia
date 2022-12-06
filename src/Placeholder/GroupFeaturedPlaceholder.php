@@ -31,6 +31,8 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
             'slug'                    => false,
         ];
 
+        //TODO, why slug - is not used
+
         $settings = array_merge($options, $placeholder->getAttributes());
 
         extract($settings);

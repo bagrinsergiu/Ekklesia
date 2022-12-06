@@ -141,7 +141,7 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
                 if ($show_media_links_video || $show_media_links_audio || $show_media_links_download || $show_media_links_notes) {
                     echo "<ul class=\"brz-sermonDetail__item--media\">";
                     if ($show_media_links_video && !empty($item['videoplayer'])) {
-                        if (strpos($item['videoplayer'], 'class=')) {
+                        if (strpos($item['videoplayer'], 'class')) {
                             $item['videoplayer'] = str_replace("Launch Player", "Watch", $item['videoplayer']);
                             $item['videoplayer'] = str_replace("Watch Video", "Watch", $item['videoplayer']);
                             $item['videoplayer'] = str_replace('mcms_videoplayer', 'mcms_videoplayer brz-button-link brz-button brz-size-sm ', $item['videoplayer']);
@@ -174,7 +174,7 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
                     echo "<div class=\"brz-sermonDetail__item--meta--preview\">{$item['text']}</div>";
                 }
 
-                echo "<div class=\"brz-ministryBrands__item--meta--links\"><a hre='#'\"><i class=\"fas fa-angle-left\"></i> Previous Page</a></div>";
+                echo "<div class=\"brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous\">Previous Page</div>";
                 echo "</div>";
                 ?>
             </div>
