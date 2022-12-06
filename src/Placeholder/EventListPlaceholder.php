@@ -134,7 +134,7 @@ class EventListPlaceholder extends PlaceholderAbstract
                         echo "<p class=\"brz-eventList__item--meta--preview\">{$item['preview']}</p>";
                     }
                     if ($detail_url && $detail_page_button_text) {
-                        echo "<p class=\"brz-eventList__item--detail--button\"><a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekklesia360_event_slug={$slug}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                        echo "<p class=\"brz-ministryBrands__item--meta--button\"><a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekklesia360_event_slug={$slug}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                     }
                     echo "</div>";
                 }

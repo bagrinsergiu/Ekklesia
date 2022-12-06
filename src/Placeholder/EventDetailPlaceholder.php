@@ -147,8 +147,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                 if ($show_description && $item['text']) {
                     echo "<div class=\"brz-eventDetail__item--meta--preview\">{$item['text']}</div>";
                 }
-                // TODO fix this - > was <a href=\"javascript:history.back();
-                echo "<p class=\"brz-eventDetail__item--meta--link\"><a class='brz-ministryBrands__item--meta--links' href='#'><i class=\"fas fa-angle-left\"></i> Previous Page</a></p>";
+                echo "<div class=\"brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous\">Previous Page</div>";
 
                 ?>
             <?php
