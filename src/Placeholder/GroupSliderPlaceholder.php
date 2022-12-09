@@ -62,7 +62,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                 ?>
 
                 <div class="brz-groupSlider-swiper-container" data-howmanyshow="<?= $howmany_show ?>">
-                    <div class="brz-groupSlider-swiper-wrapper" data-show="<?= $column_count?>">
+                    <div class="brz-groupSlider-swiper-wrapper" data-show="<?= $column_count?>" data-pagination="<?= $show_pagination ?>">
                         <?php
                         foreach ($content['show'] as $key => $item) {
                             //remove 12am
