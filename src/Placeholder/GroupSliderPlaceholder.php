@@ -38,7 +38,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms        = $this->monkCMS;
-        $detail_url = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        $detail_url      = !empty($settings['detail_page']) ? get_permalink($settings['detail_page']) : false;
 
         $content = $cms->get([
             'module'        => 'smallgroup',
