@@ -230,6 +230,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
                 <?php if ($show_group_filter && count($groups['show']) > 0): ?>
+                    <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
@@ -243,10 +244,12 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter): ?>
+                    <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
@@ -296,10 +299,12 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add1 && ($category_filter_parent_add1 != "" || is_array($category_filter_list_add1))): ?>
+                    <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="category_add1" class='sorter' >
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
@@ -330,10 +335,12 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add2 && ($category_filter_parent_add2 != "" || is_array($category_filter_list_add2))): ?>
+                    <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="category_add2" class='sorter' >
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
@@ -364,10 +371,12 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add3 && ($category_filter_parent_add3 != "" || is_array($category_filter_list_add3))): ?>
+                    <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="category_add3" class='sorter' >
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
@@ -398,6 +407,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
                 <input type="hidden" name="view" value="<?= $view ?>"/>
             </form>
