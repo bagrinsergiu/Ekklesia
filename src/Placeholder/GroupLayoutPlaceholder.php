@@ -153,7 +153,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                   data-count="<?= $filterCount ?>">
 
                 <?php if ($show_group_filter && !empty($groups['group_show'])): ?>
-                    <select name="group" class='sorter' onchange='filterEkklesia360Groups()'>
+                    <div class="brz-groupLayout__filters--form-selectWrapper">
+                    <select name="group" class='sorter'>
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -166,11 +167,13 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter): ?>
-                    <select name="category" class='sorter' onchange='filterEkklesia360Groups()'>
+                    <div class="brz-groupLayout__filters--form-selectWrapper">
+                    <select name="category" class='sorter'>
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -207,11 +210,13 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add1 && $category_filter_parent_add1 != ""): ?>
-                    <select name="category_add1" class='sorter' onchange='filterEkklesia360Groups()'>
+                    <div class="brz-groupLayout__filters--form-selectWrapper">
+                    <select name="category_add1" class='sorter'>
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
                         <?php
@@ -227,11 +232,13 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add2 && $category_filter_parent_add2 != ""): ?>
-                    <select name="category_add2" class='sorter' onchange='filterEkklesia360Groups()'>
+                    <div class="brz-groupLayout__filters--form-selectWrapper">
+                    <select name="category_add2" class='sorter'>
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
                         <?php
@@ -247,11 +254,13 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if ($show_category_filter_add3 && $category_filter_parent_add3 != ""): ?>
-                    <select name="category_add3" class='sorter' onchange='filterEkklesia360Groups()'>
+                    <div class="brz-groupLayout__filters--form-selectWrapper">
+                    <select name="category_add3" class='sorter'>
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
                         <?php
@@ -267,6 +276,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
             </form>
 
