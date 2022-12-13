@@ -133,6 +133,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <form id="brz-sermonLayout__filter--form" name="brz-sermonLayout__filter--form" class="brz-sermonLayout__filter--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
 
                 <?php if($show_group_filter && count($groups['group_show']) > 0): ?>
+                    <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
@@ -148,9 +149,11 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php if($show_category_filter && count($categories['group_show']) > 0): ?>
+                    <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
@@ -166,9 +169,11 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
+                    <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="series" class='sorter' >
                         <option value=""><?= $series_filter_heading ?></option>
                         <option value="">All</option>
@@ -184,9 +189,11 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php if($show_speaker_filter && count($speakers['group_show']) > 0): ?>
+                    <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="speaker" class='sorter' >
                         <option value=""><?= $speaker_filter_heading ?></option>
                         <option value="">All</option>
@@ -202,6 +209,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </select>
+                    </div>
                 <?php endif; ?>
 
             </form>
