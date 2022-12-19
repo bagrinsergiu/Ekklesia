@@ -49,7 +49,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
         $category           = $settings['category'] != 'all' ? $settings['category'] : '';
         $group              = $settings['group'] != 'all' ? $settings['group'] : '';
         $series             = $settings['series'] != 'all' ? $settings['series'] : '';
-        $detail_url         = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        $detail_url         = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
         $slug               = false;
 
         if ($features) {
