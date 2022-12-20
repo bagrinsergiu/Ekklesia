@@ -46,7 +46,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
         $recentEvents = $settings['recentEvents'] != '' ? $settings['recentEvents'] : '';
         $category          = $settings['category'] != 'all' ? $settings['category'] : '';
         $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? home_url($settings['detail_page']) : false; // TODO - replace this wordpress function and find in the project all of them
+        $detail_url        = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false; // TODO - replace this wordpress function and find in the project all of them
         $slugLink          = false;
         $slug              = false;
 
@@ -171,21 +171,21 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</h6>";
             }
             if ($show_registration && $item['registrationurl']) {
-                echo "<p class=\"brz-eventFeatured__item--meta--link\"><a href=\"{$item['registrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
+                echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$item['registrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_registration && $item['externalregistrationurl']) {
-                echo "<p class=\"brz-eventFeatured__item--meta--link\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">Register</span></a></p>";
+                echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_preview && $item['preview']) {
                 $item['preview'] = substr($item['preview'], 0, 110) . " ...";
-                echo "<p class=\"brz-eventFeatured__item--meta--preview\">{$item['preview']}</p>";
+                echo "<p class=\"brz-eventFeatured__item--meta--preview\"><span>{$item['preview']}</span></p>";
             }
             if ($show_description && $item['text']) {
                 echo "<div class=\"brz-eventFeatured__item--meta--preview\">{$item['text']}</div>";
             }
 
             if ($detail_url && $detail_page_button_text) {
-                echo "<p class=\"brz-eventFeatured_detail_button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
             }
 
             echo "</div>";
