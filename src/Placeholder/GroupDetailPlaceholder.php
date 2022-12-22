@@ -80,13 +80,13 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
                 echo "<h2 class=\"brz-groupDetail__item--meta--title\">{$item['name']}</h2>";
             // }
             if ($show_day && $item['dayoftheweek']) {
-                echo "<h5 class=\"brz-groupDetail__item--meta--time\">";
+                echo "<h5 class=\"brz-groupDetail__item--meta--date\">";
                 if ($show_meta_headings) echo "Meeting Day: ";
                 echo "{$item['dayoftheweek']}";
                 echo "</h5>";
             }
             if ($show_times && ($item['starttime'] || $item['endtime'])) {
-                echo "<h5 class=\"brz-groupDetail__item--meta--time\">";
+                echo "<h5 class=\"brz-groupDetail__item--meta--date\">";
                 if ($show_meta_headings) echo "Meeting Time: ";
                 if ($item['starttime']) echo "{$item['starttime']}";
                 if ($item['endtime']) echo " - {$item['endtime']}";
@@ -94,7 +94,7 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
             }
 
             if ($show_image && $item['imageurl']) {
-                echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
             }
 
             if ($show_category && $item['category']) {
@@ -139,8 +139,9 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
                 echo "<div class=\"brz-groupDetail__item--meta--preview\">{$item['description']}</div>";
             }
 
-            echo "<p class=\"brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous\">Previous Page</p>";
-
+            echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg>
+            Previous Page</div>';
             echo "</div>";
             ?>
         <?php

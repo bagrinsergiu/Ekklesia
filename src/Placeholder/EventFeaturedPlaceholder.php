@@ -58,7 +58,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
 
         //make content
         if ($show_latest_events != '') {
-            $content = $cms->get([
+            $content1 = $cms->get([
                 'module'        => 'event',
                 'display'       => 'list',
                 'order'         => 'recent',
@@ -68,8 +68,11 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 'features'      => $features,
                 'nonfeatures'   => $nonfeatures,
                 'emailencode'   => 'no',
-            ])['show'][0];
-            $slugLink = $content["slug"];
+            ]);
+
+            $content = empty($content1['show'][0]) ? [] : $content1['show'][0];
+            $slugLink = empty($content['slug']) ? '' : $content['slug'];
+
         } else {
             if ($event_slug) {
                 $slug = $event_slug;
@@ -92,7 +95,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
 
 
         <?php //output
-        if (count($content) > 0) {
+        if (isset($content) && count($content) > 0) {
             $item = $content;
         ?>
             <?php
@@ -128,8 +131,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
             if ($show_location && $item['location']) {
                 echo "<h6 class=\"brz-eventFeatured__item--meta\">Location: {$item['location']}</h6>";
                 if ($item['fulladdress']) {
-                    echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                    if ($show_meta_headings) echo "Address: ";
+                    echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                    if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta'>Address: </span>";
                     echo "<a href=\"http://maps.google.com/maps?q={$item["fulladdress"]}\" target=\"_blank\">{$item['fulladdress']}</a>";
                     echo "</h6>";
                 }
@@ -146,8 +149,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "{$item['coordname']}";
                 echo "</h6>";
                 if ($show_coordinator_email && $item['coordemail']) {
-                    echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                    if ($show_meta_headings) echo "Coordinator Email: ";
+                    echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                    if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta'>Coordinator Email: </span>";
                     echo "<a href=\"mailto:{$item['coordemail']}\">{$item['coordemail']}</a>";
                     echo "</h6>";
                 }
@@ -165,16 +168,16 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</h6>";
             }
             if ($show_website && $item['website']) {
-                echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                if ($show_meta_headings) echo "Website: ";
+                echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta'>Website: </span>";
                 echo "<a href=\"{$item['website']}\">{$item['website']}</a>";
                 echo "</h6>";
             }
             if ($show_registration && $item['registrationurl']) {
-                echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$item['registrationurl']}\" target=\"_blank\">Register</a></div>";
+                echo "<div class=\"brz-ministryBrands__item--meta--register-button\"><a href=\"{$item['registrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_registration && $item['externalregistrationurl']) {
-                echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
+                echo "<div class=\"brz-ministryBrands__item--meta--register-button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_preview && $item['preview']) {
                 $item['preview'] = substr($item['preview'], 0, 110) . " ...";

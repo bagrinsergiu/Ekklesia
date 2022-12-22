@@ -62,7 +62,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
 
 
         <?php //output
-        if (count($content['show']) > 0) {
+        if ( isset($content['show']) && count($content['show']) > 0) {
             $item = $content['show'];
         ?>
 
