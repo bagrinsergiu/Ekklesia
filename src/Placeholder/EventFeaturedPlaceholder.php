@@ -128,8 +128,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
             if ($show_location && $item['location']) {
                 echo "<h6 class=\"brz-eventFeatured__item--meta\">Location: {$item['location']}</h6>";
                 if ($item['fulladdress']) {
-                    echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                    if ($show_meta_headings) echo "Address: ";
+                    echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                    if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta'>Address: </span>";
                     echo "<a href=\"http://maps.google.com/maps?q={$item["fulladdress"]}\" target=\"_blank\">{$item['fulladdress']}</a>";
                     echo "</h6>";
                 }
@@ -146,8 +146,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "{$item['coordname']}";
                 echo "</h6>";
                 if ($show_coordinator_email && $item['coordemail']) {
-                    echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                    if ($show_meta_headings) echo "Coordinator Email: ";
+                    echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                    if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta'>Coordinator Email: </span>";
                     echo "<a href=\"mailto:{$item['coordemail']}\">{$item['coordemail']}</a>";
                     echo "</h6>";
                 }
@@ -165,8 +165,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</h6>";
             }
             if ($show_website && $item['website']) {
-                echo "<h6 class=\"brz-eventFeatured__item--meta\">";
-                if ($show_meta_headings) echo "Website: ";
+                echo "<h6 class=\"brz-eventFeatured__item--meta--link\">";
+                if ($show_meta_headings) echo "<span class='brz-eventFeatured__item--meta--link'>Website: </span>";
                 echo "<a href=\"{$item['website']}\">{$item['website']}</a>";
                 echo "</h6>";
             }

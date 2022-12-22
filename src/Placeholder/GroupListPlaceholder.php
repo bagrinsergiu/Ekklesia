@@ -40,7 +40,8 @@ class GroupListPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms        = $this->monkCMS;
-        $detail_url = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        $detail_url = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+
         $content    = $cms->get([
             'module'        => 'smallgroup',
             'display'       => 'list',
@@ -84,7 +85,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
                     }
 
                     echo "<h4 class=\"brz-groupList__item--meta--title\">";
-                    if ($detail_url) echo "<a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\">";
+                    if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\">";
                     echo "{$item['name']}";
                     if ($detail_url) echo "</a>";
                     echo "</h4>";
@@ -119,14 +120,15 @@ class GroupListPlaceholder extends PlaceholderAbstract
                         if ($item['iflinknewwindow']) {
                             $resource_target = " target=\"_blank\"";
                         }
-                        echo "<h6 class=\"brz-groupList__item--meta\">Resource: <a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a></h6>";
+                        echo "<h6 class=\"brz-groupList__item--meta--link\"><span class='brz-groupList__item--meta'>Resource: </span><a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a></h6>";
                     }
                     if ($show_preview && $item['description']) {
                         $item['description'] = substr($item['description'], 0, 110) . " ...";
                         echo "<div class=\"brz-groupList__item--meta--preview\">{$item['description']}</div>";
+                        
                     }
                     if ($detail_url && $detail_page_button_text) {
-                        echo "<p class=\"brz-groupList__item--meta--detail--button\"><a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                        echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\">{$detail_page_button_text}</a></div>";
                     }
                     echo "</div>";
                 }

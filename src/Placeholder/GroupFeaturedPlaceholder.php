@@ -31,7 +31,6 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
             'slug'                    => false,
         ];
 
-        //TODO, why slug - is not used
 
         $settings = array_merge($options, $placeholder->getAttributes());
 
@@ -41,7 +40,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
         $group_recent_list = $settings['group_recent_list'] != 'none' ? $settings['group_recent_list'] : '';
         $category          = $settings['category'] != 'all' ? $settings['category'] : '';
         $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? home_url($settings['detail_page']) : false;
+        $detail_url        = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
 
         if ($group_latest) {
             $content = $cms->get([
@@ -96,17 +95,17 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                 <?php
                 echo "<h2 class=\"brz-groupFeatured__item--meta--title\">{$item['name']}</h2>";
                 if ($show_day && $item['dayoftheweek']) {
-                    echo "<h5 class=\"brz-groupFeatured__item--meta--title\">Meeting Day: {$item['dayoftheweek']}</h5>";
+                    echo "<h5 class=\"brz-groupFeatured__item--meta--date\">Meeting Day: {$item['dayoftheweek']}</h5>";
                 }
                 if ($show_times && ($item['starttime'] || $item['endtime'])) {
-                    echo "<h5 class=\"brz-groupFeatured__item--meta\">Meeting Time: ";
+                    echo "<h5 class=\"brz-groupFeatured__item--meta--date\">Meeting Time: ";
                     if ($item['starttime']) echo "{$item['starttime']}";
                     if ($item['endtime']) echo " - {$item['endtime']}";
                     echo "</h5>";
                 }
 
                 if ($show_image && $item['imageurl']) {
-                    echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                    echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                 }
 
                 if ($show_category && $item['category']) {
@@ -133,11 +132,11 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                     echo "<h6 class=\"brz-groupFeatured__item--meta\">Resource: <a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a></h6>";
                 }
                 if ($show_preview && $item['description']) {
-                    echo "<div class=\"brz-groupFeatured__item--meta-preview\">{$item['description']}</div>";
+                    echo "<div class=\"brz-groupFeatured__item--meta--preview\">{$item['description']}</div>";
                 }
 
                 if ($detail_url && $detail_page_button_text) {
-                    echo "<p class=\"brz-groupFeatured__item--meta--button\"><a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                 }
 
                 ?>
