@@ -11,46 +11,11 @@ class SermonListPlaceholder extends PlaceholderAbstract
 
     public function getValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-        $options = [
-            'show_group_filter'       => false,
-            'group_filter_heading'    => 'Group',
-            'show_category_filter'    => false,
-            'category_filter_heading' => 'Category',
-            'show_series_filter'      => false,
-            'series_filter_heading'   => 'Series',
-            'show_speaker_filter'     => false,
-            'speaker_filter_heading'  => 'Speaker',
-            'show_search'             => false,
-            'search_placeholder'      => 'Search',
-            // Constent Settings
-            'column_count'            => 3,
-            'column_count_tablet'     => 2,
-            'column_count_mobile'     => 1,
-            'show_pagination'         => false,
-            'show_images'             => true,
-            'show_video'              => false,
-            'show_audio'              => true,
-            'show_inline_video'       => true,
-            'show_inline_audio'       => true,
-            'show_media_links'        => true,
-            'show_title'              => true,
-            'show_date'               => true,
-            'show_category'           => true,
-            'show_group'              => true,
-            'show_series'             => true,
-            'show_preacher'           => true,
-            'show_passage'            => true,
-            'show_meta_headings'      => false,
-            'show_preview'            => false,
-            'detail_page_button_text' => false,
-            'howmany'                 => 9,
-            'sticky_space'            => 0,
-        ];
 
-        $attributes = array_merge($options, $placeholder->getAttributes());
+        $attributes = $placeholder->getAttributes();
 
-        $features = isset($attributes['features']) ? 'features' : '';
-        $nonfeatures = isset($attributes['nonfeatures']) ? 'nonfeatures' : '';
+        $features    = empty($attributes['features']) ? '' : 'features';
+        $nonfeatures = empty($attributes['nonfeatures']) ? '' : 'nonfeatures';
 
         if ($features) {
             $nonfeatures = '';
