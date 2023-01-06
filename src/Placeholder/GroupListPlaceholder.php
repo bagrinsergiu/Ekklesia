@@ -48,7 +48,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
             'order'         => 'recent',
             'emailencode'   => 'no',
             'howmany'       => $howmany,
-            'page'          => isset($_GET['ekklesia360_group_list_page']) ? $_GET['ekklesia360_group_list_page'] : 1,
+            'page'          => isset($_GET['page']) ? $_GET['page'] : 1,
             'find_category' => $category == 'all' ? '' : $category,
             'find_group'    => $group == 'all' ? '' : $group,
             'show'          => "__endtime format='g:ia'__",
@@ -136,7 +136,6 @@ class GroupListPlaceholder extends PlaceholderAbstract
             <?php
             if ($show_pagination && $content['after_show']['pagination']) {
                 $content['after_show']['pagination'] = str_replace('id="pagination"', 'id="ekklesia360_group_list_pagination" class="brz-ministryBrands__pagination"', $content['after_show']['pagination']);
-                $content['after_show']['pagination'] = str_replace('page=', 'ekklesia360_group_list_page=', $content['after_show']['pagination']);
                 echo $content['after_show']['pagination'];
             }
         } //no output

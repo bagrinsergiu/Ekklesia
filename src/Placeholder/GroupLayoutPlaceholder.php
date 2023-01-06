@@ -55,7 +55,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         $cms            = $this->monkCMS;
         // home_url($settings['detail_page'])
         $detail_url     = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
-        $page           = isset($_GET['ekklesia360_group_layout_page']) ? $_GET['ekklesia360_group_layout_page'] : 1;
+        $page           = isset($_GET['page']) ? $_GET['page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
         $filterCount    = count(array_filter($filterCountArr));
@@ -385,9 +385,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 <?php
                 if ($show_pagination) {
                     $paginationOutput = '<p id="brz-groupLayout__pagination" class="brz-groupLayout__pagination">' . $pagination->getLinks($_GET) . '</p>';
-                    $paginationOutput = str_replace('page=', 'ekklesia360_group_layout_page=', $paginationOutput);
-                    //if complexity grows consider http_build_query
 
+                    //if complexity grows consider http_build_query
                     if (isset($_GET['search_term'])) {
                         $paginationOutput = str_replace('?', "?search_term={$_GET['search_term']}&", $paginationOutput);
                     }

@@ -56,7 +56,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $filterCount     = count(array_filter($filterCountArr));
         $detail_url      = !empty($settings['detail_page']) ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $cms             = $this->monkCMS;
-        $page            = isset($_GET['ekklesia360_sermon_layout_page']) ? $_GET['ekklesia360_sermon_layout_page'] : 1;
+        $page            = isset($_GET['page']) ? $_GET['page'] : 1;
         $category_filter = isset($_GET['category']) ? $_GET['category'] : false;
         $group_filter    = isset($_GET['group']) ? $_GET['group'] : false;
         $series_filter   = isset($_GET['series']) ? $_GET['series'] : false;
@@ -384,9 +384,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             if($show_pagination)
             {
                 $paginationOutput = '<p class="brz-ministryBrands__pagination">'.$pagination->getLinks($_GET).'</p>';
-                $paginationOutput = str_replace('page=', 'ekklesia360_sermon_layout_page=', $paginationOutput);
-                //if complexity grows consider http_build_query
 
+                //if complexity grows consider http_build_query
                 if(isset($_GET['search_term']))
                 {
                     $paginationOutput = str_replace('?', "?search_term={$_GET['search_term']}&", $paginationOutput);
