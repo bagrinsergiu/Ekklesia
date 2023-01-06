@@ -46,7 +46,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
         $recentEvents = $settings['recentEvents'] != '' ? $settings['recentEvents'] : '';
         $category          = $settings['category'] != 'all' ? $settings['category'] : '';
         $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false; // TODO - replace this wordpress function and find in the project all of them
+        $detail_url        = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - replace this wordpress function and find in the project all of them
         $slugLink          = false;
         $slug              = false;
 

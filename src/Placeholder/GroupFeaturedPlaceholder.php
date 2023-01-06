@@ -40,7 +40,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
         $group_recent_list = $settings['group_recent_list'] != 'none' ? $settings['group_recent_list'] : '';
         $category          = $settings['category'] != 'all' ? $settings['category'] : '';
         $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+        $detail_url        = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
 
         if ($group_latest) {
             $content1 = $cms->get([
@@ -51,7 +51,6 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                 'find_category' => $category,
                 'find_group'    => $group,
                 'emailencode'   => 'no',
-                'show'          => "__starttime format='g:ia'__",
                 'show'          => "__endtime format='g:ia'__",
             ]);
             $content = empty($content1['show'][0]) ? [] : $content1['show'][0];
@@ -69,7 +68,6 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                 'display'     => 'detail',
                 'find'        => $slug,
                 'emailencode' => 'no',
-                'show'        => "__starttime format='g:ia'__",
                 'show'        => "__endtime format='g:ia'__",
             ])['show'];
         }

@@ -54,7 +54,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
 
         $cms            = $this->monkCMS;
         // home_url($settings['detail_page'])
-        $detail_url     = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+        $detail_url     = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $page           = isset($_GET['ekklesia360_group_layout_page']) ? $_GET['ekklesia360_group_layout_page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
@@ -93,7 +93,6 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                     'module'      => 'smallgroup',
                     'display'     => 'detail',
                     'emailencode' => 'no',
-                    'show'        => "__starttime format='g:ia'__",
                     'show'        => "__endtime format='g:ia'__",
                     'find'        => $search['slug'],
                 ]);
@@ -109,7 +108,6 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 'howmany'       => '100',
                 'find_category' => $parent_category,
                 'find_group'    => $group_filter,
-                'show'          => "__starttime format='g:ia'__",
                 'show'          => "__endtime format='g:ia'__",
             ]);
             //filter categories separately since there can be more than 1 category filter

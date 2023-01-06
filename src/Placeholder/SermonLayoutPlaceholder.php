@@ -54,7 +54,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
         $filterCountArr  = array($show_group_filter, $show_category_filter, $show_series_filter, $show_speaker_filter);
         $filterCount     = count(array_filter($filterCountArr));
-        $detail_url      = !empty($settings['detail_page']) ? get_permalink($settings['detail_page']) : false;
+        $detail_url      = !empty($settings['detail_page']) ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $cms             = $this->monkCMS;
         $page            = isset($_GET['ekklesia360_sermon_layout_page']) ? $_GET['ekklesia360_sermon_layout_page'] : 1;
         $category_filter = isset($_GET['category']) ? $_GET['category'] : false;
@@ -103,7 +103,6 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     'display' => 'detail',
                     'emailencode' => 'no',
                     'find' => $search['slug'],
-                    'show' => "__videoplayer fullscreen='true'__",
                     'show' => "__audioplayer__",
                 ));
                 $content['show'][] = $item['show'];

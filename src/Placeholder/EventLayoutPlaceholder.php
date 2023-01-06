@@ -66,9 +66,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms             = $this->monkCMS;
-        $isPreview       = !is_preview(); // TODO - check from wordpress and from cloud
         $baseURL         = (strtok($_SERVER["REQUEST_URI"], '?') !== FALSE) ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
-        $detail_url      = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+        $detail_url      = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $parent_category = [];
         $calendarStart   = date('Y-m-d');
         $calendarEnd     = date('Y-m-d', strtotime("+{$howmanymonths} months"));
@@ -215,17 +214,17 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
-                        href="<?= $baseURL ?>?view=featured<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_featured_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=featured"><?= $view_featured_heading ?></a></li><?php endif; ?>
                 <?php if ($show_list_view): ?>
                     <li class="<?= $listActive ?>" data-order="<?= $view_order_list ?>"><a
-                        href="<?= $baseURL ?>?view=list<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_list_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=list"><?= $view_list_heading ?></a></li><?php endif; ?>
                 <?php if ($show_calendar_view): ?>
                     <li class="<?= $calendarActive ?>" data-order="<?= $view_order_calendar ?>"><a
-                        href="<?= $baseURL ?>?view=calendar<?= $isPreview ? "" :"&preview=true" ?>"><?= $view_calendar_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?view=calendar"><?= $view_calendar_heading ?></a></li><?php endif; ?>
             </ul>
         </div>
 
-        <?php if ($view != "featured" || $isPreview): //hide from featured view ?>
+        <?php if ($view != "featured"): //hide from featured view ?>
         <div id="brz-eventLayout--filters" class="brz-eventLayout--filters">
             <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
@@ -433,7 +432,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //featured view
-        if ($show_featured_view && ($view == "featured" || $isPreview)):
+        if ($show_featured_view && $view == "featured"):
             ?>
             <div class="brz-eventLayout--featured__container">
                 <?php //output
@@ -502,7 +501,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //list view
-        if ($show_list_view && ($view == "list" || $isPreview)):
+        if ($show_list_view && $view == "list"):
             ?>
             <div class="brz-eventLayout--list__container">
 
@@ -532,7 +531,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //calendar view
-        if ($show_calendar_view && ($view == "calendar" || $isPreview)):
+        if ($show_calendar_view && $view == "calendar"):
             ?>
             <div class="brz-eventLayout--calendar__container">
 

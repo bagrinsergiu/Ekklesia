@@ -40,7 +40,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms        = $this->monkCMS;
-        $detail_url = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+        $detail_url = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
 
         $content    = $cms->get([
             'module'        => 'smallgroup',
@@ -51,7 +51,6 @@ class GroupListPlaceholder extends PlaceholderAbstract
             'page'          => isset($_GET['ekklesia360_group_list_page']) ? $_GET['ekklesia360_group_list_page'] : 1,
             'find_category' => $category == 'all' ? '' : $category,
             'find_group'    => $group == 'all' ? '' : $group,
-            'show'          => "__starttime format='g:ia'__",
             'show'          => "__endtime format='g:ia'__",
             'after_show'    => '__pagination__'
         ]);

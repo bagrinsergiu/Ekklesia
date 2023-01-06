@@ -44,7 +44,6 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
             'order'       => 'recent',
             'howmany'     => 1,
             'emailencode' => 'no',
-            'show'        => "__videoplayer fullscreen='true'__",
             'show'        => "__audioplayer__",
         ]);
 
@@ -62,7 +61,6 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
             'display'     => 'detail',
             'find'        => $slug,
             'emailencode' => 'no',
-            'show'        => "__videoplayer fullscreen='true'__",
             'show'        => "__audioplayer__",
         ]);
 

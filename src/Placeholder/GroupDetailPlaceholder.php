@@ -51,7 +51,6 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
             'module'      => 'smallgroup',
             'display'     => 'detail',
             'find'        => $slug,
-            'show'        => "__starttime format='g:ia'__",
             'show'        => "__endtime format='g:ia'__",
             'emailencode' => 'no',
         ]);

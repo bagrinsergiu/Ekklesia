@@ -42,7 +42,7 @@ class EventListPlaceholder extends PlaceholderAbstract
         $cms        = $this->monkCMS;
         $category   = $settings['category'] != 'all' ? $settings['category'] : '';
         $group      = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url = $settings['detail_page'] ? get_permalink($settings['detail_page']) : false;
+        $detail_url = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $page       = isset($_GET['ekklesia360_event_list_page']) ? $_GET['ekklesia360_event_list_page'] : 1;
 
         if ($features) {
