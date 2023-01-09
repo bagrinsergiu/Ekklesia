@@ -97,9 +97,10 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 'find_module' => 'sermon',
                 'hide_module' => 'media',
             ));
-            foreach($search_arr['show'] as $search){
-                $item = $cms->get(array(
-                    'module'  => 'sermon',
+            if(isset($search_arr['show'])){
+                foreach($search_arr['show'] as $search){
+                    $item = $cms->get(array(
+                        'module'  => 'sermon',
                     'display' => 'detail',
                     'emailencode' => 'no',
                     'find' => $search['slug'],
@@ -107,6 +108,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 ));
                 $content['show'][] = $item['show'];
             }
+          }
         }
         //if no search module api
         else
@@ -233,13 +235,14 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <?php
 
             //setup pagination
-            $pagination = new CustomPagination($content["show"], $page, $howmany);
+            $_content =  isset($content["show"]) ? $content["show"]  : [];
+            $pagination = new CustomPagination($_content, (isset($page) ? $page : 1), $howmany);
             $pagination->setShowFirstAndLast(true);
             $resultsPagination = $pagination->getResults();
             //output
 
             //output
-            if(count($resultsPagination) > 0)
+            if(isset($resultsPagination) && count($resultsPagination) > 0)
             {
                 ?>
                     <?php
@@ -324,10 +327,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         }
                         if($show_passage && $item['passages'])
                         {
-                            echo "<h6 class=\"brz-sermonLayout__item--meta brz-sermonLayout__item--meta-passages\">";
-
-                            
-                            if($show_meta_headings) echo "Passages: ";
+                            echo "<h6>";
+                            if($show_meta_headings) echo "<span class='brz-sermonLayout__item--meta'>Passages: </span>";
                             echo "{$item['passages']}";
                             echo "</h6>";
                         }
