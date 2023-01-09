@@ -11,7 +11,6 @@ class SermonListPlaceholder extends PlaceholderAbstract
 
     public function getValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-
         $attributes = $placeholder->getAttributes();
 
         $features    = empty($attributes['features']) ? '' : 'features';
@@ -73,7 +72,7 @@ class SermonListPlaceholder extends PlaceholderAbstract
                 'show_meta_headings' => $attributes['show_meta_headings'],
                 'show_preview' => $attributes['show_preview'],
                 'detail_page_button_text' => $attributes['detail_page_button_text'] ?? '',
-                'detail_url' => $attributes['detail_url'], // TODO - wp to cloud, get the page url
+                'detail_url' => $attributes['detail_url'] ? $attributes['detail_url'] : '',
                 'sticky_space' => $attributes['sticky_space'] ? (int)$attributes['sticky_space'] : '0'
             ]
         ));

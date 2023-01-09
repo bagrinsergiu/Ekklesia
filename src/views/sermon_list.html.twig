@@ -7,7 +7,12 @@
 						<a class="brz-ministryBrands__item--meta--links" href="{{ detail_url }}?brz_sermon_slug={{ item.slug }}">
 						{% endif %}
 
-						<div class="brz-sermonList__item--img"><img src="{{ item.imageurl }}" alt="\"/></div>
+						<div class="brz-sermonList__item--img">
+							{% if item.imageurl  %}
+								<img src="{{ item.imageurl }}" alt="\"/>
+							{% endif %}
+
+						</div>
 
 						{% if detail_url %}
 						</a>
@@ -96,8 +101,7 @@
 						<ul class="brz-sermonList__item--media">
 
 							{% if item.videoplayer %}
-								<li
-									class="brz-ministryBrands__item--meta--links">
+								<li class="brz-ministryBrands__item--meta--links">
 									{% if "javascript" in item.videoplayer %}
 										{{preg_replace('<a(.+?) (.+?)>(.+?)<\/a>', '<a href="javascript:void(0);" $2><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="brz-icon-svg align-[initial]"><path d="M528 0H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h192l-16 48h-72c-13.3 0-24 10.7-24 24s10.7 24 24 24h272c13.3 0 24-10.7 24-24s-10.7-24-24-24h-72l-16-48h192c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 352H64V64h448v288z"></path></svg></a>', item.videoplayer)}}
 									{% else %}
@@ -152,4 +156,3 @@
 	{% else %}
 		<p>There are no sermons available.</p>
 	{% endif %}
-

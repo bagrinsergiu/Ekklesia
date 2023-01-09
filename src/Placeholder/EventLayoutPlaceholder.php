@@ -147,7 +147,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             $search_arr = $cms->get([
                 'module'        => 'search',
                 'display'       => 'results',
-                'howmany'       => $howmany,
+                'howmany'       => $howmanyfeatured,
                 'find_category' => $parent_category,
                 'keywords'      => $_GET['search_term'],
                 'find_module'   => 'event',
@@ -155,15 +155,17 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 'after_show'    => '__pagination__'
             ]);
 
-            foreach ($search_arr['show'] as $search) {
-                //$search['slug'] = str_replace('/event/','',$search['url']);
-                $item = $cms->get([
-                    'module'      => 'event',
-                    'display'     => 'detail',
-                    'emailencode' => 'no',
-                    'find'        => $search['slug'],
-                ]);
-                $content['show'][] = $item['show'];
+            if(isset($search_arr['show'])){
+                foreach ($search_arr['show'] as $search) {
+                    //$search['slug'] = str_replace('/event/','',$search['url']);
+                    $item = $cms->get([
+                        'module'      => 'event',
+                        'display'     => 'detail',
+                        'emailencode' => 'no',
+                        'find'        => $search['slug'],
+                    ]);
+                    $content['show'][] = $item['show'];
+                }
             }
             if ($search_arr['after_show']['pagination']) {
                 $content['after_show']['pagination'] = $search_arr['after_show']['pagination'];
@@ -196,7 +198,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
             //filter categories separately since there can be more than 1 category filter
             if (isset($_GET["category"])) {
-                $content["show"] = self::searchArray($content["show"], $_GET["category"]);
+                $content["show"] = self::searchArray(empty($content["show"])? [] : $content["show"] , $_GET["category"]);
             }
             if (isset($_GET["category_add1"])) {
                 $content["show"] = self::searchArray($content["show"], $_GET["category_add1"]);
@@ -506,7 +508,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <div class="brz-eventLayout--list__container">
 
                 <?php //output
-                if (count($content['show']) > 0) {
+                if (isset($content['show']) && count($content['show']) > 0) {
                     //iterate over each event and assign to month and day
                     foreach ($content["show"] as $show) {
                         $grouping_month = date("Y-m", strtotime($show["eventstart"]));
@@ -581,7 +583,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             foreach($pieces as $piece)
             {
                 $catcall = "category".$count."slug";
-                $categoriesArr[] = $item[$catcall];
+                if(isset($item[$catcall])){
+                    $categoriesArr[] = $item[$catcall];
+                }
                 $count++;
             }
             if (in_array($category, $categoriesArr)) {
