@@ -88,7 +88,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 'hide_module'   => 'media',
             ]);
 
-            foreach ($search_arr['show'] as $search) {
+            $_search = isset($search_arr['show']) ? $search_arr['show'] : [];
+            foreach ($_search as $search) {
                 $item = $cms->get([
                     'module'      => 'smallgroup',
                     'display'     => 'detail',
@@ -299,7 +300,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
 
             <?php
             //setup pagination
-            $pagination = new CustomPagination($content["show"], (isset($page) ? $page : 1), $howmany);
+            $_content  = isset($content["show"]) ? $content["show"] : [];
+            $pagination = new CustomPagination($_content , (isset($page) ? $page : 1), $howmany);
             $pagination->setShowFirstAndLast(true);
             $resultsPagination = $pagination->getResults();
             //output
@@ -440,7 +442,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         {
             $pieces = explode(", ", $group["category"]);
             $matches = array_intersect($pieces,$categories);
-            if($matches && count($matches > 0))
+            if(is_countable($matches) && count($matches)>0)
             {
                 $results[] = $group;
             }

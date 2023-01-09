@@ -59,7 +59,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
         }
 
         if ($sermon_latest != '') {
-            $content = $cms->get([
+            $content1 = $cms->get([
                 'module'        => 'sermon',
                 'display'       => 'list',
                 'order'         => 'recent',
@@ -72,7 +72,8 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                 'emailencode'   => 'no',
                 'show'          => "__videoplayer fullscreen='true'__",
                 'show'          => "__audioplayer__",
-            ])['show'][0];
+            ]);
+            $content = empty($content1['show'][0]) ? [] : $content1['show'][0];
         } else {
 
             if ($sermon_slug) {
@@ -142,11 +143,9 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                     echo "</h6>";
                 }
                 if ($show_passage && $item['passages']) {
-                    echo "<h6 class=\"brz-sermonFeatured__item--meta\">";
-                    if ($show_meta_headings) echo "<span>Passages: </span>";
-                    echo "<span class='brz-ministryBrands__item--meta--links'>";
+                    echo "<h6>";
+                    if ($show_meta_headings) echo "<span class='brz-sermonFeatured__item--meta'>Passages: </span>";
                     echo $item['passages'];
-                    echo "</span>";
                     echo "</h6>";
                 }
                 if ($show_image && $item['imageurl'] && !$show_video) {
@@ -189,7 +188,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                     }
                     if ($item['notes']) {
                         echo "<li class=\"brz-ministryBrands__item--meta--links\"><a href=\"{$item['notes']}\" target=\"_blank\">";
-                        echo '</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="brz-icon-svg align-[initial]"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></li>';
+                        echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="brz-icon-svg align-[initial]"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></a></li>';
                     }
                     echo "</ul>";
                 }

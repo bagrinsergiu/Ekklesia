@@ -51,17 +51,16 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
             'find_group'    => $group == 'all' ? '' : $group,
             'show'          => "__endtime format='g:ia'__"
         ]);
-        ?>
+?>
 
-        <div class="brz-groupSlider_wrap" data-showarrows="<?= $show_arrows ?>"
-             data-showpagination="<?= $show_pagination ?>">
+        <div class="brz-groupSlider_wrap" data-showarrows="<?= $show_arrows ?>" data-showpagination="<?= $show_pagination ?>">
 
             <?php //output
             if (!empty($content['show'])) {
-                ?>
+            ?>
 
                 <div class="brz-groupSlider-swiper-container" data-howmanyshow="<?= $howmany_show ?>">
-                    <div class="brz-groupSlider-swiper-wrapper" data-show="<?= $column_count?>" data-pagination="<?= $show_pagination ?>">
+                    <div class="brz-groupSlider-swiper-wrapper" data-show="<?= $column_count ?>" data-pagination="<?= $show_pagination ?>">
                         <?php
                         foreach ($content['show'] as $key => $item) {
                             //remove 12am
@@ -130,31 +129,53 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                             }
                             echo "</div>";
                             echo "</article>";
-        
                         }
                         ?>
                     </div>
-                    <?php if ($show_pagination): ?>
-                        <div class="brz-groupSlider-swiper-pagination"></div>
+                    <?php if ($show_pagination) : ?>
+                        <ul style="display:none" class="brz-ministryBrands__editor-slider brz-slick-slider__dots">
+                            <li role="presentation">
+                                <button>1</button>
+                            </li>
+                            <li class="slick-active" role="presentation">
+                                <button>2</button>
+                            </li>
+                            <li role="presentation">
+                                <button>3</button>
+                            </li>
+                            <li role="presentation">
+                                <button>4</button>
+                            </li>
+                            <li role="presentation">
+                                <button>5</button>
+                            </li>
+                            <li role="presentation">
+                                <button>6</button>
+                            </li>
+                        </ul>
                     <?php endif; ?>
                 </div>
-                <?php if ($show_arrows): ?>
-                    <div class="brz-swiper-arrow brz-swiper-arrow_prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="angle-left"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg></i></div>
-                    <div class="brz-swiper-arrow brz-swiper-arrow_next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="angle-right"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
-                </div>
+                <?php if ($show_arrows) : ?>
+                    <div class="brz-swiper-arrow brz-swiper-arrow_prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="angle-left">
+                            <path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path>
+                        </svg></i></div>
+                    <div class="brz-swiper-arrow brz-swiper-arrow_next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="angle-right">
+                            <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path>
+                        </svg>
+                    </div>
                 <?php endif; ?>
-                <?php
+            <?php
             } //no output
             else {
-                ?>
+            ?>
 
                 <p>There are no groups available.</p>
 
-                <?php
+            <?php
             }
             ?>
         </div>
 
-        <?php
+<?php
     }
 }
