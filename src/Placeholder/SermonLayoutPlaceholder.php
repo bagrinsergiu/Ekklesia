@@ -56,7 +56,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $filterCount     = count(array_filter($filterCountArr));
         $detail_url      = !empty($settings['detail_page']) ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
         $cms             = $this->monkCMS;
-        $page            = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page            = isset($_GET['sermon-layout-page']) ? $_GET['sermon-layout-page'] : 1;
         $category_filter = isset($_GET['category']) ? $_GET['category'] : false;
         $group_filter    = isset($_GET['group']) ? $_GET['group'] : false;
         $series_filter   = isset($_GET['series']) ? $_GET['series'] : false;
@@ -121,7 +121,6 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 'find_group' => $group_filter,
                 'find_series' => $series_filter,
                 'find_preacher' => $speaker_filter,
-                'show' => "__videoplayer fullscreen='true'__",
                 'show' => "__audioplayer__",
             ));
         }
@@ -234,7 +233,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <?php
 
             //setup pagination
-            $pagination = new CustomPagination($content["show"], (isset($page) ? $page : 1), $howmany);
+            $pagination = new CustomPagination($content["show"], $page, $howmany);
             $pagination->setShowFirstAndLast(true);
             $resultsPagination = $pagination->getResults();
             //output
@@ -383,7 +382,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         <?php 
             if($show_pagination)
             {
-                $paginationOutput = '<p class="brz-ministryBrands__pagination">'.$pagination->getLinks($_GET).'</p>';
+                $paginationOutput = '<p class="brz-ministryBrands__pagination">'.$pagination->getLinks($_GET, 'sermon-layout-page').'</p>';
 
                 //if complexity grows consider http_build_query
                 if(isset($_GET['search_term']))

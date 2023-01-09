@@ -156,20 +156,23 @@ class CustomPagination
      *
      * @param array $params A list of parameters (probably get/post) to
      * pass around with each request
-     * @return mixed  Return description (if any) ...
+     * @return string  Return description (if any) ...
      * @access public
      */
-    public function getLinks($params = array(), $anchorTag = "")
+    public function getLinks($params, $name, $anchorTag = "")
     {
         // Initiate the links array
         $plinks = array();
         $links = array();
         $slinks = array();
 
+        if (isset($params[$name])) {
+            unset($params[$name]);
+        }
+
         // Concatenate the get variables to add to the page numbering string
         $queryUrl = '';
-        if (!empty($params) === true) {
-            unset($params['page']);
+        if (!empty($params)) {
             $queryUrl = '&amp;'.http_build_query($params);
         }
 
@@ -180,21 +183,21 @@ class CustomPagination
                 if ($this->_showFirstAndLast) {
                     //$plinks[] = ' <a href="?page=1'.$queryUrl.'" class="first">First </a> ';
                 }
-                $plinks[] = ' <a href="?page='.($this->page - 1).$queryUrl.$anchorTag.'" id="previous">Previous</a> ';
+                $plinks[] = " <a href=\"?$name=".($this->page - 1) . $queryUrl . $anchorTag.'" id="previous">Previous</a> ';
             }
 
             // Assign all the page numbers & links to the array
             for ($j = 1; $j < ($this->pages + 1); $j++) {
                 if ($this->page == $j) {
-                    $links[] = ' <a id="current">'.$j.'</a> '; // If we are on the same page as the current item
+                    $links[] = ' <a id="current">' . $j . '</a> '; // If we are on the same page as the current item
                 } else {
-                    $links[] = ' <a href="?page='.$j.$queryUrl.$anchorTag.'" class="number">'.$j.'</a> '; // add the link to the array
+                    $links[] = " <a href=\"?$name=". $j . $queryUrl . $anchorTag . '" class="number">' . $j . '</a> '; // add the link to the array
                 }
             }
 
             // Assign the 'next page' if we are not on the last page
             if ($this->page < $this->pages) {
-                $slinks[] = ' <a href="?page='.($this->page + 1).$queryUrl.$anchorTag.'" id="next">Next</a> ';
+                $slinks[] = " <a href=\"?$name=" . ($this->page + 1) . $queryUrl . $anchorTag . '" id="next">Next</a> ';
                 if ($this->_showFirstAndLast) {
                     //$slinks[] = ' <a href="?page='.($this->pages).$queryUrl.'" class="last">Last</a> ';
                 }
@@ -203,7 +206,8 @@ class CustomPagination
             // Push the array into a string using any some glue
             return implode(' ', $plinks).implode($this->mainSeperator, $links).implode(' ', $slinks);
         }
-        return;
+
+        return '';
     }
 }
-?>
+

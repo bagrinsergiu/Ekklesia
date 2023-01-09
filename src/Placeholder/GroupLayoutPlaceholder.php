@@ -33,7 +33,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             'show_pagination'                 => true,
             'howmany'                         => 9,
             'column_count'                    => 3,
-            'column_countcolumn_count_tablet' => 2,
+            'column_count_tablet'             => 2,
             'column_count_mobile'             => 1,
             'show_images'                     => true,
             'show_day'                        => true,
@@ -55,7 +55,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         $cms            = $this->monkCMS;
         // home_url($settings['detail_page'])
         $detail_url     = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
-        $page           = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page           = isset($_GET['group-layout-page']) ? $_GET['group-layout-page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
         $filterCount    = count(array_filter($filterCountArr));
@@ -384,7 +384,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 </div>
                 <?php
                 if ($show_pagination) {
-                    $paginationOutput = '<p id="brz-groupLayout__pagination" class="brz-groupLayout__pagination">' . $pagination->getLinks($_GET) . '</p>';
+
+                    $paginationOutput = '<p id="brz-groupLayout__pagination" class="brz-groupLayout__pagination">' . $pagination->getLinks($_GET, 'group-layout-page') . '</p>';
 
                     //if complexity grows consider http_build_query
                     if (isset($_GET['search_term'])) {

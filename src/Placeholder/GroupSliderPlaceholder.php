@@ -46,7 +46,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
             'order'         => 'recent',
             'emailencode'   => 'no',
             'howmany'       => $howmany,
-            'page'          => isset($_GET['page']) ? $_GET['page'] : 1,
+            'page'          => isset($_GET['group-slider-page']) ? $_GET['group-slider-page'] : 1,
             'find_category' => $category == 'all' ? '' : $category,
             'find_group'    => $group == 'all' ? '' : $group,
             'show'          => "__endtime format='g:ia'__"
