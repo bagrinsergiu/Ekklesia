@@ -7,6 +7,7 @@ use BrizyEkklesia\Placeholder\EventDetailPlaceholder;
 use BrizyEkklesia\Placeholder\EventFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\EventLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\EventListPlaceholder;
+use BrizyEkklesia\Placeholder\FormPlaceholder;
 use BrizyEkklesia\Placeholder\GroupDetailPlaceholder;
 use BrizyEkklesia\Placeholder\GroupFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\GroupLayoutPlaceholder;
@@ -53,6 +54,7 @@ class Placeholders
             new GroupLayoutPlaceholder($this->monkCms, $this->twig),
             new GroupDetailPlaceholder($this->monkCms, $this->twig),
             new GroupFeaturedPlaceholder($this->monkCms, $this->twig),
+            new FormPlaceholder($this->monkCms, $this->twig)
         ];
     }
 }

@@ -113,4 +113,21 @@ class Api {
             'childs'  => $childs,
         ];
     }
+
+    public function getForms()
+    {
+        $forms = $this->monkCms->get([
+            'module'  => 'fmsform',
+            'display' => 'list',
+            'groupby' => '__embedhtml__'
+        ]);
+
+        $options = [];
+
+        foreach ($forms['show'] as $form) {
+            $options[$form['id']] = $form['name'];
+        }
+
+        return $options;
+    }
 }
