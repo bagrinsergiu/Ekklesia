@@ -76,6 +76,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $diff            = $date1->diff($date2, true);
         $calendarDays    = $diff->format('%a');
         $group_filter    = $_GET['group'] ?? false;
+        $isEditor        = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($category_filter_list) {
             $category_filter_list = preg_replace("/\s+/", "", $category_filter_list);
@@ -226,7 +227,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             </ul>
         </div>
 
-        <?php if ($view != "featured"): //hide from featured view ?>
+        <?php if ($view != "featured" || $isEditor): //hide from featured view ?>
         <div id="brz-eventLayout--filters" class="brz-eventLayout--filters">
             <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
