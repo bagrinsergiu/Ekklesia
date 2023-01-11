@@ -76,7 +76,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $diff            = $date1->diff($date2, true);
         $calendarDays    = $diff->format('%a');
         $group_filter    = $_GET['group'] ?? false;
-        $isEditor        = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
+        $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($category_filter_list) {
             $category_filter_list = preg_replace("/\s+/", "", $category_filter_list);
@@ -435,7 +435,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //featured view
-        if ($show_featured_view && $view == "featured"):
+        if ($show_featured_view && ($view == "featured" || $isEditor)):
+            
             ?>
             <div class="brz-eventLayout--featured__container">
                 <?php //output
@@ -504,7 +505,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //list view
-        if ($show_list_view && $view == "list"):
+        if ($show_list_view && ($view == "list" || $isEditor)):
             ?>
             <div class="brz-eventLayout--list__container">
 
@@ -534,7 +535,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         //calendar view
-        if ($show_calendar_view && $view == "calendar"):
+        if ($show_calendar_view && ($view == "calendar" || $isEditor)):
             ?>
             <div class="brz-eventLayout--calendar__container">
 
