@@ -17,10 +17,10 @@ class MonkCms
      */
     private $siteSecret;
 
-    public function __construct($siteId, $siteSecret)
+    public function __construct(EkklesiaDTO $data)
     {
-        $this->siteId     = $siteId;
-        $this->siteSecret = $siteSecret;
+        $this->siteId     = $data->getSiteId();
+        $this->siteSecret = $data->getSecret();
     }
 
     /**
