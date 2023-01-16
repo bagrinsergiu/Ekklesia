@@ -72,7 +72,7 @@ class SermonListPlaceholder extends PlaceholderAbstract
                 'show_meta_headings' => $attributes['show_meta_headings'],
                 'show_preview' => $attributes['show_preview'],
                 'detail_page_button_text' => $attributes['detail_page_button_text'] ?? '',
-                'detail_url' => $attributes['detail_url'] ? $attributes['detail_url'] : '',
+                'detail_url' => $attributes['detail_url'] ? $this->replacer->replacePlaceholders(urldecode($attributes['detail_url']), $context) : false,
                 'sticky_space' => $attributes['sticky_space'] ? (int)$attributes['sticky_space'] : '0'
             ]
         ));

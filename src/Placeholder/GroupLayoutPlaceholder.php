@@ -53,8 +53,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms            = $this->monkCMS;
-        // home_url($settings['detail_page'])
-        $detail_url     = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+        $detail_url     = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
         $page           = isset($_GET['group-layout-page']) ? $_GET['group-layout-page'] : 1;
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];

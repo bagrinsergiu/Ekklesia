@@ -17,6 +17,7 @@ use BrizyEkklesia\Placeholder\SermonDetailPlaceholder;
 use BrizyEkklesia\Placeholder\SermonFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\SermonLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\SermonListPlaceholder;
+use BrizyPlaceholders\Replacer;
 use Twig_Environment;
 
 class Placeholders
@@ -37,24 +38,24 @@ class Placeholders
         $this->twig    = $twig;
     }
 
-    public function getPlaceholders()
+    public function getPlaceholders(Replacer $replacer)
     {
         return [
-            new SermonListPlaceholder($this->monkCms, $this->twig),
-            new SermonLayoutPlaceholder($this->monkCms, $this->twig),
-            new SermonDetailPlaceholder($this->monkCms, $this->twig),
-            new SermonFeaturedPlaceholder($this->monkCms, $this->twig),
-            new EventListPlaceholder($this->monkCms, $this->twig),
-            new EventCalendarPlaceholder($this->monkCms, $this->twig),
-            new EventLayoutPlaceholder($this->monkCms, $this->twig),
-            new EventDetailPlaceholder($this->monkCms, $this->twig),
-            new EventFeaturedPlaceholder($this->monkCms, $this->twig),
-            new GroupListPlaceholder($this->monkCms, $this->twig),
-            new GroupSliderPlaceholder($this->monkCms, $this->twig),
-            new GroupLayoutPlaceholder($this->monkCms, $this->twig),
-            new GroupDetailPlaceholder($this->monkCms, $this->twig),
-            new GroupFeaturedPlaceholder($this->monkCms, $this->twig),
-            new FormPlaceholder($this->monkCms, $this->twig)
+            new SermonListPlaceholder($this->monkCms, $this->twig, $replacer),
+            new SermonLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
+            new SermonDetailPlaceholder($this->monkCms, $this->twig, $replacer),
+            new SermonFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
+            new EventListPlaceholder($this->monkCms, $this->twig, $replacer),
+            new EventCalendarPlaceholder($this->monkCms, $this->twig, $replacer),
+            new EventLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
+            new EventDetailPlaceholder($this->monkCms, $this->twig, $replacer),
+            new EventFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
+            new GroupListPlaceholder($this->monkCms, $this->twig, $replacer),
+            new GroupSliderPlaceholder($this->monkCms, $this->twig, $replacer),
+            new GroupLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
+            new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer),
+            new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
+            new FormPlaceholder($this->monkCms, $this->twig, $replacer)
         ];
     }
 }

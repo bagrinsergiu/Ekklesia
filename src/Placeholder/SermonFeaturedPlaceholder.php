@@ -49,7 +49,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
         $category           = $settings['category'] != 'all' ? $settings['category'] : '';
         $group              = $settings['group'] != 'all' ? $settings['group'] : '';
         $series             = $settings['series'] != 'all' ? $settings['series'] : '';
-        $detail_url         = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+        $detail_url         = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
         $slug               = false;
 
         if ($features) {

@@ -40,7 +40,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms        = $this->monkCMS;
-        $detail_url = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+        $detail_url = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
 
         $content    = $cms->get([
             'module'        => 'smallgroup',

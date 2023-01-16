@@ -42,13 +42,13 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
 
         extract($settings);
 
-        $cms               = $this->monkCMS;
+        $cms          = $this->monkCMS;
         $recentEvents = $settings['recentEvents'] != '' ? $settings['recentEvents'] : '';
-        $category          = $settings['category'] != 'all' ? $settings['category'] : '';
-        $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - replace this wordpress function and find in the project all of them
-        $slugLink          = false;
-        $slug              = false;
+        $category     = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group        = $settings['group'] != 'all' ? $settings['group'] : '';
+        $detail_url   = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
+        $slugLink     = false;
+        $slug         = false;
 
         if ($features) {
             $nonfeatures = '';

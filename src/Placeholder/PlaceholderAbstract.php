@@ -6,6 +6,7 @@ use BrizyEkklesia\MonkCms;
 use BrizyPlaceholders\AbstractPlaceholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
+use BrizyPlaceholders\Replacer;
 use Exception;
 use Twig_Environment;
 
@@ -31,10 +32,16 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
      */
     protected $group;
 
-    public function __construct(MonkCms $monkCMS, Twig_Environment $twig)
+    /**
+     * @var Replacer|null
+     */
+    protected $replacer;
+
+    public function __construct(MonkCms $monkCMS, Twig_Environment $twig, Replacer $replacer = null)
     {
-        $this->twig    = $twig;
-        $this->monkCMS = $monkCMS;
+        $this->twig     = $twig;
+        $this->monkCMS  = $monkCMS;
+        $this->replacer = $replacer;
     }
 
     /**
@@ -55,7 +62,7 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
     public function getValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         ob_start(); ob_clean();
-            $this->echoValue($context, $placeholder);
+        $this->echoValue($context, $placeholder);
         return ob_get_clean();
     }
 

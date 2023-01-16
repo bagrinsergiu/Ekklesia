@@ -30,7 +30,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
        $cms           = $this->monkCMS;
        $category      = $settings['category'] != 'all' ? $settings['category'] : '';
        $group         = $settings['group'] != 'all' ? $settings['group'] : '';
-       $detail_url    = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+       $detail_url    = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
        $calendarStart = date('Y-m-d');
        $calendarEnd   = date('Y-m-d', strtotime("+{$howmanymonths} months"));
        $date1         = new DateTime($calendarStart);

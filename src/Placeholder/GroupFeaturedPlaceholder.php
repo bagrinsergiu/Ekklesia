@@ -40,7 +40,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
         $group_recent_list = $settings['group_recent_list'] != 'none' ? $settings['group_recent_list'] : '';
         $category          = $settings['category'] != 'all' ? $settings['category'] : '';
         $group             = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url        = $settings['detail_page'] ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+        $detail_url        = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
 
         if ($group_latest) {
             $content1 = $cms->get([

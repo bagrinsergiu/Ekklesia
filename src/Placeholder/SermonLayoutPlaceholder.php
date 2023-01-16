@@ -54,7 +54,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
         $filterCountArr  = array($show_group_filter, $show_category_filter, $show_series_filter, $show_speaker_filter);
         $filterCount     = count(array_filter($filterCountArr));
-        $detail_url      = !empty($settings['detail_page']) ? $settings['detail_page'] : false; // TODO - wp to cloud, get the page url
+        $detail_url      = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
         $cms             = $this->monkCMS;
         $page            = isset($_GET['sermon-layout-page']) ? $_GET['sermon-layout-page'] : 1;
         $category_filter = isset($_GET['category']) ? $_GET['category'] : false;
