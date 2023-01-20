@@ -17,6 +17,25 @@ class FormPlaceholder extends PlaceholderAbstract
             return;
         }
 
+        $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
+
+        if ($isEditor) {
+            $twigFormHtml = file_get_contents(
+                __DIR__ . '/../views/editor-form.html.twig'
+            );
+
+            $template = $this->twig->createTemplate($twigFormHtml);
+
+            echo $template->render(
+                [
+                    'formId'   => $atts['form'],
+                    'uniqueId' => md5($atts['form'])
+                ]
+            );
+
+            return;
+        }
+
         $form = $this->monkCMS->get([
             'module'  => 'fmsform',
             'display' => 'detail',
@@ -24,6 +43,6 @@ class FormPlaceholder extends PlaceholderAbstract
             'show'    => '__embedhtml__'
         ]);
 
-        echo $form['show']['embedhtml'] ?? '';
+        echo isset( $form['show']['embedhtml'] ) ? $form['show']['embedhtml'] : '';
     }
 }
