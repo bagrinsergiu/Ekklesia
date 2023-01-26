@@ -48,8 +48,8 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
         ]);
 
         //make slug...would be from widget-sermon-list.php
-        if (isset($_GET['ekklesia360_sermon_slug'])) {
-            $slug = $_GET['ekklesia360_sermon_slug'];
+        if (isset($_GET['ekk-sermon-slug'])) {
+            $slug = $_GET['ekk-sermon-slug'];
         } elseif (isset($settings['sermons_recent'])) {
             $slug = $settings['sermons_recent'];
         } else {

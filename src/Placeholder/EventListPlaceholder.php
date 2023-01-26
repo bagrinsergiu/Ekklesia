@@ -43,7 +43,7 @@ class EventListPlaceholder extends PlaceholderAbstract
         $category   = $settings['category'] != 'all' ? $settings['category'] : '';
         $group      = $settings['group'] != 'all' ? $settings['group'] : '';
         $detail_url = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
-        $page       = isset($_GET['event-list-page']) ? $_GET['event-list-page'] : 1;
+        $page       = isset($_GET['ekk-event-list-page']) ? $_GET['ekk-event-list-page'] : 1;
 
         if ($features) {
             $nonfeatures = '';
@@ -143,7 +143,7 @@ class EventListPlaceholder extends PlaceholderAbstract
             <?php
             if ($show_pagination && $content['after_show']['pagination']) {
                 $content['after_show']['pagination'] = str_replace('id="pagination"', 'id="ekklesia360_event_list_pagination" class="brz-ministryBrands__pagination"', $content['after_show']['pagination']);
-                $content['after_show']['pagination'] = str_replace('page=', 'event-list-page=', $content['after_show']['pagination']);
+                $content['after_show']['pagination'] = str_replace('page=', 'ekk-event-list-page=', $content['after_show']['pagination']);
 
                 echo $content['after_show']['pagination'];
             }

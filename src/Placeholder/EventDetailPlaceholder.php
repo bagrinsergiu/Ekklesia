@@ -44,8 +44,8 @@ class EventDetailPlaceholder extends PlaceholderAbstract
         ]);
 
         //make slug...would be from widget-event-list.php
-        if (isset($_GET['ekklesia360_event_slug'])) {
-            $slug = $_GET['ekklesia360_event_slug'];
+        if (isset($_GET['ekk-event-slug'])) {
+            $slug = $_GET['ekk-event-slug'];
         } elseif ($events_recent) {
             $slug = $events_recent;
         } else {

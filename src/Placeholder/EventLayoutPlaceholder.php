@@ -75,7 +75,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $date2           = new DateTime($calendarEnd);
         $diff            = $date1->diff($date2, true);
         $calendarDays    = $diff->format('%a');
-        $group_filter    = $_GET['group'] ?? false;
+        $group_filter    = $_GET['ekk-group'] ?? false;
         $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($category_filter_list) {
@@ -105,8 +105,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $parent_category = $parent_category ? implode(",", $parent_category) : '';
 
         //views
-        if (isset($_GET['view'])) {
-            $view = $_GET['view'];
+        if (isset($_GET['ekk-view'])) {
+            $view = $_GET['ekk-view'];
         } else {
             $orderArr = [];
             if ($show_featured_view) {
@@ -143,14 +143,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         ]);
 
         //test search first
-        if (isset($_GET['search_term'])) {
+        if (isset($_GET['ekk-search_term'])) {
             $content    = [];
             $search_arr = $cms->get([
                 'module'        => 'search',
                 'display'       => 'results',
                 'howmany'       => $howmanyfeatured,
                 'find_category' => $parent_category,
-                'keywords'      => $_GET['search_term'],
+                'keywords'      => $_GET['ekk-search_term'],
                 'find_module'   => 'event',
                 'hide_module'   => 'media',
                 'after_show'    => '__pagination__'
@@ -198,17 +198,17 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             }
 
             //filter categories separately since there can be more than 1 category filter
-            if (isset($_GET["category"])) {
-                $content["show"] = self::searchArray(empty($content["show"])? [] : $content["show"] , $_GET["category"]);
+            if (isset($_GET["ekk-category"])) {
+                $content["show"] = self::searchArray(empty($content["show"])? [] : $content["show"] , $_GET["ekk-category"]);
             }
-            if (isset($_GET["category_add1"])) {
-                $content["show"] = self::searchArray($content["show"], $_GET["category_add1"]);
+            if (isset($_GET["ekk-category_add1"])) {
+                $content["show"] = self::searchArray($content["show"], $_GET["ekk-category_add1"]);
             }
-            if (isset($_GET["category_add2"])) {
-                $content["show"] = self::searchArray($content["show"], $_GET["category_add2"]);
+            if (isset($_GET["ekk-category_add2"])) {
+                $content["show"] = self::searchArray($content["show"], $_GET["ekk-category_add2"]);
             }
-            if (isset($_GET["category_add3"])) {
-                $content["show"] = self::searchArray($content["show"], $_GET["category_add3"]);
+            if (isset($_GET["ekk-category_add3"])) {
+                $content["show"] = self::searchArray($content["show"], $_GET["ekk-category_add3"]);
             }
         }
         ?>
@@ -217,13 +217,13 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
-                        href="<?= $baseURL ?>?view=featured"><?= $view_featured_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?ekk-view=featured"><?= $view_featured_heading ?></a></li><?php endif; ?>
                 <?php if ($show_list_view): ?>
                     <li class="<?= $listActive ?>" data-order="<?= $view_order_list ?>"><a
-                        href="<?= $baseURL ?>?view=list"><?= $view_list_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?ekk-view=list"><?= $view_list_heading ?></a></li><?php endif; ?>
                 <?php if ($show_calendar_view): ?>
                     <li class="<?= $calendarActive ?>" data-order="<?= $view_order_calendar ?>"><a
-                        href="<?= $baseURL ?>?view=calendar"><?= $view_calendar_heading ?></a></li><?php endif; ?>
+                        href="<?= $baseURL ?>?ekk-view=calendar"><?= $view_calendar_heading ?></a></li><?php endif; ?>
             </ul>
         </div>
 
@@ -233,13 +233,13 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if ($show_group_filter && count($groups['show']) > 0): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="group" class='sorter' >
+                    <select name="ekk-group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
                         foreach ($groups['show'] as $group) {
                             echo "<option value=\"{$group['slug']}\"";
-                            if (isset($_GET['group']) && $_GET['group'] == $group['slug']) {
+                            if (isset($_GET['ekk-group']) && $_GET['ekk-group'] == $group['slug']) {
                                 echo " selected";
                             }
                             echo ">{$group['title']}</option>";
@@ -252,7 +252,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 <?php
                 if ($show_category_filter): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="category" class='sorter' >
+                    <select name="ekk-category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -262,7 +262,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $catMatch = $categories['show'][$catKey];
                                 if ($catKey !== FALSE) {
                                     echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['category']) && $_GET['category'] == $catMatch['slug']) {
+                                    if (isset($_GET['ekk-category']) && $_GET['ekk-category'] == $catMatch['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$catMatch['name']}</option>";
@@ -275,7 +275,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                     continue;
                                 }
                                 echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['category']) && $_GET['category'] == $category['slug']) {
+                                if (isset($_GET['ekk-category']) && $_GET['ekk-category'] == $category['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$category['name']}</option>";
@@ -284,7 +284,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             if ($parent_category != "") {
                                 foreach ($categories_parent["level1"] as $category) {
                                     echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['category']) && $_GET['category'] == $category['slug']) {
+                                    if (isset($_GET['ekk-category']) && $_GET['ekk-category'] == $category['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$category['name']}</option>";
@@ -292,7 +292,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             } else {
                                 foreach ($categories["show"] as $category) {
                                     echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['category']) && $_GET['category'] == $category['slug']) {
+                                    if (isset($_GET['ekk-category']) && $_GET['ekk-category'] == $category['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$category['name']}</option>";
@@ -307,7 +307,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 <?php
                 if ($show_category_filter_add1 && ($category_filter_parent_add1 != "" || is_array($category_filter_list_add1))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="category_add1" class='sorter' >
+                    <select name="ekk-category_add1" class='sorter' >
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
                         <?php
@@ -317,7 +317,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $catMatch = $categories['show'][$catKey];
                                 if ($catKey !== FALSE) {
                                     echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['category_add1']) && $_GET['category_add1'] == $catMatch['slug']) {
+                                    if (isset($_GET['ekk-category_add1']) && $_GET['ekk-category_add1'] == $catMatch['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$catMatch['name']}</option>";
@@ -329,7 +329,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                     continue;
                                 }
                                 echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['category_add1']) && $_GET['category_add1'] == $category['slug']) {
+                                if (isset($_GET['ekk-category_add1']) && $_GET['ekk-category_add1'] == $category['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$category['name']}</option>";
@@ -343,7 +343,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 <?php
                 if ($show_category_filter_add2 && ($category_filter_parent_add2 != "" || is_array($category_filter_list_add2))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="category_add2" class='sorter' >
+                    <select name="ekk-category_add2" class='sorter' >
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
                         <?php
@@ -353,7 +353,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $catMatch = $categories['show'][$catKey];
                                 if ($catKey !== FALSE) {
                                     echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['category_add2']) && $_GET['category_add2'] == $catMatch['slug']) {
+                                    if (isset($_GET['ekk-category_add2']) && $_GET['ekk-category_add2'] == $catMatch['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$catMatch['name']}</option>";
@@ -365,7 +365,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                     continue;
                                 }
                                 echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['category_add2']) && $_GET['category_add2'] == $category['slug']) {
+                                if (isset($_GET['ekk-category_add2']) && $_GET['ekk-category_add2'] == $category['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$category['name']}</option>";
@@ -379,7 +379,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 <?php
                 if ($show_category_filter_add3 && ($category_filter_parent_add3 != "" || is_array($category_filter_list_add3))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="category_add3" class='sorter' >
+                    <select name="ekk-category_add3" class='sorter' >
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
                         <?php
@@ -389,7 +389,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $catMatch = $categories['show'][$catKey];
                                 if ($catKey !== FALSE) {
                                     echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['category_add3']) && $_GET['category_add3'] == $catMatch['slug']) {
+                                    if (isset($_GET['ekk-category_add3']) && $_GET['ekk-category_add3'] == $catMatch['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$catMatch['name']}</option>";
@@ -401,7 +401,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                     continue;
                                 }
                                 echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['category_add3']) && $_GET['category_add3'] == $category['slug']) {
+                                if (isset($_GET['ekk-category_add3']) && $_GET['ekk-category_add3'] == $category['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$category['name']}</option>";
@@ -417,7 +417,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <?php if ($show_search): ?>
                 <form method="get" id="brz-eventLayout--filters-form-search" class="brz-eventLayout--filters-form-search" name="search" action="<?= $baseURL ?>">
                     <fieldset>
-                        <input type="text" id="brz-eventLayout--filters-form-search_term" name="search_term" value=""
+                        <input type="text" id="brz-eventLayout--filters-form-search_term" name="ekk-search_term" value=""
                                placeholder="<?= $search_placeholder ?>"/>
                         <button type="submit" name="submit" id="brz-eventLayout--filters-form-search_submit" value=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="search"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button>
                     </fieldset>
@@ -426,8 +426,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <?php endif; ?>
         </div>
 
-        <?php if (isset($_GET['search_term'])) {
-            echo "<h4 class=\"ekklesia360_event_layout_results_heading\"><a href=\"{$baseURL}?view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['search_term']}\"</h4>";
+        <?php if (isset($_GET['ekk-search_term'])) {
+            echo "<h4 class=\"ekklesia360_event_layout_results_heading\"><a href=\"{$baseURL}?view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['ekk-search_term']}\"</h4>";
         }
         ?>
     <?php endif; //end hide from featured
@@ -455,7 +455,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             $slug = "{$item['id']}-$slugDate-{$item['slug']}";
 
                             if ($detail_url) {
-                                $item["url"] = str_replace('/event/', "{$detail_url}?ekklesia360_event_slug=", $item['url']);
+                                $item["url"] = str_replace('/event/', "{$detail_url}?ekk-event-slug=", $item['url']);
                             }
 
                             echo "<div class=\"brz-eventLayout--featured__item\">";
@@ -675,7 +675,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $slug = "{$v['id']}-$slugDate-{$v['slug']}";
                         if($detail_url)
                         {
-                            $v["url"] = str_replace('/event/',"{$detail_url}?ekklesia360_event_slug=",$v['url']);
+                            $v["url"] = str_replace('/event/',"{$detail_url}?ekk-event-slug=",$v['url']);
                         }
                         $results .= "<div class=\"brz-eventLayout--list-item__content\">";
                         $results .= "<div class=\"brz-eventLayout--list-item__content-date\">";
@@ -853,7 +853,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 {
                     if($detail_url)
                     {
-                        $v["url"] = str_replace('/event/',"{$detail_url}?ekklesia360_event_slug=",$v['url']);
+                        $v["url"] = str_replace('/event/',"{$detail_url}?ekk-event-slug=",$v['url']);
                     }
                     $calendar.= "<li>";
                     $calendar.= "<span class=\"title\">";

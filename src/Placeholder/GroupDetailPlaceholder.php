@@ -39,8 +39,8 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
             'emailencode' => 'no',
         ]);
 
-        if (isset($_GET['ekklesia360_group_slug'])) {
-            $slug = $_GET['ekklesia360_group_slug'];
+        if (isset($_GET['ekk-group-slug'])) {
+            $slug = $_GET['ekk-group-slug'];
         } elseif ($groups_recent) {
             $slug = $groups_recent;
         } else {
