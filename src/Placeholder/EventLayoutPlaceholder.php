@@ -863,7 +863,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                     $calendar.= "</span>";
                     $calendar.= "</li>";
                 }
-                $calendar.= "<ul>";
+                $calendar.= "</ul>";
             }
 
             $calendar.= '</td>';
