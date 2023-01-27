@@ -445,7 +445,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         {
             $pieces = explode(", ", $group["category"]);
             $matches = array_intersect($pieces,$categories);
-            if(is_countable($matches) && count($matches)>0)
+            if(count($matches)>0)
             {
                 $results[] = $group;
             }
