@@ -53,14 +53,14 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
         ]);
 ?>
 
-        <div class="brz-groupSlider_wrap" data-showarrows="<?= $show_arrows ?>" data-showpagination="<?= $show_pagination ?>">
+        <div class="brz-groupSlider_wrap" data-brz-showarrows="<?= $show_arrows ?>" data-brz-showpagination="<?= $show_pagination ?>">
 
             <?php //output
             if (!empty($content['show'])) {
             ?>
 
-                <div class="brz-groupSlider-swiper-container" data-howmanyshow="<?= $howmany_show ?>">
-                    <div class="brz-groupSlider-swiper-wrapper" data-show="<?= $column_count ?>" data-pagination="<?= $show_pagination ?>">
+                <div class="brz-groupSlider-swiper-container" data-brz-howmanyshow="<?= $howmany_show ?>">
+                    <div class="brz-groupSlider-swiper-wrapper" data-brz-show="<?= $column_count ?>" data-brz-pagination="<?= $show_pagination ?>">
                         <?php
                         foreach ($content['show'] as $key => $item) {
                             //remove 12am
