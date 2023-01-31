@@ -136,7 +136,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
             <?php
             if ($show_pagination && $content['after_show']['pagination']) {
                 $content['after_show']['pagination'] = str_replace('id="pagination"', 'id="ekklesia360_group_list_pagination" class="brz-ministryBrands__pagination"', $content['after_show']['pagination']);
-                $content['after_show']['pagination'] = str_replace('page=', 'group-list-page=', $content['after_show']['pagination']);
+                $content['after_show']['pagination'] = str_replace('page=', 'ekk-group-list-page=', $content['after_show']['pagination']);
 
                 echo $content['after_show']['pagination'];
             }
