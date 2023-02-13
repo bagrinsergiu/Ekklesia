@@ -130,4 +130,39 @@ class Api {
 
         return $options;
     }
+
+    public function getModule($module)
+    {
+        switch ($module) {
+            case 'sermon':
+            case 'event':
+            case 'smallgroup':
+                $data = $this->getCats($module);
+                break;
+            case 'eventsLvl':
+                $data = $this->getCatsLevels('event');
+                break;
+            case 'smallgroupsLvl':
+                $data = $this->getCatsLevels('smallgroup');
+                break;
+            case 'groups':
+            case 'series':
+            case 'forms':
+                $data = $this->{'get' . ucfirst($module)}();
+                break;
+            case 'recentSermons':
+                $data = $this->getRecent('sermon');
+                break;
+            case 'events':
+                $data = $this->getRecent('event');
+                break;
+            case 'smallgroups':
+                $data = $this->getRecent('smallgroup');
+                break;
+            default:
+                $data = [];
+        }
+
+        return $data;
+    }
 }
