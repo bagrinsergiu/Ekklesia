@@ -106,7 +106,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                 if ($show_title) {
 
                     echo "<h2 class=\"brz-sermonFeatured__item--meta--title\">";
-                    if ($detail_url) echo "<a href=\"{$detail_url}?ekk-sermon-slug={$item['slug']}\">";
+                    if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
                     echo "{$item['title']}";
                     if ($detail_url) echo "</a>";
                     echo "</h2>";
@@ -149,7 +149,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                 }
                 if ($show_image && $item['imageurl'] && !$show_video) {
                     echo "<div class=\"image\">";
-                    if ($detail_url) echo "<a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekk-sermon-slug={$item['slug']}\">";
+                    if ($detail_url) echo "<a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
                     echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                     if ($detail_url) echo "</a>";
                     echo "</div>";
@@ -164,7 +164,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                         echo "</div>";
                     } elseif ($show_image && $item['imageurl']) {
                         echo "<div class=\"image\">";
-                        if ($detail_url) echo "<a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekk-sermon-slug={$item['slug']}\">";
+                        if ($detail_url) echo "<a class='brz-ministryBrands__item--meta--links' href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
                         echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                         if ($detail_url) echo "</a>";
                         echo "</div>";
@@ -200,7 +200,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                 }
 
                 if ($detail_url && $detail_page_button_text) {
-                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-sermon-slug={$item['slug']}\" class=\"brz-ministryBrands__item--meta--links\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-slug={$item['slug']}\" class=\"brz-ministryBrands__item--meta--links\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                 }
 
                 echo "</div>";

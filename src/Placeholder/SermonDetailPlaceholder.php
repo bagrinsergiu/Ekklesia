@@ -37,7 +37,7 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
 
         extract($settings);
 
-        //recent sermon
+        // recent sermon
         $recent = $cms->get([
             'module'      => 'sermon',
             'display'     => 'list',
@@ -47,27 +47,14 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
             'show'        => "__audioplayer__",
         ]);
 
-        //make slug...would be from widget-sermon-list.php
-        if (isset($_GET['ekk-sermon-slug'])) {
-            $slug = $_GET['ekk-sermon-slug'];
-        } elseif (isset($settings['sermons_recent'])) {
-            $slug = $settings['sermons_recent'];
-        } else {
-            $slug = $recent['show'][0]['slug'];
-        }
-
         $content = $cms->get([
             'module'      => 'sermon',
             'display'     => 'detail',
-            'find'        => $slug,
+            'find'        => $_GET['ekk-slug'] ?? $recent['show'][0]['slug'],
             'emailencode' => 'no',
             'show'        => "__audioplayer__",
         ]);
 
-?>
-
-
-        <?php //output
         if (count($content['show']) > 0) {
             $item = $content['show'];
         ?>
