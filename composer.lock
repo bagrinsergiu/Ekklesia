@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bagrinsergiu/monkcms-php",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bagrinsergiu/monkcms-php.git",
-                "reference": "ba8798d17b24eddcfb0fd0724e60a2940c5e34d4"
+                "reference": "7ca315b76eacad98179710dadf9871a8cf30ee3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bagrinsergiu/monkcms-php/zipball/ba8798d17b24eddcfb0fd0724e60a2940c5e34d4",
-                "reference": "ba8798d17b24eddcfb0fd0724e60a2940c5e34d4",
+                "url": "https://api.github.com/repos/bagrinsergiu/monkcms-php/zipball/7ca315b76eacad98179710dadf9871a8cf30ee3d",
+                "reference": "7ca315b76eacad98179710dadf9871a8cf30ee3d",
                 "shasum": ""
             },
             "require": {
@@ -95,9 +95,9 @@
             ],
             "support": {
                 "issues": "https://github.com/MonkDev/monkcms-php/issues",
-                "source": "https://github.com/bagrinsergiu/monkcms-php/tree/1.0.0"
+                "source": "https://github.com/bagrinsergiu/monkcms-php/tree/1.0.1"
             },
-            "time": "2023-03-21T14:16:06+00:00"
+            "time": "2023-03-22T08:50:29+00:00"
         },
         {
             "name": "rmccue/requests",
