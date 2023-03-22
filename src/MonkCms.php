@@ -8,6 +8,11 @@ use Monk\Cms;
 class MonkCms
 {
     /**
+     * @var EkklesiaDTO
+     */
+    private $config;
+
+    /**
      * @var string
      */
     private $siteId;
@@ -17,22 +22,29 @@ class MonkCms
      */
     private $siteSecret;
 
-    public function __construct(EkklesiaDTO $data)
+    /**
+     * @var string
+     */
+    private $apiUrl;
+
+    public function __construct(EkklesiaConfig $config)
     {
-        $this->siteId     = $data->getSiteId();
-        $this->siteSecret = $data->getSecret();
+        $this->config = $config;
     }
 
     /**
      * @throws Exception
      */
-    public function get($config = [])
+    public function get($args = [])
     {
-        $cms = new Cms([
-            'siteId'     => $this->siteId,
-            'siteSecret' => $this->siteSecret
-        ]);
+        $config = $this->config->toArray();
 
-        return $cms->get($config);
+        if (isset($config['url']) && empty($config['url'])) {
+            unset($config['url']);
+        }
+
+        $cms = new Cms($this->config->toArray());
+
+        return $cms->get($args);
     }
 }

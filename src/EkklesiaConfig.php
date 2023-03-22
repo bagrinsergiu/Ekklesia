@@ -2,16 +2,28 @@
 
 namespace BrizyEkklesia;
 
-class EkklesiaDTO
+class EkklesiaConfig
 {
+    /**
+     * @var string
+     */
     private $site_id;
 
+    /**
+     * @var string
+     */
     private $secret;
 
-    public function __construct($siteId, $secret)
+    /**
+     * @var string
+     */
+    private $url;
+
+    public function __construct($siteId, $secret, $url = '')
     {
         $this->site_id = $siteId;
         $this->secret  = $secret;
+        $this->apiUrl  = $url;
     }
 
     /**
@@ -25,6 +37,15 @@ class EkklesiaDTO
         $secret = isset($data['secret']) ? $data['secret'] : null;
 
         return new self($siteId, $secret);
+    }
+
+    public function toArray()
+    {
+        return [
+            'siteId'     => $this->getSiteId(),
+            'siteSecret' => $this->getSecret(),
+            'url'        => $this->getUrl()
+        ];
     }
 
     /**
@@ -65,5 +86,21 @@ class EkklesiaDTO
     public function setSecret($secret)
     {
         $this->secret = $secret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->apiUrl;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url): void
+    {
+        $this->apiUrl = $url;
     }
 }
