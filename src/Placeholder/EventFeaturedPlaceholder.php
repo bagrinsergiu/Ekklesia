@@ -46,7 +46,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
         $recentEvents = $settings['recentEvents'] != '' ? $settings['recentEvents'] : '';
         $category     = $settings['category'] != 'all' ? $settings['category'] : '';
         $group        = $settings['group'] != 'all' ? $settings['group'] : '';
-        $detail_url   = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
+        $detail_url   = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : false;
         $slugLink     = false;
         $slug         = false;
 
@@ -70,7 +70,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 'emailencode'   => 'no',
             ]);
 
-            $content = empty($content1['show'][0]) ? [] : $content1['show'][0];
+            $content  = empty($content1['show'][0]) ? [] : $content1['show'][0];
             $slugLink = empty($content['slug']) ? '' : $content['slug'];
 
         } else {
@@ -102,7 +102,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
             echo "<div class=\"brz-eventFeatured__item\">";
             if ($show_title) {
                 echo "<h2 class=\"brz-eventFeatured__item--meta--title\">";
-                if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\">";
+                if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$slugLink}\">";
                 echo "{$item['title']}";
                 if ($detail_url) echo "</a>";
                 echo "</h4>";
@@ -111,7 +111,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "<h5 class=\"brz-eventFeatured__item--meta--date\">{$item['eventtimes']}</h5>";
             }
             if ($show_image && $item['imageurl']) {
-                if ($detail_url) echo "<a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\">";
+                if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$slugLink}\">";
                 echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                 if ($detail_url) echo "</a>";
             }
@@ -188,7 +188,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
             }
 
             if ($detail_url && $detail_page_button_text) {
-                echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekklesia360_event_slug={$slugLink}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-slug={$slugLink}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
             }
 
             echo "</div>";

@@ -46,7 +46,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
             'order'         => 'recent',
             'emailencode'   => 'no',
             'howmany'       => $howmany,
-            'page'          => isset($_GET['ekk-group-slider-page']) ? $_GET['ekk-group-slider-page'] : 1,
+            'page'          => isset($_GET['ekk-page']) ? $_GET['ekk-page'] : 1,
             'find_category' => $category == 'all' ? '' : $category,
             'find_group'    => $group == 'all' ? '' : $group,
             'show'          => "__endtime format='g:ia'__"
@@ -77,13 +77,13 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                             echo "<article class=\"brz-groupSlider-swiper-slide\">";
                             echo "<div class=\"brz-groupSlider-info\">";
                             if ($show_images && $item['imageurl']) {
-                                if ($detail_url) echo "<a href=\"{$detail_url}?ekk-group-slug={$item['slug']}\">";
+                                if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
                                 echo "<div class=\"brz-groupSlider-image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                                 if ($detail_url) echo "</a>";
                             }
 
                             echo "<h4 class=\"brz-groupSlider_heading\">";
-                            if ($detail_url) echo "<a href=\"{$detail_url}?ekk-group-slug={$item['slug']}\">";
+                            if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
                             echo "{$item['name']}";
                             if ($detail_url) echo "</a>";
                             echo "</h4>";
@@ -125,7 +125,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                                 echo "<p class=\"brz-groupSlider_preview\">{$item['description']}</p>";
                             }
                             if ($detail_url && $detail_page_button_text) {
-                                echo "<p class=\"brz-groupSlider_detail_button\"><a href=\"{$detail_url}?ekk-group-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                                echo "<p class=\"brz-groupSlider_detail_button\"><a href=\"{$detail_url}?ekk-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                             }
                             echo "</div>";
                             echo "</article>";

@@ -31,24 +31,23 @@ class EventDetailPlaceholder extends PlaceholderAbstract
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
+        $cms      = $this->monkCMS;
 
         extract($settings);
-
-        $cms    = $this->monkCMS;
-        $recent = $cms->get([
-            'module'      => 'event',
-            'display'     => 'list',
-            'order'       => 'recent',
-            'emailencode' => 'no',
-            'howmany'     => 1
-        ]);
-
-        //make slug...would be from widget-event-list.php
-        if (isset($_GET['ekk-event-slug'])) {
-            $slug = $_GET['ekk-event-slug'];
+        
+        if (isset($_GET['ekk-slug'])) {
+            $slug = $_GET['ekk-slug'];
         } elseif ($events_recent) {
             $slug = $events_recent;
         } else {
+            $recent = $cms->get([
+                'module'      => 'event',
+                'display'     => 'list',
+                'order'       => 'recent',
+                'emailencode' => 'no',
+                'howmany'     => 1
+            ]);
+            
             $slug = !empty($recent['show'][0]['slug']) ? $recent['show'][0]['slug'] : '';
         }
 

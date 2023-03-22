@@ -27,23 +27,23 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
+        $cms      = $this->monkCMS;
 
         extract($settings);
 
-        $cms    = $this->monkCMS;
-        $recent = $cms->get([
-            'module'      => 'smallgroup',
-            'display'     => 'list',
-            'order'       => 'recent',
-            'howmany'     => 1,
-            'emailencode' => 'no',
-        ]);
-
-        if (isset($_GET['ekk-group-slug'])) {
-            $slug = $_GET['ekk-group-slug'];
+        if (isset($_GET['ekk-slug'])) {
+            $slug = $_GET['ekk-slug'];
         } elseif ($groups_recent) {
             $slug = $groups_recent;
         } else {
+            $recent = $cms->get([
+                'module'      => 'smallgroup',
+                'display'     => 'list',
+                'order'       => 'recent',
+                'howmany'     => 1,
+                'emailencode' => 'no',
+            ]);
+
             $slug = isset($recent['show'][0]['slug']) ? $recent['show'][0]['slug'] : '';
         }
 
@@ -58,7 +58,7 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 
 
         <?php //output
-          if (count($content['show']) > 0) {
+          if (!empty($content['show'])) {
             $item = $content['show'];
 
             //remove 12am

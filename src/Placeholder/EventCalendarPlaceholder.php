@@ -203,14 +203,21 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
                $calendar .= "<ul class=\"brz-eventCalendar-links\">";
                foreach ($events[$cur_date] as $v) {
                    if ($detail_url) {
-                       $v["url"] = str_replace('/event/', "{$detail_url}?ekklesia360_event_slug=", $v['url']);
+                       $v["url"] = str_replace('/event/', "{$detail_url}?ekk-slug=", $v['url']);
                    }
                    $calendar .= "<li>";
-                   $calendar .= "<span class=\"brz-eventCalendar-title\">";
-                   if ($detail_url) $calendar .= "<a href=\"{$v['url']}\" title=\"{$v["title"]}\">";
-                   $calendar .= "{$v["title"]}";
-                   if ($detail_url) $calendar .= "</a>";
-                   $calendar .= "</span>";
+                       $calendar .= "<span class=\"brz-eventCalendar-title\">";
+
+                           if ($detail_url) {
+                               $calendar .= "<a href=\"{$v['url']}\" title=\"{$v["title"]}\">";
+                           }
+
+                           $calendar .= "{$v["title"]}";
+
+                           if ($detail_url) {
+                               $calendar .= "</a>";
+                           }
+                       $calendar .= "</span>";
                    $calendar .= "</li>";
                }
                $calendar .= "</ul>";

@@ -266,7 +266,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                                 echo "<video src=\"{$item['videourl']}\" controls preload=\"none\" width=\"1024\" height=\"576\" poster=\"{$item['imageurl']}\" type=\"video/{$videoext}\"><p>The Video could not be played. Please <a href=\"{$item['videourl']}\" target=\"_blank\">download it here</a>.</p></video>";
                                 echo "</div>";
                             }
-                            elseif($show_image && $item['imageurl'])
+                            elseif($show_images && $item['imageurl'])
                             {
                                 echo "<div class=\"brz-sermonLayout__item--media--image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             }
@@ -365,10 +365,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     ?>
                 <?php
                 
-            }
-            //no output
-            else
-            {
+            } else {
                 ?>
 
                 <p>There are no sermons available.</p>

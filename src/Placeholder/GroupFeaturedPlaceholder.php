@@ -62,7 +62,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
             }
         }
 
-        if ($slug) {
+        if (!empty($slug)) {
             $content = $cms->get([
                 'module'      => 'smallgroup',
                 'display'     => 'detail',
@@ -135,7 +135,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                 }
 
                 if ($detail_url && $detail_page_button_text) {
-                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekklesia360_group_slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                 }
 
                 ?>

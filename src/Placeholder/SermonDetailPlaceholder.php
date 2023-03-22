@@ -30,6 +30,7 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
             'show_passage'              => false,
             'show_meta_headings'        => false,
             'show_preview'              => false,
+            'sermons_recent'            => '',
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -37,20 +38,27 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
 
         extract($settings);
 
-        // recent sermon
-        $recent = $cms->get([
-            'module'      => 'sermon',
-            'display'     => 'list',
-            'order'       => 'recent',
-            'howmany'     => 1,
-            'emailencode' => 'no',
-            'show'        => "__audioplayer__",
-        ]);
+        if (!empty($_GET['ekk-slug'])) {
+            $slug = $_GET['ekk-slug'];
+        } elseif ($sermons_recent) {
+            $slug = $sermons_recent;
+        } else {
+            $recent = $cms->get([
+                'module'      => 'sermon',
+                'display'     => 'list',
+                'order'       => 'recent',
+                'howmany'     => 1,
+                'emailencode' => 'no',
+                'show'        => "__audioplayer__",
+            ]);
+
+            $slug = isset($recent['show'][0]['slug']) ? $recent['show'][0]['slug'] : '';
+        }
 
         $content = $cms->get([
             'module'      => 'sermon',
             'display'     => 'detail',
-            'find'        => $_GET['ekk-slug'] ?? $recent['show'][0]['slug'],
+            'find'        => $slug,
             'emailencode' => 'no',
             'show'        => "__audioplayer__",
         ]);
