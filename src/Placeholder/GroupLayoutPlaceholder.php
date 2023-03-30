@@ -111,7 +111,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 'show'          => "__endtime format='g:ia'__",
             ]);
             //filter categories separately since there can be more than 1 category filter
-            if (isset($_GET["ekk-category"])) {
+            if (!empty($_GET["ekk-category"])) {
                 $catArr = [];
                 foreach ($categories["show"] as $key => $val) {
                     if ($val["slug"] == $_GET["ekk-category"]) {
@@ -120,7 +120,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 }
                 $content["show"] = self::searchArray($content["show"], $catArr);
             }
-            if (isset($_GET["ekk-category-1"])) {
+            if (!empty($_GET["ekk-category-1"])) {
                 $cat1Arr = [];
                 foreach ($categories["show"] as $key => $val) {
                     if ($val["slug"] == $_GET["ekk-category-1"]) {
@@ -129,7 +129,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 }
                 $content["show"] = self::searchArray($content["show"], $cat1Arr);
             }
-            if (isset($_GET["ekk-category-2"])) {
+            if (!empty($_GET["ekk-category-2"])) {
                 $cat2Arr = [];
                 foreach ($categories["show"] as $key => $val) {
                     if ($val["slug"] == $_GET["ekk-category-2"]) {
@@ -138,7 +138,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 }
                 $content["show"] = self::searchArray($content["show"], $cat2Arr);
             }
-            if (isset($_GET["ekk-category-3"])) {
+            if (!empty($_GET["ekk-category-3"])) {
                 $cat3Arr = [];
                 foreach ($categories["show"] as $key => $val) {
                     if ($val["slug"] == $_GET["ekk-category-3"]) {

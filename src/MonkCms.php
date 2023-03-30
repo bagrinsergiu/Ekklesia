@@ -43,7 +43,7 @@ class MonkCms
             unset($config['url']);
         }
 
-        $cms = new Cms($this->config->toArray());
+        $cms = new Cms($config);
 
         return $cms->get($args);
     }
