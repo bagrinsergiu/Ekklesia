@@ -19,24 +19,46 @@ class EkklesiaConfig
      */
     private $url;
 
-    public function __construct($siteId, $secret, $url = '')
+	/**
+     * @var string
+     */
+    private $accountId;
+
+	/**
+     * @var string
+     */
+    private $visitorId;
+
+	/**
+     * @var string
+     */
+    private $themeName;
+
+    public function __construct($siteId, $secret, $accountId, $visitorId, $themeName, $url = '')
     {
-        $this->site_id = $siteId;
-        $this->secret  = $secret;
-        $this->apiUrl  = $url;
+	    $this->site_id   = $siteId;
+	    $this->secret    = $secret;
+	    $this->apiUrl    = $url;
+	    $this->accountId = $accountId;
+	    $this->visitorId = $visitorId;
+	    $this->themeName = $themeName;
     }
 
     /**
      * @param $json
-     * @return EkklesiaDTO
+     *
+     * @return EkklesiaConfig
      */
     static public function factoryFromJson($json)
     {
         $data   = $json ? json_decode($json, true) : [];
         $siteId = isset($data['site_id']) ? $data['site_id'] : null;
         $secret = isset($data['secret']) ? $data['secret'] : null;
+	    $accountId = isset($data['MBAccountID']) ? $data['MBAccountID'] : '';
+	    $visitorId = isset($data['MBVisitorID']) ? $data['MBVisitorID'] : '';
+	    $themeName = isset($data['MBThemeName']) ? $data['MBThemeName'] : '';
 
-        return new self($siteId, $secret);
+        return new self($siteId, $secret, $accountId, $visitorId, $themeName);
     }
 
     public function toArray()
@@ -103,4 +125,52 @@ class EkklesiaConfig
     {
         $this->apiUrl = $url;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getAccountId()
+	{
+		return $this->accountId;
+	}
+
+	/**
+	 * @param string $accountId
+	 */
+	public function setAccountId($accountId)
+	{
+		$this->accountId = $accountId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVisitorId()
+	{
+		return $this->visitorId;
+	}
+
+	/**
+	 * @param string $visitorId
+	 */
+	public function setVisitorId($visitorId)
+	{
+		$this->visitorId = $visitorId;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getThemeName()
+	{
+		return $this->themeName;
+	}
+
+	/**
+	 * @param string $themeName
+	 */
+	public function setThemeName($themeName)
+	{
+		$this->themeName = $themeName;
+	}
 }
