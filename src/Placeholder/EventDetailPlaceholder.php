@@ -36,8 +36,8 @@ class EventDetailPlaceholder extends PlaceholderAbstract
 
         extract($settings);
         
-        if (isset($_GET['ekk-slug'])) {
-            $slug = $_GET['ekk-slug'];
+        if (isset($_GET['mc-slug'])) {
+            $slug = $_GET['mc-slug'];
         } elseif ($events_recent) {
             $slug = $events_recent;
         } else {

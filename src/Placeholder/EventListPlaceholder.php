@@ -43,7 +43,7 @@ class EventListPlaceholder extends PlaceholderAbstract
         $category   = $settings['category'] != 'all' ? $settings['category'] : '';
         $group      = $settings['group'] != 'all' ? $settings['group'] : '';
         $detail_url = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
-        $page       = isset($_GET['ekk-page']) ? $_GET['ekk-page'] : 1;
+        $page       = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
 
         if ($features) {
             $nonfeatures = '';
@@ -80,14 +80,14 @@ class EventListPlaceholder extends PlaceholderAbstract
 
                     echo "<div class=\"brz-eventList__item\">";
                     if ($show_images && $item['imageurl']) {
-                        if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$slug}\">";
+                        if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slug}\">";
                         echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                         if ($detail_url) echo "</a>";
                     }
 
                     if ($show_title) {
                         echo "<h4 class=\"brz-eventList__item--meta--title\">";
-                        if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$slug}\">";
+                        if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slug}\">";
                         echo "{$item['title']}";
                         if ($detail_url) echo "</a>";
                         echo "</h4>";
@@ -134,7 +134,7 @@ class EventListPlaceholder extends PlaceholderAbstract
                         echo "<div class=\"brz-eventList__item--meta--preview\">{$item['preview']}</div>";
                     }
                     if ($detail_url && $detail_page_button_text) {
-                        echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-slug={$slug}\">{$detail_page_button_text}</a></div>";
+                        echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$slug}\">{$detail_page_button_text}</a></div>";
                     }
                     echo "</div>";
                 }
@@ -143,7 +143,7 @@ class EventListPlaceholder extends PlaceholderAbstract
             <?php
             if ($show_pagination && $content['after_show']['pagination']) {
                 $content['after_show']['pagination'] = str_replace('id="pagination"', 'id="ekklesia360_event_list_pagination" class="brz-ministryBrands__pagination"', $content['after_show']['pagination']);
-                $content['after_show']['pagination'] = str_replace('page=', 'ekk-page=', $content['after_show']['pagination']);
+                $content['after_show']['pagination'] = str_replace('page=', 'mc-page=', $content['after_show']['pagination']);
 
                 echo $content['after_show']['pagination'];
             }

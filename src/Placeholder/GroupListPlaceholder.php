@@ -48,7 +48,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
             'order'         => 'recent',
             'emailencode'   => 'no',
             'howmany'       => $howmany,
-            'page'          => isset($_GET['ekk-page']) ? $_GET['ekk-page'] : 1,
+            'page'          => isset($_GET['mc-page']) ? $_GET['mc-page'] : 1,
             'find_category' => $category == 'all' ? '' : $category,
             'find_group'    => $group == 'all' ? '' : $group,
             'show'          => "__endtime format='g:ia'__",
@@ -78,13 +78,13 @@ class GroupListPlaceholder extends PlaceholderAbstract
 
                     echo "<div class='brz-groupList__item'>";
                     if ($show_images && $item['imageurl']) {
-                        if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
+                        if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                         echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                         if ($detail_url) echo "</a>";
                     }
 
                     echo "<h4 class=\"brz-groupList__item--meta--title\">";
-                    if ($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
+                    if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                     echo "{$item['name']}";
                     if ($detail_url) echo "</a>";
                     echo "</h4>";
@@ -127,7 +127,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
                         
                     }
                     if ($detail_url && $detail_page_button_text) {
-                        echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?ekk-slug={$item['slug']}\">{$detail_page_button_text}</a></div>";
+                        echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\">{$detail_page_button_text}</a></div>";
                     }
                     echo "</div>";
                 }
@@ -136,7 +136,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
             <?php
             if ($show_pagination && $content['after_show']['pagination']) {
                 $content['after_show']['pagination'] = str_replace('id="pagination"', 'id="ekklesia360_group_list_pagination" class="brz-ministryBrands__pagination"', $content['after_show']['pagination']);
-                $content['after_show']['pagination'] = str_replace('page=', 'ekk-page=', $content['after_show']['pagination']);
+                $content['after_show']['pagination'] = str_replace('page=', 'mc-page=', $content['after_show']['pagination']);
 
                 echo $content['after_show']['pagination'];
             }

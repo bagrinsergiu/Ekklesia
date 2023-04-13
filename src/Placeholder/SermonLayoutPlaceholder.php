@@ -56,11 +56,11 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $filterCount     = count(array_filter($filterCountArr));
         $detail_url      = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
         $cms             = $this->monkCMS;
-        $page            = isset($_GET['ekk-page']) ? $_GET['ekk-page'] : 1;
-        $category_filter = isset($_GET['ekk-category']) ? $_GET['ekk-category'] : false;
-        $group_filter    = isset($_GET['ekk-group']) ? $_GET['ekk-group'] : false;
-        $series_filter   = isset($_GET['ekk-series']) ? $_GET['ekk-series'] : false;
-        $speaker_filter  = isset($_GET['ekk-speaker']) ? $_GET['ekk-speaker'] : false;
+        $page            = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
+        $category_filter = isset($_GET['mc-category']) ? $_GET['mc-category'] : false;
+        $group_filter    = isset($_GET['mc-group']) ? $_GET['mc-group'] : false;
+        $series_filter   = isset($_GET['mc-series']) ? $_GET['mc-series'] : false;
+        $speaker_filter  = isset($_GET['mc-speaker']) ? $_GET['mc-speaker'] : false;
 
         $categories = $cms->get(array(
             'module'  => 'sermon',
@@ -87,13 +87,13 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         ));
 
         //test search first
-        if (isset($_GET['ekk-search'])) {
+        if (isset($_GET['mc-search'])) {
             $content    = [];
             $search_arr = $cms->get([
                 'module'      => 'search',
                 'display'     => 'results',
                 'howmany'     => '100',
-                'keywords'    => $_GET['ekk-search'],
+                'keywords'    => $_GET['mc-search'],
                 'find_module' => 'sermon',
                 'hide_module' => 'media',
             ]);
@@ -131,14 +131,14 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if($show_group_filter && count($groups['group_show']) > 0): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
-                    <select name="ekk-group" class='sorter' >
+                    <select name="mc-group" class='sorter' >
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
                         foreach($groups['group_show'] as $group)
                         {
                             echo "<option value=\"{$group['slug']}\"";
-                            if(isset($_GET['ekk-group']) && $_GET['ekk-group'] == $group['slug'])
+                            if(isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug'])
                             {
                                 echo " selected";
                             }
@@ -151,14 +151,14 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if($show_category_filter && count($categories['group_show']) > 0): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
-                    <select name="ekk-category" class='sorter' >
+                    <select name="mc-category" class='sorter' >
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
                         foreach($categories['group_show'] as $category)
                         {
                             echo "<option value=\"{$category['slug']}\"";
-                            if(isset($_GET['ekk-category']) && $_GET['ekk-category'] == $category['slug'])
+                            if(isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug'])
                             {
                                 echo " selected";
                             }
@@ -171,14 +171,14 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
-                    <select name="ekk-series" class='sorter' >
+                    <select name="mc-series" class='sorter' >
                         <option value=""><?= $series_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
                         foreach($series['group_show'] as $serie)
                         {
                             echo "<option value=\"{$serie['slug']}\"";
-                            if(isset($_GET['ekk-series']) && $_GET['ekk-series'] == $serie['slug'])
+                            if(isset($_GET['mc-series']) && $_GET['mc-series'] == $serie['slug'])
                             {
                                 echo " selected";
                             }
@@ -191,14 +191,14 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if($show_speaker_filter && count($speakers['group_show']) > 0): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
-                    <select name="ekk-speaker" class='sorter' >
+                    <select name="mc-speaker" class='sorter' >
                         <option value=""><?= $speaker_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
                         foreach($speakers['group_show'] as $speaker)
                         {
                             echo "<option value=\"{$speaker['slug']}\"";
-                            if(isset($_GET['ekk-speaker']) && $_GET['ekk-speaker'] == $speaker['slug'])
+                            if(isset($_GET['mc-speaker']) && $_GET['mc-speaker'] == $speaker['slug'])
                             {
                                 echo " selected";
                             }
@@ -214,16 +214,16 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <?php if($show_search): ?>
                 <form method="get" id="brz-sermonLayout__filter--form-search" name="brz-sermonLayout__filter--form-search" class="brz-sermonLayout__filter--form-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="ekklesia360_sermon_layout_search_term" name="ekk-search" value="" placeholder="<?= $search_placeholder ?>" />
+                        <input type="text" id="ekklesia360_sermon_layout_search_term" name="mc-search" value="" placeholder="<?= $search_placeholder ?>" />
                         <button type="submit" id="ekklesia360_sermon_layout_search_submit" value=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-icon-svg" data-type="fa" data-name="search"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button>
                     </fieldset>
                 </form>
             <?php endif; ?>
         </div>
 
-        <?php if(isset($_GET['ekk-search']))
+        <?php if(isset($_GET['mc-search']))
     {
-        echo "<h4 class=\"ekklesia360_sermon_layout_results_heading\"><a href=\"{$baseURL}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['ekk-search']}\"</h4>";
+        echo "<h4 class=\"ekklesia360_sermon_layout_results_heading\"><a href=\"{$baseURL}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h4>";
     }
         ?>
 
@@ -249,7 +249,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
                         if( $show_images && $item['imageurl'] && !$show_video)
                         {
-                            if($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
+                            if($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                             echo "<div class=\"brz-sermonLayout__item--media--image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             if($detail_url) echo "</a>";
                         }
@@ -281,7 +281,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         if($show_title )
                         {
                             echo "<h4 class=\"brz-sermonLayout__item--meta--title\">";
-                            if($detail_url) echo "<a href=\"{$detail_url}?ekk-slug={$item['slug']}\">";
+                            if($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                             echo "{$item['title']}";
                             if($detail_url) echo "</a>";
                             echo "</h4>";
@@ -357,7 +357,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         if($detail_url && $detail_page_button_text)
                         {
                             // need to look later if this url is created correctly
-                            echo "<p class=\"brz-sermonLayout__item--detail-button\"><a href=\"{$detail_url}?ekk-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"brz-sermonLayout__item--detail-button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                         }
 
                         echo "</div>";
@@ -377,33 +377,27 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         <?php 
             if($show_pagination)
             {
-                $paginationOutput = '<p class="brz-ministryBrands__pagination">' . $pagination->getLinks($_GET, 'ekk-page') . '</p>';
-
-                //if complexity grows consider http_build_query
-                if(isset($_GET['ekk-search']))
-                {
-                    $paginationOutput = str_replace('?', "?ekk-search={$_GET['ekk-search']}&", $paginationOutput);
-                }
+                $paginationOutput = '<p class="brz-ministryBrands__pagination">' . $pagination->getLinks($_GET, 'mc-page') . '</p>';
 
                 //add group
-                if(isset($_GET['ekk-group']))
+                if(isset($_GET['mc-group']))
                 {
-                    $paginationOutput = str_replace('?', "?ekk-group={$_GET['ekk-group']}&", $paginationOutput);
+                    $paginationOutput = str_replace('?', "?mc-group={$_GET['mc-group']}&", $paginationOutput);
                 }
                 //add category
-                if(isset($_GET['ekk-category']))
+                if(isset($_GET['mc-category']))
                 {
-                    $paginationOutput = str_replace('?', "?ekk-category={$_GET['ekk-category']}&", $paginationOutput);
+                    $paginationOutput = str_replace('?', "?mc-category={$_GET['mc-category']}&", $paginationOutput);
                 }
                 //add series
-                if(isset($_GET['ekk-series']))
+                if(isset($_GET['mc-series']))
                 {
-                    $paginationOutput = str_replace('?', "?ekk-series={$_GET['ekk-series']}&", $paginationOutput);
+                    $paginationOutput = str_replace('?', "?mc-series={$_GET['mc-series']}&", $paginationOutput);
                 }
                 //add speaker
-                if(isset($_GET['ekk-speaker']))
+                if(isset($_GET['mc-speaker']))
                 {
-                    $paginationOutput = str_replace('?', "?ekk-speaker={$_GET['ekk-speaker']}&", $paginationOutput);
+                    $paginationOutput = str_replace('?', "?mc-speaker={$_GET['mc-speaker']}&", $paginationOutput);
                 }
                 echo $paginationOutput;
             }

@@ -39,8 +39,8 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
 
         extract($settings);
 
-        if (!empty($_GET['ekk-slug'])) {
-            $slug = $_GET['ekk-slug'];
+        if (!empty($_GET['mc-slug'])) {
+            $slug = $_GET['mc-slug'];
         } elseif ($sermons_recent) {
             $slug = $sermons_recent;
         } else {

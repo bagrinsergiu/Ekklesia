@@ -32,8 +32,8 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 
         extract($settings);
 
-        if (isset($_GET['ekk-slug'])) {
-            $slug = $_GET['ekk-slug'];
+        if (isset($_GET['mc-slug'])) {
+            $slug = $_GET['mc-slug'];
         } elseif ($groups_recent) {
             $slug = $groups_recent;
         } else {
