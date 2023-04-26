@@ -76,9 +76,10 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 
 	    echo "<div class='brz-groupDetail__item'>";
 
-		    // if ($show_title) {
-		    echo "<h2 class=\"brz-groupDetail__item--meta--title\">{$item['name']}</h2>";
-		    // }
+		    if ($show_title) {
+		        echo "<h2 class=\"brz-groupDetail__item--meta--title\">{$item['name']}</h2>";
+		    }
+
 		    if ($show_day && $item['dayoftheweek']) {
 			    echo "<h5 class=\"brz-groupDetail__item--meta--date\">";
 				    if ($show_meta_headings) {
