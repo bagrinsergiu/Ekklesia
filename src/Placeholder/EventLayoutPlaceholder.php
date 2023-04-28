@@ -465,7 +465,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             $slug = "{$item['id']}-$slugDate-{$item['slug']}";
 
                             if ($detail_url) {
-                                $item["url"] = str_replace('/event/', "{$detail_url}?event=", $item['url']);
+                                $item["url"] = str_replace('/event/', "{$detail_url}?mc-slug=", $item['url']);
                             }
 
                             echo "<div class=\"brz-eventLayout--featured__item\">";
@@ -681,7 +681,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $slug = "{$v['id']}-$slugDate-{$v['slug']}";
                         if($detail_url)
                         {
-                            $v["url"] = str_replace('/event/', "{$detail_url}?event=", $v['url']);
+                            $v["url"] = str_replace('/event/', "{$detail_url}?mc-slug=", $v['url']);
                         }
                         $results .= "<div class=\"brz-eventLayout--list-item__content\">";
                         $results .= "<div class=\"brz-eventLayout--list-item__content-date\">";
