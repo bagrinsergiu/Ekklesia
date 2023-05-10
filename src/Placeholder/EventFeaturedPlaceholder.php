@@ -57,7 +57,7 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
         }
 
         //make content
-        if ($show_latest_events != '') {
+        if ($show_latest_events) {
             $content1 = $cms->get([
                 'module'        => 'event',
                 'display'       => 'list',

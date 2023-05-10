@@ -58,7 +58,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
             $features = '';
         }
 
-        if ($sermon_latest != '') {
+        if ($sermon_latest) {
             $content1 = $cms->get([
                 'module'        => 'sermon',
                 'display'       => 'list',
