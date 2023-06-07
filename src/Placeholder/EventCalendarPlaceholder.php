@@ -12,7 +12,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
 {
    protected $name = 'ekk_event_calendar';
 
-	private $time = true;
+	private $time = false;
 
    public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
    {
@@ -23,7 +23,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
            'nonfeatures'   => '',
            'detail_page'   => false,
            'howmanymonths' => 3,
-           'time'          => true
+           'time'          => false
        ];
  
        $settings = array_merge($options, $placeholder->getAttributes());
