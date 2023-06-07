@@ -72,7 +72,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                     echo "<h5 class=\"brz-eventDetail__item--meta--date\">{$item['eventtimes']}</h5>";
                 }
                 if ($show_image && $item['imageurl']) {
-                    echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                    echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                 }
                 if ($show_category && $item['category']) {
                     echo "<h6 class=\"brz-eventDetail__item--meta\">";

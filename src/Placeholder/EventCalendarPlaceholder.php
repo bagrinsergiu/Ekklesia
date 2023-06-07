@@ -11,7 +11,9 @@ use DateTime;
 class EventCalendarPlaceholder extends PlaceholderAbstract
 {
    protected $name = 'ekk_event_calendar';
- 
+
+	private $time = true;
+
    public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
    {
        $options = [
@@ -21,6 +23,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
            'nonfeatures'   => '',
            'detail_page'   => false,
            'howmanymonths' => 3,
+           'time'          => true
        ];
  
        $settings = array_merge($options, $placeholder->getAttributes());
@@ -37,6 +40,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
        $date2         = new DateTime($calendarEnd);
        $diff          = $date1->diff($date2, true);
        $calendarDays  = $diff->format('%a');
+	   $this->time    = $time;
  
        if ($features) {
            $nonfeatures = '';
@@ -102,7 +106,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
        $end_month_format = $end_month->format("Y-m");
  
        //iterate each month
-       foreach ($period as $month) {
+       foreach ($period as $index => $month) {
            //set month formats
            $month_format = $month->format("Y-m");//should match format of initial $events month
            $month_format_month = $month->format("m");//month to draw table
@@ -117,7 +121,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
  
  
            //open .month div
-           $results .= "<div class=\"brz-eventCalendar-month {$month_format}\">";
+	       $results .= '<div class="brz-eventCalendar-month brz-eventCalendar-month' . ($index + 1) . ' {$month_format}">';
  
            //pagination
            $results .= "<div class=\"brz-eventCalendar-pagination\">";
@@ -202,9 +206,9 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
                //print_r($events[$cur_date]);
                $calendar .= "<ul class=\"brz-eventCalendar-links\">";
                foreach ($events[$cur_date] as $v) {
-                   if ($detail_url) {
-                       $v["url"] = str_replace('/event/', "{$detail_url}?mc-slug=", $v['url']);
-                   }
+	               if ($this->time && !empty($v['eventstart']) && $time = strtotime($v['eventstart'])) {
+		               $calendar .= date('H:i ', $time);
+	               }
                    $calendar .= "<li>";
                        $calendar .= "<span class=\"brz-eventCalendar-title\">";
 
