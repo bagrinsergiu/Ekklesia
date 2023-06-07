@@ -207,7 +207,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
                $calendar .= "<ul class=\"brz-eventCalendar-links\">";
                foreach ($events[$cur_date] as $v) {
 	               if ($this->time && !empty($v['eventstart']) && $time = strtotime($v['eventstart'])) {
-		               $calendar .= date('H:i ', $time);
+		               $calendar .= '<span class="brz-eventCalendar__event-start-time">' . date('H:i ', $time) . '</span>';
 	               }
                    $calendar .= "<li>";
                        $calendar .= "<span class=\"brz-eventCalendar-title\">";
