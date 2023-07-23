@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7af9b1f751500e8e9c766f1134bf23a",
+    "content-hash": "6d7f1427db422d7636d140ca598206ef",
     "packages": [
+        {
+            "name": "bagrinsergiu/content-placeholder",
+            "version": "2.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bagrinsergiu/brizy-content-placeholder.git",
+                "reference": "b83a386223b21c2e38c4f38798c6426e45fdd3c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bagrinsergiu/brizy-content-placeholder/zipball/b83a386223b21c2e38c4f38798c6426e45fdd3c0",
+                "reference": "b83a386223b21c2e38c4f38798c6426e45fdd3c0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "php": ">=7.1.0",
+                "phpspec/prophecy-phpunit": "^2",
+                "phpunit/phpunit": "^9.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BrizyPlaceholders\\": "lib/",
+                    "BrizyPlaceholdersTests\\": "tests/"
+                }
+            },
+            "description": "Brizy content placeholders SDK",
+            "keywords": [
+                "brizy",
+                "content",
+                "placeholders"
+            ],
+            "support": {
+                "source": "https://github.com/bagrinsergiu/brizy-content-placeholder/tree/2.0.9",
+                "issues": "https://github.com/bagrinsergiu/brizy-content-placeholder/issues"
+            },
+            "time": "2023-07-05T10:53:28+00:00"
+        },
         {
             "name": "bagrinsergiu/monkcms-php",
             "version": "1.0.1",
@@ -423,16 +464,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.15.4",
+            "version": "v2.15.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3e059001d6d597dd50ea7c74dd2464b4adea48d3"
+                "reference": "fc02a6af3eeb97c4bf5650debc76c2eda85ac22e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3e059001d6d597dd50ea7c74dd2464b4adea48d3",
-                "reference": "3e059001d6d597dd50ea7c74dd2464b4adea48d3",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/fc02a6af3eeb97c4bf5650debc76c2eda85ac22e",
+                "reference": "fc02a6af3eeb97c4bf5650debc76c2eda85ac22e",
                 "shasum": ""
             },
             "require": {
@@ -487,7 +528,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v2.15.4"
+                "source": "https://github.com/twigphp/Twig/tree/v2.15.5"
             },
             "funding": [
                 {
@@ -499,7 +540,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-27T12:26:20+00:00"
+            "time": "2023-05-03T17:49:41+00:00"
         }
     ],
     "packages-dev": [
@@ -1485,16 +1526,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "14f72dd46eaf2f2293cbe79c93cc0bc43161a211"
+                "reference": "6296a0c086dd0117c1b78b059374d7fcbe7545ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/14f72dd46eaf2f2293cbe79c93cc0bc43161a211",
-                "reference": "14f72dd46eaf2f2293cbe79c93cc0bc43161a211",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/6296a0c086dd0117c1b78b059374d7fcbe7545ae",
+                "reference": "6296a0c086dd0117c1b78b059374d7fcbe7545ae",
                 "shasum": ""
             },
             "require": {
@@ -1539,7 +1580,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
-                "source": "https://github.com/sebastianbergmann/diff/tree/3.0.3"
+                "source": "https://github.com/sebastianbergmann/diff/tree/3.0.4"
             },
             "funding": [
                 {
@@ -1547,7 +1588,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-30T07:59:04+00:00"
+            "time": "2023-05-07T05:30:20+00:00"
         },
         {
             "name": "sebastian/environment",

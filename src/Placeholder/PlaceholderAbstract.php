@@ -83,4 +83,34 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
     public function getGroup() {
         return $this->group;
     }
+
+	public function getConfigStructure()
+	{
+		// TODO: Implement getConfigStructure() method.
+	}
+
+	public function getLabel()
+	{
+		// TODO: Implement getLabel() method.
+	}
+
+	public function setLabel($label)
+	{
+		// TODO: Implement setLabel() method.
+	}
+
+	public function getPlaceholder()
+	{
+		// TODO: Implement getPlaceholder() method.
+	}
+
+	public function setPlaceholder($placeholder)
+	{
+		// TODO: Implement setPlaceholder() method.
+	}
+
+	public function getAttributes()
+	{
+		// TODO: Implement getAttributes() method.
+	}
 }
