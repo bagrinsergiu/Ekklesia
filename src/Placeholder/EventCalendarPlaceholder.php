@@ -64,43 +64,16 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
            'nonfeatures'   => $nonfeatures
        ]);
 
-	   if (isset($_GET['mc-subscribe'])   && !empty($content['show'])) {
-		   $tz = 'America/Los_Angeles';
-
-		   $calendar = new Vcalendar( [
-			   Vcalendar::UNIQUE_ID => "kigkonsult.se",
-			   Vcalendar::TZID      => $tz
-		   ] );
-
-		   // required of some calendar software
-		   $calendar->setMethod( "PUBLISH" );
-		   $calendar->setXprop( "x-wr-calname", "Calendar Sample" );
-		   $calendar->setXprop( "X-WR-CALDESC", "Calendar Description" );
-		   $calendar->setXprop( "X-WR-TIMEZONE", $tz );
-
-		   foreach ($content['show'] as $event) {
-			   $vevent = $calendar->newVevent();
-			   $vevent->setDtstart(new DateTime( $event['eventstart']), new DateTimezone( $tz ));
-			   $vevent->setDtend(new DateTime( $event['eventend']), new DateTimezone( $tz ));
-			   $vevent->setLocation( "Central Placa" );
-			   $vevent->setSummary(  $event['event']);
-
-			   if(!empty($event['description'])) {
-				   $vevent->setDescription( $event['description'] );
+	   if (isset($_GET['mc-subscribe']) && !empty($content['show'])) {
+		   if (is_numeric($_GET['mc-subscribe'])) {
+			   $key = array_search($_GET['mc-subscribe'], array_column($content['show'], 'occurrenceid'));
+			   if (false !== $key) {
+				   $event = $content['show'][$key];
+				   $this->sendCalendarIcs([$event], $event['slug']);
 			   }
-
-			   $valarm = $vevent->newValarm();
-
-			   $valarm->setAction( Vcalendar::DISPLAY );
-			   // reuse the event description
-			   $valarm->setDescription( $vevent->getProperty( Vcalendar::SUMMARY ));
-			   // create alarm trigger (in UTC datetime)
-			   $valarm->setTrigger( '-PT0H15M0S');
+		   } else {
+			   $this->sendCalendarIcs($content['show']);
 		   }
-
-		   $calendar->returnCalendar();
-
-		   exit();
 	   }
 
        ?>
@@ -311,4 +284,53 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
        $period = new DatePeriod($start, $interval, $end);
        return $period;
    }
+
+	private function sendCalendarIcs(array $events, $fileName = null)
+	{
+		$tz         = 'America/Los_Angeles';
+		$zone       = new DateTimeZone($tz);
+		$currentUrl = $_SERVER['HTTP_HOST'];
+		$calendar   = new Vcalendar([Vcalendar::UNIQUE_ID => $currentUrl]);
+
+		$calendar->setMethod(Vcalendar::PUBLISH);
+		$calendar->setXprop(Vcalendar::X_WR_CALNAME, $currentUrl);
+		$calendar->setXprop(Vcalendar::X_WR_CALDESC, $currentUrl);
+		$calendar->setXprop(Vcalendar::X_WR_TIMEZONE, $tz);
+		$calendar->setXprop('X-LIC-LOCATION', $tz);
+
+		foreach ($events as $event) {
+			$start = new DateTime($event['eventstart'], $zone);
+			$end   = new DateTime($event['eventend'], $zone);
+
+			if($start->getTimestamp() > $end->getTimestamp()) {
+				continue;
+			}
+
+			$vevent = $calendar->newVevent();
+
+			$vevent->setTransp(Vcalendar::OPAQUE);
+			$vevent->setClass(Vcalendar::P_BLIC);
+			$vevent->setDtstart($start);
+			$vevent->setDtend($end);
+			$vevent->setSummary($event['event']);
+
+			if (!empty($event['location'])) {
+				$vevent->setLocation(strip_tags($event['location']));
+			}
+
+			$valarm = $vevent->newValarm();
+
+			$valarm->setAction(Vcalendar::DISPLAY);
+			$valarm->setDescription($vevent->getSummary());
+			$valarm->setTrigger('-PT0H15M0S');
+		}
+
+		if ($fileName) {
+			$fileName = "$fileName.ics";
+		}
+
+		$calendar->returnCalendar(false, false, true, $fileName);
+
+		exit();
+	}
 }
