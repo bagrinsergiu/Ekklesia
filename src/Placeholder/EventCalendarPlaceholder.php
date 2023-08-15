@@ -7,7 +7,9 @@ use BrizyPlaceholders\ContextInterface;
 use DateInterval;
 use DatePeriod;
 use DateTime;
- 
+use DateTimeZone;
+use Kigkonsult\Icalcreator\Vcalendar;
+
 class EventCalendarPlaceholder extends PlaceholderAbstract
 {
    protected $name = 'ekk_event_calendar';
@@ -61,6 +63,46 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
            'features'      => $features,
            'nonfeatures'   => $nonfeatures
        ]);
+
+	   if (isset($_GET['mc-subscribe'])   && !empty($content['show'])) {
+		   $tz = 'America/Los_Angeles';
+
+		   $calendar = new Vcalendar( [
+			   Vcalendar::UNIQUE_ID => "kigkonsult.se",
+			   Vcalendar::TZID      => $tz
+		   ] );
+
+		   // required of some calendar software
+		   $calendar->setMethod( "PUBLISH" );
+		   $calendar->setXprop( "x-wr-calname", "Calendar Sample" );
+		   $calendar->setXprop( "X-WR-CALDESC", "Calendar Description" );
+		   $calendar->setXprop( "X-WR-TIMEZONE", $tz );
+
+		   foreach ($content['show'] as $event) {
+			   $vevent = $calendar->newVevent();
+			   $vevent->setDtstart(new DateTime( $event['eventstart']), new DateTimezone( $tz ));
+			   $vevent->setDtend(new DateTime( $event['eventend']), new DateTimezone( $tz ));
+			   $vevent->setLocation( "Central Placa" );
+			   $vevent->setSummary(  $event['event']);
+
+			   if(!empty($event['description'])) {
+				   $vevent->setDescription( $event['description'] );
+			   }
+
+			   $valarm = $vevent->newValarm();
+
+			   $valarm->setAction( Vcalendar::DISPLAY );
+			   // reuse the event description
+			   $valarm->setDescription( $vevent->getProperty( Vcalendar::SUMMARY ));
+			   // create alarm trigger (in UTC datetime)
+			   $valarm->setTrigger( '-PT0H15M0S');
+		   }
+
+		   $calendar->returnCalendar();
+
+		   exit();
+	   }
+
        ?>
  
        <div class="brz-eventCalendar_wrap">
