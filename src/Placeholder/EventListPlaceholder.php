@@ -94,7 +94,9 @@ class EventListPlaceholder extends PlaceholderAbstract
                     }
 
                     if ($show_date) {
-                        echo "<h5 class=\"brz-eventList__item--meta--date\">Date: {$item['eventtimes']}</h5>";
+                        echo "<h5 class=\"brz-eventList__item--meta--date\">";
+                        if($show_meta_headings) echo "Date: ";
+                        echo "{$item['eventtimes']}</h5>";
                     }
 
                     if ($show_category && $item['category']) {
