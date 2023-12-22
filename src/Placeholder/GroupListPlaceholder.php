@@ -79,7 +79,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
                     echo "<div class='brz-groupList__item'>";
                     if ($show_images && $item['imageurl']) {
                         if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
-                        echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                        echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                         if ($detail_url) echo "</a>";
                     }
 
@@ -124,7 +124,6 @@ class GroupListPlaceholder extends PlaceholderAbstract
                     if ($show_preview && $item['description']) {
                         $item['description'] = substr($item['description'], 0, 110) . " ...";
                         echo "<div class=\"brz-groupList__item--meta--preview\">{$item['description']}</div>";
-                        
                     }
                     if ($detail_url && $detail_page_button_text) {
                         echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\">{$detail_page_button_text}</a></div>";

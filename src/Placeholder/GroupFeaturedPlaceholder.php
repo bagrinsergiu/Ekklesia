@@ -104,7 +104,7 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                 }
 
                 if ($show_image && $item['imageurl']) {
-                    echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
+                    echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                 }
 
                 if ($show_category && $item['category']) {

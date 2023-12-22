@@ -35,7 +35,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
         $cms      = $this->monkCMS;
 
         extract($settings);
-        
+
         if (isset($_GET['mc-slug'])) {
             $slug = $_GET['mc-slug'];
         } elseif ($events_recent) {
@@ -48,7 +48,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                 'emailencode' => 'no',
                 'howmany'     => 1
             ]);
-            
+
             $slug = !empty($recent['show'][0]['slug']) ? $recent['show'][0]['slug'] : '';
         }
 
@@ -61,7 +61,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
 
         if ( isset($content['show']) && count($content['show']) > 0) {
             $item = $content['show'];
-            ?>
+?>
 
             <div class="brz-eventDetail__item">
                 <?php
@@ -72,7 +72,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                     echo "<h5 class=\"brz-eventDetail__item--meta--date\">{$item['eventtimes']}</h5>";
                 }
                 if ($show_image && $item['imageurl']) {
-                    echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
+                    echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                 }
                 if ($show_category && $item['category']) {
                     echo "<h6 class=\"brz-eventDetail__item--meta\">";
@@ -142,7 +142,7 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                     echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
                 }
                 if ($show_description && $item['text']) {
-                    echo "<div class=\"brz-eventDetail__item--meta--preview\">{$item['text']}</div>";
+                    echo "<div class=\"brz-eventDetail__item--meta--preview\"><span>{$item['text']}</span></div>";
                 }
 
                 if ($previous_page) {
@@ -152,11 +152,11 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                 }
                 ?>
             </div>
-            <?php
+        <?php
         } else {
-            ?>
+        ?>
             <p>There is no event available.</p>
-            <?php
+<?php
         }
     }
 }
