@@ -219,9 +219,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 $content["show"] = self::searchArray($content["show"], $_GET["mc-category-3"]);
             }
         }
-        ?>
+?>
 
-        <div id="brz-eventLayout--view" class="brz-eventLayout--view">
+<div id="brz-eventLayout--view" class="brz-eventLayout--view">
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
@@ -245,184 +245,184 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 <?php if ($show_group_filter && count($groups['show']) > 0): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-group" class='sorter' >
-                        <option><?= $group_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($groups['show'] as $group) {
-                            echo "<option value=\"{$group['slug']}\"";
-                            if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
-                                echo " selected";
-                            }
-                            echo ">{$group['title']}</option>";
-                        }
-                        ?>
-                    </select>
-                    </div>
-                <?php endif; ?>
+                                <option><?= $group_filter_heading ?></option>
+                                <option value="">All</option>
+                                <?php
+                                foreach ($groups['show'] as $group) {
+                                    echo "<option value=\"{$group['slug']}\"";
+                                    if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
+                                        echo " selected";
+                                    }
+                                    echo ">{$group['title']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-                <?php
+                    <?php
                 if ($show_category_filter): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-category" class='sorter' >
-                        <option value=""><?= $category_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        if (is_array($category_filter_list)) {
-                            foreach ($category_filter_list as $category) {
-                                $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                $catMatch = $categories['show'][$catKey];
-                                if ($catKey !== FALSE) {
-                                    echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $catMatch['slug']) {
-                                        echo " selected";
+                                <option value=""><?= $category_filter_heading ?></option>
+                                <option value="">All</option>
+                                <?php
+                                if (is_array($category_filter_list)) {
+                                    foreach ($category_filter_list as $category) {
+                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                        $catMatch = $categories['show'][$catKey];
+                                        if ($catKey !== FALSE) {
+                                            echo "<option value=\"{$catMatch['slug']}\"";
+                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $catMatch['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$catMatch['name']}</option>";
+                                        }
                                     }
-                                    echo ">{$catMatch['name']}</option>";
-                                }
-                            }
-                        } //since this is the main category filter this will always show
-                        elseif ($category_filter_parent) {
-                            foreach ($categories["level3"] as $category) {
-                                if ($category["parentid"] != $category_filter_parent) {
-                                    continue;
-                                }
-                                echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                    echo " selected";
-                                }
-                                echo ">{$category['name']}</option>";
-                            }
-                        } else {
-                            if ($parent_category != "") {
-                                foreach ($categories_parent["level1"] as $category) {
-                                    echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                        echo " selected";
+                                } //since this is the main category filter this will always show
+                                elseif ($category_filter_parent) {
+                                    foreach ($categories["level3"] as $category) {
+                                        if ($category["parentid"] != $category_filter_parent) {
+                                            continue;
+                                        }
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
                                     }
-                                    echo ">{$category['name']}</option>";
-                                }
-                            } else {
-                                foreach ($categories["show"] as $category) {
-                                    echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                        echo " selected";
+                                } else {
+                                    if ($parent_category != "") {
+                                        foreach ($categories_parent["level1"] as $category) {
+                                            echo "<option value=\"{$category['slug']}\"";
+                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$category['name']}</option>";
+                                        }
+                                    } else {
+                                        foreach ($categories["show"] as $category) {
+                                            echo "<option value=\"{$category['slug']}\"";
+                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$category['name']}</option>";
+                                        }
                                     }
-                                    echo ">{$category['name']}</option>";
                                 }
-                            }
-                        }
-                        ?>
-                    </select>
-                    </div>
-                <?php endif; ?>
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-                <?php
+                    <?php
                 if ($show_category_filter_add1 && ($category_filter_parent_add1 != "" || is_array($category_filter_list_add1))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-category-1" class='sorter' >
-                        <option value=""><?= $category_filter_heading_add1 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        if (is_array($category_filter_list_add1)) {
-                            foreach ($category_filter_list_add1 as $category) {
-                                $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                $catMatch = $categories['show'][$catKey];
-                                if ($catKey !== FALSE) {
-                                    echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $catMatch['slug']) {
-                                        echo " selected";
+                                <option value=""><?= $category_filter_heading_add1 ?></option>
+                                <option value="">All</option>
+                                <?php
+                                if (is_array($category_filter_list_add1)) {
+                                    foreach ($category_filter_list_add1 as $category) {
+                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                        $catMatch = $categories['show'][$catKey];
+                                        if ($catKey !== FALSE) {
+                                            echo "<option value=\"{$catMatch['slug']}\"";
+                                            if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $catMatch['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$catMatch['name']}</option>";
+                                        }
                                     }
-                                    echo ">{$catMatch['name']}</option>";
+                                } else {
+                                    foreach ($categories["level3"] as $category) {
+                                        if ($category["parentid"] != $category_filter_parent_add1) {
+                                            continue;
+                                        }
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
+                                    }
                                 }
-                            }
-                        } else {
-                            foreach ($categories["level3"] as $category) {
-                                if ($category["parentid"] != $category_filter_parent_add1) {
-                                    continue;
-                                }
-                                echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $category['slug']) {
-                                    echo " selected";
-                                }
-                                echo ">{$category['name']}</option>";
-                            }
-                        }
-                        ?>
-                    </select>
-                    </div>
-                <?php endif; ?>
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-                <?php
+                    <?php
                 if ($show_category_filter_add2 && ($category_filter_parent_add2 != "" || is_array($category_filter_list_add2))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-category-2" class='sorter' >
-                        <option value=""><?= $category_filter_heading_add2 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        if (is_array($category_filter_list_add2)) {
-                            foreach ($category_filter_list_add2 as $category) {
-                                $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                $catMatch = $categories['show'][$catKey];
-                                if ($catKey !== FALSE) {
-                                    echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $catMatch['slug']) {
-                                        echo " selected";
+                                <option value=""><?= $category_filter_heading_add2 ?></option>
+                                <option value="">All</option>
+                                <?php
+                                if (is_array($category_filter_list_add2)) {
+                                    foreach ($category_filter_list_add2 as $category) {
+                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                        $catMatch = $categories['show'][$catKey];
+                                        if ($catKey !== FALSE) {
+                                            echo "<option value=\"{$catMatch['slug']}\"";
+                                            if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $catMatch['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$catMatch['name']}</option>";
+                                        }
                                     }
-                                    echo ">{$catMatch['name']}</option>";
+                                } else {
+                                    foreach ($categories["level3"] as $category) {
+                                        if ($category["parentid"] != $category_filter_parent_add2) {
+                                            continue;
+                                        }
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
+                                    }
                                 }
-                            }
-                        } else {
-                            foreach ($categories["level3"] as $category) {
-                                if ($category["parentid"] != $category_filter_parent_add2) {
-                                    continue;
-                                }
-                                echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $category['slug']) {
-                                    echo " selected";
-                                }
-                                echo ">{$category['name']}</option>";
-                            }
-                        }
-                        ?>
-                    </select>
-                    </div>
-                <?php endif; ?>
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-                <?php
+                    <?php
                 if ($show_category_filter_add3 && ($category_filter_parent_add3 != "" || is_array($category_filter_list_add3))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-category-3" class='sorter' >
-                        <option value=""><?= $category_filter_heading_add3 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        if (is_array($category_filter_list_add3)) {
-                            foreach ($category_filter_list_add3 as $category) {
-                                $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                $catMatch = $categories['show'][$catKey];
-                                if ($catKey !== FALSE) {
-                                    echo "<option value=\"{$catMatch['slug']}\"";
-                                    if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $catMatch['slug']) {
-                                        echo " selected";
+                                <option value=""><?= $category_filter_heading_add3 ?></option>
+                                <option value="">All</option>
+                                <?php
+                                if (is_array($category_filter_list_add3)) {
+                                    foreach ($category_filter_list_add3 as $category) {
+                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                        $catMatch = $categories['show'][$catKey];
+                                        if ($catKey !== FALSE) {
+                                            echo "<option value=\"{$catMatch['slug']}\"";
+                                            if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $catMatch['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$catMatch['name']}</option>";
+                                        }
                                     }
-                                    echo ">{$catMatch['name']}</option>";
+                                } else {
+                                    foreach ($categories["level3"] as $category) {
+                                        if ($category["parentid"] != $category_filter_parent_add3) {
+                                            continue;
+                                        }
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
+                                    }
                                 }
-                            }
-                        } else {
-                            foreach ($categories["level3"] as $category) {
-                                if ($category["parentid"] != $category_filter_parent_add3) {
-                                    continue;
-                                }
-                                echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $category['slug']) {
-                                    echo " selected";
-                                }
-                                echo ">{$category['name']}</option>";
-                            }
-                        }
-                        ?>
-                    </select>
-                    </div>
-                <?php endif; ?>
-                <input type="hidden" name="mc-view" value="<?= $view ?>"/>
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+                    <input type="hidden" name="mc-view" value="<?= $view ?>"/>
             </form>
 
             <?php if ($show_search): ?>
@@ -436,23 +436,23 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <?php endif; ?>
         </div>
 
-        <?php if (isset($_GET['mc-search'])) {
-            echo "<h4 class=\"ekklesia360_event_layout_results_heading\"><a href=\"{$baseURL}?mc-view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h4>";
-        }
-        ?>
-    <?php endif; //end hide from featured
+            <?php if (isset($_GET['mc-search'])) {
+                echo "<h4 class=\"ekklesia360_event_layout_results_heading\"><a href=\"{$baseURL}?mc-view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h4>";
+            }
+            ?>
+        <?php endif; //end hide from featured
         ?>
 
         <?php
         //featured view
         if ($show_featured_view && ($view == "featured" || $isEditor)):
-            
-            ?>
+
+        ?>
             <div class="brz-eventLayout--featured__container">
                 <?php //output
                 if (count($content['show']) > 0) {
-                    ?>
-
+                ?>
+                
                     <div class="brz-eventLayout--featured" data-columncount="<?php echo $column_count_featured; ?>"
                          data-columncount-tablet="<?php echo $column_count_featured_tablet; ?>"
                          data-columncount-mobile="<?php echo $column_count_featured_mobile; ?>">
@@ -470,7 +470,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                             echo "<div class=\"brz-eventLayout--featured__item\">";
                             if ($show_images_featured && $item['imageurl']) {
-                                echo "<div class=\"brz-eventLayout--featured__item-image\">";
+                                echo "<div class=\"brz-ministryBrands__item--media\">";
                                 if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                                 if ($show_preview_featured && $item['preview']) {
@@ -498,14 +498,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </div>
-                    <?php
+                <?php
                 } //no output
                 else {
-                    ?>
+                ?>
 
                     <p>There are no events available.</p>
 
-                    <?php
+                <?php
                 }
                 ?>
             </div>
@@ -516,7 +516,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         <?php
         //list view
         if ($show_list_view && ($view == "list" || $isEditor)):
-            ?>
+        ?>
             <div class="brz-eventLayout--list__container">
 
                 <?php //output
@@ -532,11 +532,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                     echo "</div>";
                 } //no output
                 else {
-                    ?>
+                ?>
 
                     <p>There are no events available.</p>
 
-                    <?php
+                <?php
                 }
                 ?>
             </div>
@@ -546,7 +546,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         <?php
         //calendar view
         if ($show_calendar_view && ($view == "calendar" || $isEditor)):
-            ?>
+        ?>
             <div class="brz-eventLayout--calendar__container">
 
                 <?php //output
@@ -557,27 +557,27 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $grouping_day = date("Y-m-d", strtotime($show["eventstart"]));
                         $events[$grouping_month][$grouping_day][] = $show;//set first dimension to day and then assign all events as second level to that day
                     }
-                    ?>
+                ?>
 
                     <div class="brz-eventLayout--calendar">
                         <?php
                         echo self::draw_calendar($events, $detail_url);
                         ?>
                     </div>
-                    <?php
+                <?php
                 } //no output
                 else {
-                    ?>
+                ?>
 
                     <p>There are no events available.</p>
 
-                    <?php
+                <?php
                 }
                 ?>
             </div>
         <?php endif; //end calendar view
         ?>
-        <?php
+<?php
     }
 
     /*

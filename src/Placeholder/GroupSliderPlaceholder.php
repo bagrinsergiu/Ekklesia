@@ -78,7 +78,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                             echo "<div class=\"brz-groupSlider-info\">";
                             if ($show_images && $item['imageurl']) {
                                 if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
-                                echo "<div class=\"brz-groupSlider-image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                                echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                                 if ($detail_url) echo "</a>";
                             }
 

@@ -134,19 +134,19 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
                 }
 
                 if ( $show_image && $item['imageurl'] && ! $show_video ) {
-                    echo "<div class=\"brz-sermonDetail__item--media--img\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                    echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                 }
 
                 if ( $show_video ) {
                     if ( $item['videoembed'] ) {
-                        echo "<div class=\"brz-sermonDetail__item--media--video\">{$item['videoembed']}</div>";
+                        echo "<div class=\"brz-ministryBrands__item--media\">{$item['videoembed']}</div>";
                     } elseif ( $item['videourl'] ) {
                         $videoext = pathinfo( $item['videourl'], PATHINFO_EXTENSION );
-                        echo "<div class=\"brz-sermonDetail__item--media\">";
+                        echo "<div class=\"brz-ministryBrands__item--media\">";
                             echo "<video src=\"{$item['videourl']}\" controls preload=\"none\" width=\"1024\" height=\"576\" poster=\"{$item['imageurl']}\" type=\"video/{$videoext}\"><p>The Video could not be played. Please <a href=\"{$item['videourl']}\" target=\"_blank\">download it here</a>.</p></video>";
                         echo "</div>";
                     } elseif ( $show_image && $item['imageurl'] ) {
-                        echo "<div class=\"brz-sermonDetail__item--media--img\">
+                        echo "<div class=\"brz-ministryBrands__item--media\">
                                 <img src=\"{$item['imageurl']}\" alt=\"\" />
                              </div>";
                     }

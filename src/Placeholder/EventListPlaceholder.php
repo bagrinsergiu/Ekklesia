@@ -81,7 +81,7 @@ class EventListPlaceholder extends PlaceholderAbstract
                     echo "<div class=\"brz-eventList__item\">";
                     if ($show_images && $item['imageurl']) {
                         if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slug}\">";
-                        echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                        echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                         if ($detail_url) echo "</a>";
                     }
 
