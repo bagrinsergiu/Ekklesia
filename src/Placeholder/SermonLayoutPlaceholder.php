@@ -45,6 +45,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             'detail_page_button_text' => false,
             'howmany'                 => 9,
             'sticky_space'            => 0,
+            'defaultCategory'         => '',
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -61,6 +62,10 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $group_filter    = isset($_GET['mc-group']) ? $_GET['mc-group'] : false;
         $series_filter   = isset($_GET['mc-series']) ? $_GET['mc-series'] : false;
         $speaker_filter  = isset($_GET['mc-speaker']) ? $_GET['mc-speaker'] : false;
+
+	    if (!isset($_GET['mc-category']) && $defaultCategory) {
+		    $category_filter = $defaultCategory;
+	    }
 
         $categories = $cms->get(array(
             'module'  => 'sermon',
@@ -158,7 +163,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                         foreach($categories['group_show'] as $category)
                         {
                             echo "<option value=\"{$category['slug']}\"";
-                            if(isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug'])
+                            if($category_filter == $category['slug'])
                             {
                                 echo " selected";
                             }
@@ -385,9 +390,9 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     $paginationOutput = str_replace('?', "?mc-group={$_GET['mc-group']}&", $paginationOutput);
                 }
                 //add category
-                if(isset($_GET['mc-category']))
+                if($category_filter)
                 {
-                    $paginationOutput = str_replace('?', "?mc-category={$_GET['mc-category']}&", $paginationOutput);
+                    $paginationOutput = str_replace('?', "?mc-category=$category_filter&", $paginationOutput);
                 }
                 //add series
                 if(isset($_GET['mc-series']))
