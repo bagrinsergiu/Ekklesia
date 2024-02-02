@@ -92,7 +92,12 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
 
             <div class="brz-groupFeatured__item">
                 <?php
-                echo "<h2 class=\"brz-groupFeatured__item--meta--title\">{$item['name']}</h2>";
+                echo "<h2 class=\"brz-groupFeatured__item--meta--title\">";
+                if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
+                echo "{$item['name']}";
+                if ($detail_url) echo "</a>";
+                echo "</h2>";
+
                 if ($show_day && $item['dayoftheweek']) {
                     echo "<h5 class=\"brz-groupFeatured__item--meta--date\">Meeting Day: {$item['dayoftheweek']}</h5>";
                 }
