@@ -18,6 +18,7 @@ use BrizyEkklesia\Placeholder\SermonDetailPlaceholder;
 use BrizyEkklesia\Placeholder\SermonFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\SermonLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\SermonListPlaceholder;
+use BrizyEkklesia\Placeholder\ArticleFeaturedPlaceholder;
 use BrizyPlaceholders\Replacer;
 use Twig_Environment;
 
@@ -56,8 +57,9 @@ class Placeholders
             new GroupLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
             new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new FormPlaceholder($this->monkCms, $this->twig, $replacer),
+            new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
+            new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer)
         ];
     }
 }
