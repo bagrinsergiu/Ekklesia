@@ -2,6 +2,7 @@
 
 namespace BrizyEkklesia;
 
+use BrizyEkklesia\Placeholder\ArticleDetailPlaceholder;
 use BrizyEkklesia\Placeholder\EventCalendarPlaceholder;
 use BrizyEkklesia\Placeholder\EventDetailPlaceholder;
 use BrizyEkklesia\Placeholder\EventFeaturedPlaceholder;
@@ -57,6 +58,7 @@ class Placeholders
             new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
             new FormPlaceholder($this->monkCms, $this->twig, $replacer),
+            new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer)
         ];
     }
