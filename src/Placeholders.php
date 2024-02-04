@@ -3,6 +3,8 @@
 namespace BrizyEkklesia;
 
 use BrizyEkklesia\Placeholder\ArticleDetailPlaceholder;
+use BrizyEkklesia\Placeholder\ArticleLayoutPlaceholder;
+use BrizyEkklesia\Placeholder\ArticleListPlaceholder;
 use BrizyEkklesia\Placeholder\EventCalendarPlaceholder;
 use BrizyEkklesia\Placeholder\EventDetailPlaceholder;
 use BrizyEkklesia\Placeholder\EventFeaturedPlaceholder;
@@ -19,6 +21,9 @@ use BrizyEkklesia\Placeholder\SermonFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\SermonLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\SermonListPlaceholder;
 use BrizyEkklesia\Placeholder\ArticleFeaturedPlaceholder;
+use BrizyEkklesia\Placeholder\StaffDetailPlaceholder;
+use BrizyEkklesia\Placeholder\StaffLayoutPlaceholder;
+use BrizyEkklesia\Placeholder\StaffListPlaceholder;
 use BrizyPlaceholders\Replacer;
 use Twig_Environment;
 
@@ -59,7 +64,12 @@ class Placeholders
             new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
             new FormPlaceholder($this->monkCms, $this->twig, $replacer),
             new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer)
+            new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
+            new ArticleListPlaceholder($this->monkCms, $this->twig, $replacer),
+            new ArticleLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
+            new StaffListPlaceholder($this->monkCms, $this->twig, $replacer),
+            new StaffLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
+            new StaffDetailPlaceholder($this->monkCms, $this->twig, $replacer),
         ];
     }
 }

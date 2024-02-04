@@ -11,42 +11,32 @@ class ArticleDetailPlaceholder extends PlaceholderAbstract
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-        $options = [
-            'show_image'                => false,
+        $settings = array_merge([
+            'show_image'                => true,
             'show_video'                => false,
             'show_audio'                => false,
             'show_media_links_video'    => false,
             'show_media_links_audio'    => false,
             'show_media_links_download' => false,
             'show_media_links_notes'    => false,
-            'show_title'                => false,
-            'show_date'                 => false,
-            'show_category'             => false,
+            'show_title'                => true,
+            'show_date'                 => true,
+            'show_category'             => true,
             'show_group'                => false,
             'show_series'               => false,
-            'show_author'               => false,
+            'show_author'               => true,
             'show_meta_headings'        => false,
             'show_content'              => false,
             'articles_recent'           => '',
             'previous_page'             => false,
-        ];
-
-        $settings = array_merge($options, $placeholder->getAttributes());
-        $cms      = $this->monkCMS;
+        ], $placeholder->getAttributes());
 
         extract($settings);
 
-        if (!empty($_GET['mc-slug']) || $articles_recent) {
-            $content = $cms->get([
-                'module'      => 'article',
-                'display'     => 'detail',
-                'find'        => $_GET['mc-slug'] ?: $articles_recent,
-                'emailencode' => 'no',
-            ]);
-        }
+        $slug = empty($_GET['mc-slug']) ? $articles_recent : $_GET['mc-slug'];
 
-        if (empty($content['show'])) {
-            $recent = $cms->get([
+        if (!$slug) {
+            $recent = $this->monkCMS->get([
                 'module'      => 'article',
                 'display'     => 'list',
                 'order'       => 'recent',
@@ -57,7 +47,16 @@ class ArticleDetailPlaceholder extends PlaceholderAbstract
             if (empty($recent['show'][0])) {
                 return;
             }
+
+            $slug = $recent['show'][0]['slug'];
         }
+
+        $content = $this->monkCMS->get([
+           'module'      => 'article',
+           'display'     => 'detail',
+           'find'        => $slug,
+           'emailencode' => 'no',
+       ]);
 
         $item = $content['show'];
 
@@ -144,22 +143,10 @@ class ArticleDetailPlaceholder extends PlaceholderAbstract
                 if (strpos($item['videoplayer'], 'class')) {
                     $item['videoplayer'] = str_replace("Launch Player", "Watch", $item['videoplayer']);
                     $item['videoplayer'] = str_replace("Watch Video", "Watch", $item['videoplayer']);
-                    $item['videoplayer'] = str_replace(
-                        'mcms_videoplayer',
-                        'mcms_videoplayer brz-button-link brz-button brz-size-sm',
-                        $item['videoplayer']
-                    );
+                    $item['videoplayer'] = str_replace('mcms_videoplayer', 'mcms_videoplayer brz-button-link brz-button brz-size-sm', $item['videoplayer']);
                 } else {
-                    $item['videoplayer'] = str_replace(
-                        ">Launch Player",
-                        " class=\"brz-button-link brz-button brz-size-sm\">Watch",
-                        $item['videoplayer']
-                    );
-                    $item['videoplayer'] = str_replace(
-                        ">Watch Video",
-                        " class=\"brz-button-link brz-button brz-size-sm\">Watch",
-                        $item['videoplayer']
-                    );
+                    $item['videoplayer'] = str_replace(">Launch Player", " class=\"brz-button-link brz-button brz-size-sm\">Watch", $item['videoplayer']);
+                    $item['videoplayer'] = str_replace(">Watch Video", " class=\"brz-button-link brz-button brz-size-sm\">Watch", $item['videoplayer']);
                 }
 
                 echo "<li class=\"brz-ministryBrands__item--meta--links\">{$item['videoplayer']}</li>";
@@ -167,11 +154,7 @@ class ArticleDetailPlaceholder extends PlaceholderAbstract
 
             if ($show_media_links_audio && !empty($item['audioplayer'])) {
                 $item['audioplayer'] = str_replace("Launch Player", "Listen", $item['audioplayer']);
-                $item['audioplayer'] = str_replace(
-                    'mcms_audioplayer',
-                    'mcms_audioplayer brz-button-link brz-button brz-size-sm',
-                    $item['audioplayer']
-                );
+                $item['audioplayer'] = str_replace('mcms_audioplayer', 'mcms_audioplayer brz-button-link brz-button brz-size-sm', $item['audioplayer']);
                 echo "<li class=\"brz-ministryBrands__item--meta--links\">{$item['audioplayer']}</li>";
             }
 

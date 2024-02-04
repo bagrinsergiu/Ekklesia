@@ -11,90 +11,65 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-        $options = [
-            'show_image'              => false,
+        $settings = array_merge([
+            'show_image'              => true,
             'show_video'              => false,
             'show_audio'              => false,
             'show_media_links'        => false,
-            'show_title'              => false,
-            'show_date'               => false,
-            'show_category'           => false,
+            'show_title'              => true,
+            'show_date'               => true,
+            'show_category'           => true,
             'show_group'              => false,
             'show_series'             => false,
-            'show_author'             => false,
+            'show_author'             => true,
             'show_meta_headings'      => false,
             'show_preview'            => false,
             'show_content'            => false,
-            'detail_page_button_text' => false,
-            'detail_page'             => false,
-            'article_slug'            => false,
+            'detail_page_button_text' => '',
+            'detail_page'             => '',
+            'article_slug'            => '',
             'recentArticles'          => '',
             'features'                => '',
             'nonfeatures'             => '',
             'series'                  => 'all',
             'category'                => 'all',
             'group'                   => 'all',
-            'show_latest_articles'    => false,
-        ];
-
-        $settings = array_merge($options, $placeholder->getAttributes());
+            'show_latest_articles'    => true,
+        ], $placeholder->getAttributes());
 
         extract($settings);
 
-        $cms            = $this->monkCMS;
-        $recentArticles = $settings['recentArticles'] != '' ? $settings['recentArticles'] : '';
-        $category       = $settings['category'] != 'all' ? $settings['category'] : '';
-        $group          = $settings['group'] != 'all' ? $settings['group'] : '';
-        $series         = $settings['series'] != 'all' ? $settings['series'] : '';
-        $detail_url     = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : false;
-        $slug           = false;
+        $detail_url = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : false;
 
-        if ($features) {
-            $nonfeatures = '';
-        } elseif ($nonfeatures) {
-            $features = '';
-        }
-
-        //make content
         if ($show_latest_articles) {
-            $content1 = $cms->get([
+            $content = $this->monkCMS->get([
                 'module'        => 'article',
                 'display'       => 'list',
                 'order'         => 'recent',
                 'howmany'       => 1,
-                'find_category' => $category,
-                'find_group'    => $group,
-                'features'      => $features,
-                'nonfeatures'   => $nonfeatures,
+                'find_category' => $settings['category'] != 'all' ? $settings['category'] : '',
+                'find_group'    => $settings['group'] != 'all' ? $settings['group'] : '',
+                'find_series'   => $settings['series'] != 'all' ? $settings['series'] : '',
+                'features'      => $nonfeatures ? '' : $features,
+                'nonfeatures'   => $features ? '' : $nonfeatures,
                 'emailencode'   => 'no',
             ]);
 
-            $content = empty($content1['show'][0]) ? [] : $content1['show'][0];
+            $item = empty($content['show'][0]) ? [] : $content['show'][0];
 
         } else {
-            if ($article_slug) {
-                $slug = $article_slug;
-            } elseif ($article_recent_list != '') {
-                $slug = $article_recent_list;
-            }
-        }
 
-        if ($slug) {
-            $content = $cms->get([
+            $item = $this->monkCMS->get([
                 'module'      => 'article',
                 'display'     => 'detail',
-                'find'        => $slug,
+                'find'        => $recentArticles ?: $article_slug,
                 'emailencode' => 'no',
-            ])['show'];
+            ]);
+
+            $item = empty($item['show']) ? [] : $item['show'];
         }
-        ?>
 
-
-        <?php //output
-        if (isset($content) && count($content) > 0) {
-            $item = $content;
-            ?>
-            <?php
+        if ($item) {
             echo "<article>";
             echo "<div class=\"brz-articleFeatured__item\">";
             if ($show_title) {
@@ -219,16 +194,9 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
             }
             echo "</div>";
             echo "</article>";
-            ?>
-            <?php
-        } //no output
-        else {
-            ?>
-            <p>There is no article available.</p>
 
-            <?php
+        } else {
+            echo '<p>There is no article available.</p>';
         }
-        ?>
-        <?php
     }
 }
