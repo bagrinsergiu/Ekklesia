@@ -121,8 +121,8 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
         ?>
 
-        <div id="ekklesia360_article_layout_filters" class="ekklesia360_article_layout_filters">
-            <form id="ekklesia360_article_layout_form" name="ekklesia360_article_layout_form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+        <div id="brz-articleLayout__filters" class="brz-articleLayout__filters">
+            <form id="brz-articleLayout__form" name="brz-articleLayout__form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                 <?php if($show_group_filter && !empty($groups['group_show'])): ?>
                     <select name="mc-group" class="sorter">
                         <option value=""><?= $group_filter_heading ?></option>
@@ -141,7 +141,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter): ?>
-                    <select name="mc-category" class="sorter">
+                    <select name="mc-category" class="brz-articleLayout__sorter">
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -182,7 +182,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add1 && $category_filter_parent_add1): ?>
-                    <select name="mc-category_add1" class="sorter">
+                    <select name="mc-category_add1" class="brz-articleLayout__sorter--filter">
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
                         <?php
@@ -202,7 +202,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add2 && $category_filter_parent_add2 != ""): ?>
-                    <select name="mc-category_add2">
+                    <select name="mc-category_add2" class="brz-articleLayout__sorter--filter">
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
                         <?php
@@ -222,7 +222,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add3 && $category_filter_parent_add3 != ""): ?>
-                    <select name="mc-category_add3">
+                    <select name="mc-category_add3" class="brz-articleLayout__sorter--filter">
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
                         <?php
@@ -241,7 +241,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
-                    <select name="mc-series">
+                    <select name="mc-series" class="brz-articleLayout__sorter--series">
                         <option value=""><?= $series_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -257,7 +257,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_author_filter && count($authors['group_show']) > 0): ?>
-                    <select name="mc-author">
+                    <select name="mc-author" class="brz-articleLayout__sorter--author">
                         <option value=""><?= $author_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -274,10 +274,12 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             </form>
 
             <?php if ($show_search): ?>
-                <form method="get" id="ekklesia360_article_layout_search" name="mc-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+                <form method="get" id="brz-articleLayout__search" name="mc-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="ekklesia360_article_layout_search_term" name="mc-search_term" value="" placeholder="<?= $search_placeholder ?>"/>
-                        <button type="submit" name="submit" id="ekklesia360_article_layout_search_submit" value=""><i class="fas fa-search"></i></button>
+                        <input type="text" id="brz-articleLayout__search_term" name="mc-search_term" value="" placeholder="<?= $search_placeholder ?>"/>
+                        <button type="submit" name="submit" id="brz-articleLayout__search_submit" class="brz-articleLayout__search_submit" value="">
+                            <i class="brz-icon fas fa-search"></i>
+                        </button>
                     </fieldset>
                 </form>
             <?php endif; ?>
@@ -285,10 +287,10 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
         <?php
         if (isset($_GET['mc-search_term'])) {
-            echo "<h4 class=\"ekklesia360_article_layout_results_heading\"><a href=\"{$baseURL}\"><i class=\"fas fa-times\"></i></a> Search results for \"{$_GET['mc-search_term']}\"</h4>";
+            echo "<h4 class=\"brz-articleLayout__results_heading\"><a href=\"{$baseURL}\"><i class=\"brz-icon fas fa-times\"></i></a> Search results for \"{$_GET['mc-search_term']}\"</h4>";
         }
         ?>
-        <div id="ekklesia360_article_layout_wrap" class="ekklesia360_article_layout_wrap">
+        <div id="brz-articleLayout__wrap" class="brz-articleLayout__wrap">
 
             <?php
 
@@ -297,41 +299,41 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             $resultsPagination = $pagination->getResults();
 
             if (count($resultsPagination) > 0) { ?>
-                <div class="ekklesia360_article_layout">
+                <div class="brz-articleLayout">
                     <?php
                     foreach ($resultsPagination as $key => $item) {
                         echo "<article>";
-                        echo "<div class=\"info\">";
+                        echo "<div class=\"brz-articleLayout__info\">";
 
                         if ($show_images && $item['imageurl'] && !$show_video) {
                             if ($detail_url) {
                                 echo "<a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\">";
                             }
-                            echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                            echo "<div class=\"brz-articleLayout__image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             if ($detail_url) {
                                 echo "</a>";
                             }
                         }
                         if ($show_video) {
                             if ($item['videoembed']) {
-                                echo "<div class=\"ekklesia360_article_media_responsive video\">{$item['videoembed']}</div>";
+                                echo "<div class=\"brz-articleLayout__media_responsive--video\">{$item['videoembed']}</div>";
                             } elseif ($item['videourl']) {
                                 $videoext = pathinfo($item['videourl'], PATHINFO_EXTENSION);
-                                echo "<div class=\"ekklesia360_article_media_responsive\">";
+                                echo "<div class=\"brz-articleLayout__media_responsive\">";
                                 echo "<video src=\"{$item['videourl']}\" controls preload=\"none\" width=\"1024\" height=\"576\" poster=\"{$item['imageurl']}\" type=\"video/{$videoext}\"><p>The Video could not be played. Please <a href=\"{$item['videourl']}\" target=\"_blank\">download it here</a>.</p></video>";
                                 echo "</div>";
                             } elseif ($show_images && $item['imageurl']) {
-                                echo "<div class=\"image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                                echo "<div class=\"brz-articleLayout__image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             }
                         }
                         if ($show_audio && $item['audiourl']) {
-                            echo "<div class=\"ekklesia360_article_media_audio\">";
+                            echo "<div class=\"brz-articleLayout__media_audio\">";
                             echo "<audio src=\"{$item['audiourl']}\" controls preload=\"none\"></audio>";
                             echo "</div>";
                         }
 
                         if ($show_title) {
-                            echo "<h4 class=\"ekklesia360_article_layout_heading\">";
+                            echo "<h4 class=\"brz-articleLayout__heading\">";
                             if ($detail_url) {
                                 echo "<a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\">";
                             }
@@ -343,7 +345,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                         }
 
                         if ($show_date && $item['date']) {
-                            echo "<h6 class=\"ekklesia360_article_layout_meta\">";
+                            echo "<h6 class=\"brz-articleLayout__meta\">";
                             if ($show_meta_headings) {
                                 echo "Date: ";
                             }
@@ -351,7 +353,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_category && $item['category']) {
-                            echo "<h6 class=\"ekklesia360_article_layout_meta\">";
+                            echo "<h6 class=\"brz-articleLayout__meta\">";
                             if ($show_meta_headings) {
                                 echo "Category: ";
                             }
@@ -359,7 +361,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_group && $item['group']) {
-                            echo "<h6 class=\"ekklesia360_article_layout_meta\">";
+                            echo "<h6 class=\"brz-articleLayout__meta\">";
                             if ($show_meta_headings) {
                                 echo "Group: ";
                             }
@@ -367,7 +369,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_series && $item['series']) {
-                            echo "<h6 class=\"ekklesia360_article_layout_meta\">";
+                            echo "<h6 class=\"brz-articleLayout__meta\">";
                             if ($show_meta_headings) {
                                 echo "Series: ";
                             }
@@ -375,7 +377,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_author && $item['author']) {
-                            echo "<h6 class=\"ekklesia360_article_layout_meta\">";
+                            echo "<h6 class=\"brz-articleLayout__meta\">";
                             if ($show_meta_headings) {
                                 echo "Author: ";
                             }
@@ -383,35 +385,35 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_media_links) {
-                            echo "<ul class=\"ekklesia360_article_layout_media\">";
+                            echo "<ul class=\"brz-articleLayout__media\">";
                             if ($item['videoplayer']) {
                                 $item['videoplayer'] = preg_replace(
                                     '/<a(.+?)>.+?<\/a>/i',
-                                    "<a$1><i class=\"fas fa-desktop\"></i></a>",
+                                    "<a$1><i class=\"brz-icon fas fa-desktop\"></i></a>",
                                     $item['videoplayer']
                                 );
-                                echo "<li class=\"ekklesia360_article_layout_media_videoplayer\">{$item['videoplayer']}</li>";
+                                echo "<li class=\"brz-articleLayout__media_videoplayer\">{$item['videoplayer']}</li>";
                             }
                             if ($item['audioplayer']) {
                                 $item['audioplayer'] = preg_replace(
                                     '/<a(.+?)>.+?<\/a>/i',
-                                    "<a$1><i class=\"fas fa-volume-up\"></i></a>",
+                                    "<a$1><i class=\"brz-icon fas fa-volume-up\"></i></a>",
                                     $item['audioplayer']
                                 );
-                                echo "<li class=\"ekklesia360_article_layout_media_audioplayer\">{$item['audioplayer']}</li>";
+                                echo "<li class=\"brz-articleLayout__media_audioplayer\">{$item['audioplayer']}</li>";
                             }
                             if ($item['notes']) {
-                                echo "<li class=\"ekklesia360_article_layout_media_notes\"><a href=\"{$item['notes']}\" target=\"_blank\"><i class=\"fas fa-file-alt\"></i></a></li>";
+                                echo "<li class=\"brz-articleLayout__media_notes\"><a href=\"{$item['notes']}\" target=\"_blank\"><i class=\"brz-icon fas fa-file-alt\"></i></a></li>";
                             }
                             echo "</ul>";
                         }
                         if ($show_preview && $item['preview']) {
                             $item['preview'] = substr($item['preview'], 0, 110)." ...";
-                            echo "<p class=\"ekklesia360_article_layout_preview\">{$item['preview']}</p>";
+                            echo "<p class=\"brz-articleLayout__preview\">{$item['preview']}</p>";
                         }
 
                         if ($detail_url && $detail_page_button_text) {
-                            echo "<p class=\"ekklesia360_article_layout_detail_button\"><a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\" class=\"elementor-button-link elementor-button elementor-size-sm\"><span class=\"elementor-button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"brz-articleLayout__detail_button\"><a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\" class=\"brz-articleLayout__button-link\"><span class=\"brz-articleLayout__button-text\">{$detail_page_button_text}</span></a></p>";
                         }
 
                         echo "</div>";
@@ -421,7 +423,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                 </div>
                 <?php
                 if ($show_pagination) {
-                    $paginationOutput = '<p id="ekklesia360_article_layout_pagination" class="ekklesia360_pagination">'.$pagination->getLinks($_GET, 'mc-page').'</p>';
+                    $paginationOutput = '<p id="brz-articleLayout__pagination" class="brz-articleLayout__pagination">'.$pagination->getLinks($_GET, 'mc-page').'</p>';
 
                     if (!empty($_GET['mc-search'])) {
                         $paginationOutput = str_replace('?', "?mc-search={$_GET['mc-search']}&", $paginationOutput);
