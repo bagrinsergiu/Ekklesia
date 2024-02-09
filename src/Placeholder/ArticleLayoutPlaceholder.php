@@ -12,6 +12,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $options = [
+            'show_category'                => false,
             'parent_category'              => 'articles',
             'show_category_filter'         => true,
             'category_filter_parent'       => 'childrens-ministry',
@@ -27,13 +28,13 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             'category_filter_heading_add3' => 'Category',
             'show_group_filter'            => true,
             'group_filter_heading'         => 'Group',
+            'show_search'                  => true,
+            'search_placeholder'           => 'Search',
+            'show_pagination'              => true,
             'show_series_filter'           => true,
             'series_filter_heading'        => 'Series',
             'show_author_filter'           => true,
             'author_filter_heading'        => 'Author',
-            'show_search'                  => true,
-            'search_placeholder'           => 'Search',
-            'show_pagination'              => true,
             'howmany'                      => 3,
             'show_images'                  => true,
             'show_video'                   => false,
@@ -41,7 +42,6 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             'show_media_links'             => false,
             'show_title'                   => true,
             'show_date'                    => false,
-            'show_category'                => false,
             'show_group'                   => false,
             'show_series'                  => false,
             'show_author'                  => false,
@@ -122,9 +122,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
         ?>
 
         <div id="brz-articleLayout__filters" class="brz-articleLayout__filters">
-            <form id="brz-articleLayout__form" name="brz-articleLayout__form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+            <form id="brz-articleLayout__form" class="brz-articleLayout__filters--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                 <?php if($show_group_filter && !empty($groups['group_show'])): ?>
-                    <select name="mc-group" class="sorter">
+                    <select name="mc-group" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $group_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -141,7 +141,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter): ?>
-                    <select name="mc-category" class="brz-articleLayout__sorter">
+                    <select name="mc-category" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $category_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -182,7 +182,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add1 && $category_filter_parent_add1): ?>
-                    <select name="mc-category_add1" class="brz-articleLayout__sorter--filter">
+                    <select name="mc-category_add1" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $category_filter_heading_add1 ?></option>
                         <option value="">All</option>
                         <?php
@@ -202,7 +202,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add2 && $category_filter_parent_add2 != ""): ?>
-                    <select name="mc-category_add2" class="brz-articleLayout__sorter--filter">
+                    <select name="mc-category_add2" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $category_filter_heading_add2 ?></option>
                         <option value="">All</option>
                         <?php
@@ -222,7 +222,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php
                 if($show_category_filter_add3 && $category_filter_parent_add3 != ""): ?>
-                    <select name="mc-category_add3" class="brz-articleLayout__sorter--filter">
+                    <select name="mc-category_add3" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $category_filter_heading_add3 ?></option>
                         <option value="">All</option>
                         <?php
@@ -241,7 +241,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
-                    <select name="mc-series" class="brz-articleLayout__sorter--series">
+                    <select name="mc-series" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $series_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -257,7 +257,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                 <?php endif; ?>
 
                 <?php if($show_author_filter && count($authors['group_show']) > 0): ?>
-                    <select name="mc-author" class="brz-articleLayout__sorter--author">
+                    <select name="mc-author" class="brz-articleLayout__filters--form-sorter">
                         <option value=""><?= $author_filter_heading ?></option>
                         <option value="">All</option>
                         <?php
@@ -274,10 +274,10 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             </form>
 
             <?php if ($show_search): ?>
-                <form method="get" id="brz-articleLayout__search" name="mc-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+                <form method="get" id="brz-articleLayout__filters--form-search" class="brz-articleLayout__filters--form-search" name="mc-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="brz-articleLayout__search_term" name="mc-search_term" value="" placeholder="<?= $search_placeholder ?>"/>
-                        <button type="submit" name="submit" id="brz-articleLayout__search_submit" class="brz-articleLayout__search_submit" value="">
+                        <input type="text" id="brz-articleLayout__filters--form-search_term" class="brz-articleLayout__filters--form-search_term" name="mc-search_term" value="" placeholder="<?= $search_placeholder ?>"/>
+                        <button type="submit" name="submit" id="brz-articleLayout__filters--form-search_submit" class="brz-articleLayout__filters--form-search_submit" value="">
                             <i class="brz-icon fas fa-search"></i>
                         </button>
                     </fieldset>
@@ -290,16 +290,15 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
             echo "<h4 class=\"brz-articleLayout__results_heading\"><a href=\"{$baseURL}\"><i class=\"brz-icon fas fa-times\"></i></a> Search results for \"{$_GET['mc-search_term']}\"</h4>";
         }
         ?>
-        <div id="brz-articleLayout__wrap" class="brz-articleLayout__wrap">
+        <div id="brz-articleLayout__container" class="brz-articleLayout__container">
 
             <?php
-
             $pagination = new CustomPagination($content["show"] ?: [] , $page, $howmany);
             $pagination->setShowFirstAndLast(true);
             $resultsPagination = $pagination->getResults();
 
             if (count($resultsPagination) > 0) { ?>
-                <div class="brz-articleLayout">
+                <div class="brz-articleLayout__content">
                     <?php
                     foreach ($resultsPagination as $key => $item) {
                         echo "<article>";
@@ -309,21 +308,21 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             if ($detail_url) {
                                 echo "<a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\">";
                             }
-                            echo "<div class=\"brz-articleLayout__image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                            echo "<div class=\"brz-articleLayout__media--item\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             if ($detail_url) {
                                 echo "</a>";
                             }
                         }
                         if ($show_video) {
                             if ($item['videoembed']) {
-                                echo "<div class=\"brz-articleLayout__media_responsive--video\">{$item['videoembed']}</div>";
+                                echo "<div class=\"brz-articleLayout__media--item\">{$item['videoembed']}</div>";
                             } elseif ($item['videourl']) {
                                 $videoext = pathinfo($item['videourl'], PATHINFO_EXTENSION);
-                                echo "<div class=\"brz-articleLayout__media_responsive\">";
+                                echo "<div class=\"brz-articleLayout__media--item\">";
                                 echo "<video src=\"{$item['videourl']}\" controls preload=\"none\" width=\"1024\" height=\"576\" poster=\"{$item['imageurl']}\" type=\"video/{$videoext}\"><p>The Video could not be played. Please <a href=\"{$item['videourl']}\" target=\"_blank\">download it here</a>.</p></video>";
                                 echo "</div>";
                             } elseif ($show_images && $item['imageurl']) {
-                                echo "<div class=\"brz-articleLayout__image\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                                echo "<div class=\"brz-articleLayout__media--item\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             }
                         }
                         if ($show_audio && $item['audiourl']) {
