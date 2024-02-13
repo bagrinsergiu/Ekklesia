@@ -183,7 +183,9 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</ul>";
             }
             if ($show_preview && $item['preview']) {
-                $item['preview'] = substr($item['preview'], 0, 110)." ...";
+                if (strlen($item['preview']) >= 110) {
+                    $item['preview'] = substr($item['preview'], 0, 110) . "...";
+                }
                 echo "<p class=\"brz-articleFeatured__item--meta--preview\"><span>{$item['preview']}</span></p>";
             }
             if ($show_content && $item['text']) {

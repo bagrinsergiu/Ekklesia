@@ -380,7 +380,9 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     }
                     if($show_preview && $item['preview'])
                     {
-                        $item['preview'] = substr($item['preview'], 0, 110)." ...";
+                        if (strlen($item['preview']) >= 110) {
+                            $item['preview'] = substr($item['preview'], 0, 110) . "...";
+                        }
                         echo "<p class=\"brz-sermonLayout__item--preview\">{$item['preview']}</p>";
                     }
 

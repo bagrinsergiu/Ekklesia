@@ -225,7 +225,9 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "<div class=\"brz-ministryBrands__item--meta--register-button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_preview && $item['preview']) {
-                $item['preview'] = substr($item['preview'], 0, 110) . " ...";
+                if (strlen($item['preview']) >= 110) {
+                    $item['preview'] = substr($item['preview'], 0, 110) . "...";
+                }
                 echo "<p class=\"brz-eventFeatured__item--meta--preview\"><span>{$item['preview']}</span></p>";
             }
             if ($show_description && $item['text']) {

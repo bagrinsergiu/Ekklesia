@@ -474,7 +474,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
                                 if ($show_preview_featured && $item['preview']) {
-                                    $item['preview'] = substr($item['preview'], 0, 75) . " ...";
+                                    if (strlen($item['preview']) >= 75) {
+                                        $item['preview'] = substr($item['preview'], 0, 75) . "...";
+                                    }
                                     echo "<div class=\"brz-eventLayout--featured__preview\"><div><span>{$item['preview']}</span></div></div>";
                                 }
                                 if ($detail_url) echo "</a>";

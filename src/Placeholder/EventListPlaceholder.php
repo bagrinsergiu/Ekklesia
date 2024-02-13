@@ -156,7 +156,9 @@ class EventListPlaceholder extends PlaceholderAbstract
                         }
                     }
                     if ($show_preview && $item['preview']) {
-                        $item['preview'] = substr($item['preview'], 0, 110) . " ...";
+                        if (strlen($item['preview']) >= 110) {
+                            $item['preview'] = substr($item['preview'], 0, 110) . "...";
+                        }
                         echo "<div class=\"brz-eventList__item--meta--preview\">{$item['preview']}</div>";
                     }
                     if ($detail_url && $detail_page_button_text) {

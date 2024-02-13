@@ -406,7 +406,9 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h6>";
                         }
                         if ($show_preview && $item['description']) {
-                            $item['description'] = substr($item['description'], 0, 110) . "<span class=\"brz-groupLayout--item__content-preview--more\">...</span>";
+                            if (strlen($item['description']) >= 110) {
+                                $item['description'] = substr($item['description'], 0, 110) . "<span class=\"brz-groupLayout--item__content-preview--more\">...</span>";
+                            }
                             $item['description'] = str_replace("<p>","<p class=\"brz-groupLayout--item__content-preview\">",$item['description']);
 
                             echo $item['description'];

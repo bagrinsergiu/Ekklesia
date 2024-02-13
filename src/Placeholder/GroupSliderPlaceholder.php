@@ -155,7 +155,9 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                                 echo "</h6>";
                             }
                             if ($show_preview && $item['description']) {
-                                $item['description'] = substr($item['description'], 0, 110) . " ...";
+                                if (strlen($item['description']) >= 110) {
+                                    $item['description'] = substr($item['description'], 0, 110) . "...";
+                                }
                                 echo "<p class=\"brz-groupSlider_preview\">{$item['description']}</p>";
                             }
                             if ($detail_url && $detail_page_button_text) {
