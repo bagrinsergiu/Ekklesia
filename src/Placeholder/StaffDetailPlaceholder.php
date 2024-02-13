@@ -77,7 +77,7 @@ class StaffDetailPlaceholder extends PlaceholderAbstract
                     }
 
                     if ($show_position && $item['position']) {
-                        echo "<h6 class=\"brz-staffDetail__item--meta\">Position: {$item['position']}</h6>";
+                        echo "<h6 class=\"brz-staffDetail__item--meta\">{$item['position']}</h6>";
                     }
 
                     if ($show_groups && $item['groups']) {
@@ -139,7 +139,7 @@ class StaffDetailPlaceholder extends PlaceholderAbstract
                     echo "</ul>";
 
                     if ($show_about && $item['about']) {
-                        echo "<div class=\"brz-staffDetail__item--about\">About: {$item['about']}</div>";
+                        echo "<div class=\"brz-staffDetail__item--about\">{$item['about']}</div>";
                     }
 
                     echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
