@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class GroupSliderPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_group_slider';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -155,8 +158,9 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                                 echo "</h6>";
                             }
                             if ($show_preview && $item['description']) {
-                                $item['description'] = substr($item['description'], 0, 110) . " ...";
-                                echo "<p class=\"brz-groupSlider_preview\">{$item['description']}</p>";
+                                echo '<p class="brz-groupSlider_preview">';
+                                echo $this->excerpt($item['description']);
+                                echo '</p>';
                             }
                             if ($detail_url && $detail_page_button_text) {
                                 echo "<p class=\"brz-groupSlider_detail_button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";

@@ -2,6 +2,7 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 use DateInterval;
@@ -10,6 +11,8 @@ use DateTime;
 
 class EventLayoutPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_event_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -469,15 +472,26 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             }
 
                             echo "<div class=\"brz-eventLayout--featured__item\">";
+
                             if ($show_images_featured && $item['imageurl']) {
                                 echo "<div class=\"brz-ministryBrands__item--media\">";
-                                if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
-                                echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
-                                if ($show_preview_featured && $item['preview']) {
-                                    $item['preview'] = substr($item['preview'], 0, 75) . " ...";
-                                    echo "<div class=\"brz-eventLayout--featured__preview\"><div><span>{$item['preview']}</span></div></div>";
+
+                                if ($detail_url) {
+                                    echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 }
-                                if ($detail_url) echo "</a>";
+
+                                echo "<img src=\"{$item['imageurl']}\" alt=\"\" />";
+
+                                if ($show_preview_featured && $item['preview']) {
+                                    echo '<div class="brz-eventLayout--featured__preview"><div><span>';
+                                    echo $this->excerpt($item['preview'], ' ...', 75);
+                                    echo '</span></div></div>';
+                                }
+
+                                if ($detail_url) {
+                                    echo "</a>";
+                                }
+
                                 echo "</div>";
                             }
 

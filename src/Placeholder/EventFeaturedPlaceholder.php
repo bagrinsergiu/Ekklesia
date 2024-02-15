@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class EventFeaturedPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_event_featured';
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
@@ -225,8 +228,9 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "<div class=\"brz-ministryBrands__item--meta--register-button\"><a href=\"{$item['externalregistrationurl']}\" target=\"_blank\">Register</a></div>";
             }
             if ($show_preview && $item['preview']) {
-                $item['preview'] = substr($item['preview'], 0, 110) . " ...";
-                echo "<p class=\"brz-eventFeatured__item--meta--preview\"><span>{$item['preview']}</span></p>";
+                echo '<p class="brz-eventFeatured__item--meta--preview"><span>';
+                echo $this->excerpt($item['preview']);
+                echo '</span></p>';
             }
             if ($show_description && $item['text']) {
                 echo "<div class=\"brz-eventFeatured__item--meta--preview\">{$item['text']}</div>";

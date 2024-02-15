@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class EventListPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_event_list';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -156,8 +159,9 @@ class EventListPlaceholder extends PlaceholderAbstract
                         }
                     }
                     if ($show_preview && $item['preview']) {
-                        $item['preview'] = substr($item['preview'], 0, 110) . " ...";
-                        echo "<div class=\"brz-eventList__item--meta--preview\">{$item['preview']}</div>";
+                        echo '<div class="brz-eventList__item--meta--preview">';
+                        echo $this->excerpt($item['preview']);
+                        echo '</div>';
                     }
                     if ($detail_url && $detail_page_button_text) {
                         echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$slug}\">{$detail_page_button_text}</a></div>";

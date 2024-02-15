@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class SermonFeaturedPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_sermon_featured';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -217,8 +220,9 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
                     echo "</ul>";
                 }
                 if ($show_preview && $item['preview']) {
-                    $item['preview'] = substr($item['preview'], 0, 110) . " ...";
-                    echo "<p class=\"brz-sermonFeatured__item--meta--preview\">{$item['preview']}</p>";
+                    echo '<p class="brz-sermonFeatured__item--meta--preview">';
+                    echo $this->excerpt($item['preview']);
+                    echo '</p>';
                 }
                 if ($show_content && $item['text']) {
                     echo "<div class=\"brz-sermonFeatured__item--meta--preview\">{$item['text']}</div>";
