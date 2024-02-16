@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class ArticleFeaturedPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_article_featured';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -183,8 +186,9 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</ul>";
             }
             if ($show_preview && $item['preview']) {
-                $item['preview'] = substr($item['preview'], 0, 110)." ...";
-                echo "<p class=\"brz-articleFeatured__item--meta--preview\"><span>{$item['preview']}</span></p>";
+                echo '<p class="brz-articleFeatured__item--meta--preview"><span>';
+                echo $this->excerpt($item['preview']);
+                echo '</span></p>';
             }
             if ($show_content && $item['text']) {
                 echo "<div class=\"brz-articleFeatured__content\">{$item['text']}</div>";

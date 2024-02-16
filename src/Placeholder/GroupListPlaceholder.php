@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class GroupListPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_group_list';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -155,10 +158,13 @@ class GroupListPlaceholder extends PlaceholderAbstract
                         echo "<a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a>";
                         echo "</h6>";
                      }
+
                     if ($show_preview && $item['description']) {
-                        $item['description'] = substr($item['description'], 0, 110) . " ...";
-                        echo "<div class=\"brz-groupList__item--meta--preview\">{$item['description']}</div>";
+                        echo '<div class="brz-groupList__item--meta--preview"><p>';
+                        echo $this->excerpt($item['description']);
+                        echo '</p></div>';
                     }
+
                     if ($detail_url && $detail_page_button_text) {
                         echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\">{$detail_page_button_text}</a></div>";
                     }

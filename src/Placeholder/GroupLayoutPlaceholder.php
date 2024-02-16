@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class GroupLayoutPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_group_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -405,12 +408,13 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                             echo "<a href=\"{$item['resourcelink']}\" {$resource_target}>{$item['resourcelink']}</a>";
                             echo "</h6>";
                         }
-                        if ($show_preview && $item['description']) {
-                            $item['description'] = substr($item['description'], 0, 110) . "<span class=\"brz-groupLayout--item__content-preview--more\">...</span>";
-                            $item['description'] = str_replace("<p>","<p class=\"brz-groupLayout--item__content-preview\">",$item['description']);
 
-                            echo $item['description'];
+                        if ($show_preview && $item['description']) {
+                            echo '<p class="brz-groupLayout--item__content-preview">';
+                            echo $this->excerpt($item['description'], '<span class=\"brz-groupLayout--item__content-preview--more\">...</span>');
+                            echo '</p>';
                         }
+
                         if ($detail_url && $detail_page_button_text) {
                             echo "<p class=\"brz-groupLayout--item__content-detailButton\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\" class=\"brz-button-link brz-button brz-size-sm\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                         }

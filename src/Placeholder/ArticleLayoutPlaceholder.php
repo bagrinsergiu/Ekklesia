@@ -2,11 +2,14 @@
 
 namespace BrizyEkklesia\Placeholder;
 
+use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
 class ArticleLayoutPlaceholder extends PlaceholderAbstract
 {
+    use HelperTrait;
+
     protected $name = 'ekk_article_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
@@ -428,8 +431,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             echo "</ul>";
                         }
                         if ($show_preview && $item['preview']) {
-                            $item['preview'] = substr($item['preview'], 0, 110)." ...";
-                            echo "<p class=\"brz-articleLayout__preview\">{$item['preview']}</p>";
+                            echo '<p class="brz-articleLayout__preview">';
+                            echo $this->excerpt($item['preview']);
+                            echo '</p>';
                         }
 
                         if ($detail_url && $detail_page_button_text) {
