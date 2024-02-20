@@ -139,7 +139,7 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
                 echo "<h6 class=\"brz-articleFeatured__item--meta\">";
                 if ($show_meta_headings) {
                     if ($show_meta_icons) {
-                        echo "<span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\"><path fill=\"currentColor\" d=\"M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z\"></path></svg>";
+                        echo "<span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\"><path fill=\"currentColor\" d=\"M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z\"></path></svg></span>";
                     } else {
                         echo "<span>Author: </span>";
                     }
@@ -167,7 +167,7 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
                     echo "<video src=\"{$item['videourl']}\" controls preload=\"none\" width=\"1024\" height=\"576\" poster=\"{$item['imageurl']}\" type=\"video/{$videoext}\"><p>The Video could not be played. Please <a href=\"{$item['videourl']}\" target=\"_blank\">download it here</a>.</p></video>";
                     echo "</div>";
                 } elseif ($show_image && $item['imageurl']) {
-                    echo "<div class=\"image\">";
+                    echo "<div class=\"brz-ministryBrands__item--media\">";
                     if ($detail_url) {
                         echo "<a href=\"{$detail_url}?nc-slug={$item['slug']}\">";
                     }
@@ -202,7 +202,7 @@ class ArticleFeaturedPlaceholder extends PlaceholderAbstract
                     echo "<li class=\"brz-ministryBrands__item--meta--links\">{$item['audioplayer']}</li>";
                 }
                 if ($item['notes']) {
-                    echo "<li class=\"brz-ministryBrands__item--meta--links\"><a href=\"{$item['notes']}\" target=\"_blank\"><i class=\"fas fa-file-alt\"></i></a></li>";
+                    echo "<li class=\"brz-ministryBrands__item--meta--links\"><a href=\"{$item['notes']}\" target=\"_blank\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\" class=\"brz-icon-svg align-[initial]\"><path d=\"M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z\"></path></svg></a></li>";
                 }
                 echo "</ul>";
             }
