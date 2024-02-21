@@ -187,6 +187,9 @@ class Api
 			case 'articleSeries':
 				$data = $this->getSeries('article');
 				break;
+			case 'articlesLvl':
+				$data = $this->getCatsLevels('article');
+				break;
 			default:
 				$data = [];
 		}
