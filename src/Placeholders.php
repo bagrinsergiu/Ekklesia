@@ -24,6 +24,7 @@ use BrizyEkklesia\Placeholder\ArticleFeaturedPlaceholder;
 use BrizyEkklesia\Placeholder\StaffDetailPlaceholder;
 use BrizyEkklesia\Placeholder\StaffLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\StaffListPlaceholder;
+use BrizyEkklesia\Placeholder\PrayerPlaceholder;
 use BrizyPlaceholders\Replacer;
 use Twig_Environment;
 
@@ -63,6 +64,7 @@ class Placeholders
             new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
             new FormPlaceholder($this->monkCms, $this->twig, $replacer),
+            new PrayerPlaceholder($this->monkCms, $this->twig, $replacer),
             new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
             new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
             new ArticleListPlaceholder($this->monkCms, $this->twig, $replacer),
