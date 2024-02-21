@@ -36,7 +36,8 @@ class EventListPlaceholder extends PlaceholderAbstract
             'show_location'           => false,
             'show_registration'       => false,
             'sticky_space'            => 0,
-            'show_meta_icons'         => false
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -104,7 +105,12 @@ class EventListPlaceholder extends PlaceholderAbstract
 </span>";
                             else echo "<span>Date: </span>";
                         }
-                        echo "<span>{$item['eventtimes']}</span>";
+                        
+                        $starttime = date($date_format, strtotime($item['eventstart']));
+                        $endtime = date($date_format, strtotime($item['eventend']));
+                        $frequency = $item['eventtimesremarks'];
+
+                        echo "<span>{$frequency}, {$starttime} - {$endtime}</span>";
                         echo "</h5>";
                     }
 

@@ -30,7 +30,8 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
             'detail_page_button_text' => false,
             'detail_page'             => false,
             'slug'                    => false,
-            'show_meta_icons'         => false
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
         ];
 
 
@@ -116,8 +117,8 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
 </span>";
                         else echo "<span>Meeting Time: </span>";
 
-                    if ($item['starttime']) echo "{$item['starttime']}";
-                    if ($item['endtime']) echo " - {$item['endtime']}";
+                    if ($item['starttime']) echo date($date_format, strtotime($item['starttime']));
+                    if ($item['endtime']) echo " - " . date($date_format, strtotime($item['endtime']));
                     echo "</h5>";
                 }
 

@@ -34,7 +34,8 @@ class EventDetailPlaceholder extends PlaceholderAbstract
             'previous_page'          => false,
             'show_subscribe_to_event'=> false,
             'subscribe_to_event_button_text' => '',
-            'show_meta_icons'        => false
+            'show_meta_icons'        => false,
+            'date_format'            => 'g:i a'
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -79,7 +80,11 @@ class EventDetailPlaceholder extends PlaceholderAbstract
                     echo "<h2 class=\"brz-eventDetail__item--meta--title\">{$item['title']}</h2>";
                 }
                 if ($show_date) {
-                    echo "<h5 class=\"brz-eventDetail__item--meta--date\">{$item['eventtimes']}</h5>";
+                    $starttime = date($date_format, strtotime($item['eventstart']));
+                    $endtime = date($date_format, strtotime($item['eventend']));
+                    $frequency = $item['eventtimesremarks'];
+
+                    echo "<h5 class=\"brz-eventDetail__item--meta--date\">{$frequency}, {$starttime} - {$endtime}</h5>";
                 }
                 if ($show_image && $item['imageurl']) {
                     echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";

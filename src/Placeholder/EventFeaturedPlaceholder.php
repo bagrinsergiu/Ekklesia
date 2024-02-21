@@ -39,7 +39,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
             'nonfeatures'             => '',
             'detail_page_button_text' => false,
             'detail_page'             => false,
-            'show_meta_icons'         => false
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -112,7 +113,11 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 echo "</h4>";
             }
             if ($show_date) {
-                echo "<h5 class=\"brz-eventFeatured__item--meta--date\">{$item['eventtimes']}</h5>";
+                $starttime = date($date_format, strtotime($item['evenstart']));
+                $endtime = date($date_format, strtotime($item['eventend']));
+                $frequency = $item['eventtimesremarks'];
+
+                echo "<h5 class=\"brz-eventFeatured__item--meta--date\">{$frequency}, {$starttime} - {$endtime}</h5>";
             }
             if ($show_image && $item['imageurl']) {
                 if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slugLink}\">";

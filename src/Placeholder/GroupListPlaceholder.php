@@ -36,7 +36,8 @@ class GroupListPlaceholder extends PlaceholderAbstract
             'show_childcare'                  => false,
             'show_resourcelink'               => false,
             'sticky_space'                    => 0,
-            'show_meta_icons'                 => false
+            'show_meta_icons'                 => false,
+            'date_format'                     => 'g:i a'
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -106,8 +107,8 @@ class GroupListPlaceholder extends PlaceholderAbstract
                         if ($show_meta_icons) echo "<span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path fill=\"currentColor\" d=\"M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z\"></path></svg>
 </span>";
                         else echo "<span>Meeting Time: </span>";
-                        if ($item['starttime']) echo "{$item['starttime']}";
-                        if ($item['endtime']) echo " - {$item['endtime']}";
+                        if ($item['starttime']) echo date($date_format, strtotime($item['starttime']));
+                        if ($item['endtime']) echo " - " . date($date_format, strtotime($item['endtime']));
                         echo "</h6>";
                     }
                     if ($show_category && $item['category']) {

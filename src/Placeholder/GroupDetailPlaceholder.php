@@ -25,7 +25,8 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 			'show_content'       => false,
 			'groups_recent'      => false,
 			'previous_page'      => false,
-            'show_meta_icons'    => false
+            'show_meta_icons'    => false,
+			'date_format' 		 => 'g:i a'
 		];
 
 		$settings = array_merge($options, $placeholder->getAttributes());
@@ -99,10 +100,10 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 				else echo "<span>Meeting Time: </span>";
 			}
 			if ($item['starttime']) {
-				echo "{$item['starttime']}";
+				echo date($date_format, strtotime($item['starttime']));
 			}
-			if ($item['endtime']) {
-				echo " - {$item['endtime']}";
+            if ($item['endtime']) {
+				echo " - " . date($date_format, strtotime($item['endtime']));
 			}
 			echo "</h5>";
 		}
@@ -153,7 +154,7 @@ class GroupDetailPlaceholder extends PlaceholderAbstract
 				else echo "<span>Childcare Provided: </span>";
 			}
 			echo "<span>{$childcare}</span>";
-			echo "</h6>";  
+			echo "</h6>";
 		}
 		if ($show_resourcelink && $item['resourcelink']) {
 			$resource_target = "";
