@@ -59,6 +59,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'featuredActive'               => '',
             'listActive'                   => '',
             'calendarActive'               => '',
+            'date_format'                  => 'g:i a'
         ];
 
         $attrs    = $placeholder->getAttributes();
@@ -491,7 +492,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                             }
 
                             if ($show_date_featured) {
-                                echo "<p class=\"brz-eventLayout--featured__meta\">{$item['eventtimes']}</p>";
+                                $starttime = date($date_format, strtotime($item['eventstart']));
+                                $endtime = date($date_format, strtotime($item['eventend']));
+                                $frequency = $item['eventtimesremarks'];
+
+                                echo "<p class=\"brz-eventLayout--featured__meta\">{$frequency}, {$starttime} - {$endtime}</p>";
                             }
                             echo "</div>";
                             echo "</div>";
@@ -528,7 +533,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $events[$grouping_month][$grouping_day][] = $show;//set first dimension to day and then assign all events as second level to that day
                     }
                     echo "<div class=\"brz-eventLayout--list\">";
-                    echo self::draw_list($events, $detail_url);
+                    echo self::draw_list($events, $detail_url, $date_format);
                     echo "</div>";
                 } //no output
                 else {
@@ -608,7 +613,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
     }
 
     //draw list
-    private function draw_list($events=null, $detail_url=null){
+    private function draw_list($events=null, $detail_url=null, $date_format='g:i a'){
 
         $results  	= false;
         $period   	= self::get_period($events);
@@ -708,9 +713,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         else
                         {
-                            $results .= date("l, g:i a", strtotime($v["eventstart"]));
+                            $results .= date("l, {$date_format}", strtotime($v["eventstart"]));
                             $results .= " - ";
-                            $results .= date("g:i a", strtotime($v["eventend"]));
+                            $results .= date($date_format, strtotime($v["eventend"]));
                         }
 
                         if($v["isrecurring"])
