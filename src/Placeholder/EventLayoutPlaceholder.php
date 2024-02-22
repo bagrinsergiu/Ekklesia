@@ -511,7 +511,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 $endtime = date($date_format, strtotime($item['eventend']));
                                 $frequency = $item['eventtimesremarks'];
 
-                                echo "<p class=\"brz-eventLayout--featured__meta\">{$frequency}, {$starttime} - {$endtime}</p>";
+                                echo "<p class=\"brz-eventLayout--featured__meta brz-ministryBrands__item--meta-date\">{$frequency}, {$starttime} - {$endtime}</p>";
                             }
 
                             if ($detail_url && $detail_page_button_text) {
@@ -697,7 +697,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 {
                     $grouping_day = date("l", strtotime($day));
                     $grouping_date = date("F j, Y", strtotime($day));
-                    $results .= "<h3 class=\"brz-eventLayout--list-item__title\">
+                    $results .= "<h3 class=\"brz-eventLayout--list-item__title brz-ministryBrands__item--meta-title\">
                             <span class='brz-eventLayout--list-item__grouping-day'>{$grouping_day}</span>
                             <span class='brz-eventLayout--list-item__grouping-date'>{$grouping_date}</span>
                         </h3>";
