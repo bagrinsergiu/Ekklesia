@@ -37,6 +37,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'view_calendar_heading'        => 'Full Calendar',
             'howmanymonths'                => 3,
             'detail_page'                  => false,
+            'detail_page_button_text'      => '',
             'sticky_space'                 => 0,
             'parent_category'              => '',
             'category_filter_list'         => '',
@@ -512,6 +513,10 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                                 echo "<p class=\"brz-eventLayout--featured__meta\">{$frequency}, {$starttime} - {$endtime}</p>";
                             }
+
+                            if ($detail_url && $detail_page_button_text) {
+                                echo "<div class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$slug}\">{$detail_page_button_text}</a></div>";
+                            }
                             echo "</div>";
                             echo "</div>";
                         }
@@ -692,7 +697,10 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 {
                     $grouping_day = date("l", strtotime($day));
                     $grouping_date = date("F j, Y", strtotime($day));
-                    $results .= "<h3 class=\"brz-eventLayout--list-item__title\">{$grouping_day} <span>{$grouping_date}</span></h3>";
+                    $results .= "<h3 class=\"brz-eventLayout--list-item__title\">
+                            <span class='brz-eventLayout--list-item__grouping-day'>{$grouping_day}</span>
+                            <span class='brz-eventLayout--list-item__grouping-date'>{$grouping_date}</span>
+                        </h3>";
                     //iterate event
                     foreach($val as $v)
                     {
