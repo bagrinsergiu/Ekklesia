@@ -43,7 +43,7 @@
 				{% endif %}
 
 				{% if show_title %}
-					<h4 class="brz-sermonList__item--meta--title">
+					<h4 class="brz-sermonList__item--meta--title brz-ministryBrands__item--meta-title">
 						{% if detail_url %}
 							<a class="brz-ministryBrands__item--meta--links--title" href="{{ detail_url }}?mc-slug={{ item.slug }}">
 							{% endif %}
@@ -54,7 +54,7 @@
 					{% endif %}
 
 					{% if show_date and item.date %}
-						<h6 class="brz-sermonList__item--meta">
+						<h6 class="brz-sermonList__item--meta brz-ministryBrands__item--meta-date">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
@@ -72,7 +72,7 @@
 					{% endif %}
 
 					{% if show_category and item.category %}
-						<h6 class="brz-sermonList__item--meta">
+						<h6 class="brz-sermonList__item--meta brz-ministryBrands__item--meta-category">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
@@ -90,7 +90,7 @@
 					{% endif %}
 
 					{% if show_group and item.group %}
-						<h6 class="brz-sermonList__item--meta">
+						<h6 class="brz-sermonList__item--meta brz-ministryBrands__item--meta-group">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
@@ -108,7 +108,7 @@
 					{% endif %}
 
 					{% if show_series and item.series %}
-						<h6 class="brz-sermonList__item--meta">
+						<h6 class="brz-sermonList__item--meta brz-ministryBrands__item--meta-series">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
@@ -126,7 +126,7 @@
 					{% endif %}
 
 					{% if show_preacher and item.preacher %}
-						<h6 class="brz-sermonList__item--meta">
+						<h6 class="brz-sermonList__item--meta brz-ministryBrands__item--meta-preacher">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
@@ -143,7 +143,7 @@
 					{% endif %}
 
 					{% if show_passage and item.passages %}
-						<h6 class="brz-sermonList__item--meta--link">
+						<h6 class="brz-sermonList__item--meta--link brz-ministryBrands__item--meta-passage">
 							{% if show_meta_headings %}
 								{% if show_meta_icons %}
 									<span class="brz-ministryBrands__meta--icons">
