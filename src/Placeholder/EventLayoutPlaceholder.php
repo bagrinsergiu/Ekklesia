@@ -32,7 +32,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'show_calendar_view'           => true,
             'view_order_calendar'          => 3,
             'view_calendar_heading'        => 'Full Calendar',
-            'howmanymonths'                => 3,
+            'howmanymonths'                => 1,
             'detail_page'                  => false,
             'sticky_space'                 => 0,
             'parent_category'              => '',
@@ -179,8 +179,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             if ($search_arr['after_show']['pagination']) {
                 $content['after_show']['pagination'] = $search_arr['after_show']['pagination'];
             }
-        } //if no search module api
-        else {
+        } else {
 
             if ($view == "featured") {
                 $content = $cms->get([
@@ -221,7 +220,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         }
 ?>
 
-<div id="brz-eventLayout--view" class="brz-eventLayout--view">
+    <div id="brz-eventLayout--view" class="brz-eventLayout--view">
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
@@ -263,7 +262,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                     <?php
                 if ($show_category_filter): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="mc-category" class='sorter' >
+                        <select name="mc-category" class='sorter' >
                                 <option value=""><?= $category_filter_heading ?></option>
                                 <option value="">All</option>
                                 <?php
@@ -450,7 +449,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         ?>
             <div class="brz-eventLayout--featured__container">
                 <?php //output
-                if (count($content['show']) > 0) {
+                if (!empty($content['show'])) {
                 ?>
                 
                     <div class="brz-eventLayout--featured" data-columncount="<?php echo $column_count_featured; ?>"
@@ -550,7 +549,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <div class="brz-eventLayout--calendar__container">
 
                 <?php //output
-                if (count($content['show']) > 0) {
+                if (!empty($content['show'])) {
                     //iterate over each event and assign to month and day
                     foreach ($content["show"] as $show) {
                         $grouping_month = date("Y-m", strtotime($show["eventstart"]));
@@ -723,37 +722,31 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         $results .= "</div>";
                     }
                 }
-            }//end if
+            }
 
-            //close .month div
             $results .= "</div>";
-
-        }//end foreach month
+        }
 
 
         return $results;
     }
 
-    //draw calendar
-    private function draw_calendar($events=null, $detail_url=null){
-        $results  	= false;
-        $period   	= self::get_period($events);
-
-        $period_arr = iterator_to_array($period);
-
-        $start_month = reset($period_arr);
+    private function draw_calendar($events = null, $detail_url = null)
+    {
+        $results            = false;
+        $period             = self::get_period($events);
+        $period_arr         = iterator_to_array($period);
+        $start_month        = reset($period_arr);
         $start_month_format = $start_month->format("Y-m");
-
-        $end_month = end($period_arr);
-        $end_month_format = $end_month->format("Y-m");
+        $end_month          = end($period_arr);
+        $end_month_format   = $end_month->format("Y-m");
 
         //iterate each month
-        foreach($period as $month)
-        {
+        foreach ($period as $month) {
             //set month formats
-            $month_format = $month->format("Y-m");//should match format of initial $events month
+            $month_format       = $month->format("Y-m");//should match format of initial $events month
             $month_format_month = $month->format("m");//month to draw table
-            $month_format_year = $month->format("Y");//month to draw table
+            $month_format_year  = $month->format("Y");//month to draw table
 
             $month_label_format = $month->format("F Y");
 
@@ -762,47 +755,39 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             $prev_month = date("Y-m", strtotime("1-{$pag_format} -1 month"));
             $next_month = date("Y-m", strtotime("1-{$pag_format} +1 month"));
 
-
             //open .month div
             $results .= "<div class=\"brz-eventLayout--calendar-item {$month_format}\">";
 
             //pagination
             $results .= "<div class=\"brz-eventLayout__pagination\">";
             //prev
-            if($month_format === $start_month_format)
-            {
+            if ($month_format === $start_month_format) {
                 $results .= "<a class=\"previous off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
-            }
-            else
-            {
+            } else {
                 $results .= "<a href=\"{$prev_month}\" data-month=\"{$prev_month}\" class=\"previous\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-left\"><path d=\"M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z\"></path></svg></a>";
             }
             //heading
             $results .= "<span class=\"heading\">{$month_label_format}</span>";
 
             //next
-            if($month_format === $end_month_format)
-            {
+            if ($month_format === $end_month_format) {
                 $results .= "<a class=\"next off\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
-            }
-            else
-            {
+            } else {
                 $results .= "<a href=\"{$next_month}\" data-month=\"{$next_month}\" class=\"next\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"angle-right\"><path d=\"M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z\"></path></svg></a>";
             }
 
             $results .= "</div>";
 
-
             //if no output nrf
-            if(count($events[$month_format]) < 1)
-            {
+            if (count($events[$month_format]) < 1) {
                 $results .= "<h4 class=\"nrf\">There are no events for this month.</h4>";
-            }
-            //else results
-            else
-            {
+            } //else results
+            else {
                 //get table of month and pass/format events
-                $results .= self::draw_calendar_table($month_format_month, $month_format_year,$events[$month_format], $detail_url);
+                $results .= self::draw_calendar_table($month_format_month,
+                    $month_format_year,
+                    $events[$month_format],
+                    $detail_url);
 
             }//end if
 
@@ -810,7 +795,6 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             $results .= "</div>";
 
         }//end foreach month
-
 
         return $results;
     }

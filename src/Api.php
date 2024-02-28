@@ -97,16 +97,20 @@ class Api {
         ]);
 
         $parents = [];
-        foreach ($cats['level1'] as $cat) {
-            $parents[$cat['slug']] = $cat['name'];
+        if (!empty($cats['level1'])) {
+            foreach ($cats['level1'] as $cat) {
+                $parents[$cat['slug']] = $cat['name'];
+            }
+            asort($parents);
         }
-        asort($parents);
 
         $childs = [];
-        foreach ($cats['level2'] as $cat) {
-            $childs[$cat['bid']] = $cat['name'];
+        if (!empty($cats['level2'])) {
+            foreach ($cats['level2'] as $cat) {
+                $childs[$cat['bid']] = $cat['name'];
+            }
+            asort($childs);
         }
-        asort($childs);
 
         return [
             'parents' => $parents,

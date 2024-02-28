@@ -201,12 +201,14 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                                         echo ">{$category['name']}</option>";
                                     }
                                 } else {
-                                    foreach ($categories["show"] as $category) {
-                                        echo "<option value=\"{$category['slug']}\"";
-                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                            echo " selected";
+                                    if (!empty($categories["show"])) {
+                                        foreach ($categories["show"] as $category) {
+                                            echo "<option value=\"{$category['slug']}\"";
+                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                                echo " selected";
+                                            }
+                                            echo ">{$category['name']}</option>";
                                         }
-                                        echo ">{$category['name']}</option>";
                                     }
                                 }
                             }

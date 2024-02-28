@@ -37,7 +37,7 @@ class SermonListPlaceholder extends PlaceholderAbstract
             'show'          => "__audioplayer__",
             'after_show'    => '__pagination__',
         ])) {
-            return null;
+            return '';
         }
 
         $twigHtml = file_get_contents(

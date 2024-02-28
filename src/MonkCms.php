@@ -43,7 +43,7 @@ class MonkCms
             unset($config['url']);
         }
 
-        $cms = new Cms($config);
+        $cms = new Cms($config, ['timeout' => 40]);
 
         return $cms->get($args);
     }
