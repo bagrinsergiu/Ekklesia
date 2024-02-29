@@ -167,6 +167,9 @@ class Api
 			case 'smallgroupsLvl':
 				$data = $this->getCatsLevels('smallgroup');
 				break;
+			case 'sermonsLvl':
+				$data = $this->getCatsLevels('sermon');
+				break;
 			case 'groups':
 			case 'series':
 			case 'forms':
