@@ -114,16 +114,20 @@ class Api
 		$cats    = $this->monkCms->get(['module' => $module, 'display' => 'categories',]);
 		$parents = [];
 
-		foreach ($cats['level1'] as $cat) {
-			$parents[$cat['slug']] = $cat['name'];
-		}
-		asort($parents);
+        if (!empty($cats['level1'])) {
+            foreach ($cats['level1'] as $cat) {
+                $parents[$cat['slug']] = $cat['name'];
+            }
+            asort($parents);
+        }
 
 		$childs = [];
-		foreach ($cats['level2'] as $cat) {
-			$childs[$cat['bid']] = $cat['name'];
-		}
-		asort($childs);
+        if (!empty($cats['level2'])) {
+            foreach ($cats['level2'] as $cat) {
+                $childs[$cat['bid']] = $cat['name'];
+            }
+            asort($childs);
+        }
 
 		return [
 			'parents' => $parents,
