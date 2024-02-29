@@ -128,42 +128,36 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
         <div id="brz-articleLayout__filters" class="brz-articleLayout__filters">
             <form id="brz-articleLayout__form" class="brz-articleLayout__filters--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                 <?php if($show_group_filter && !empty($groups['group_show'])): ?>
-                    <select name="mc-group" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $group_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($groups['group_show'] as $group) {
-                            echo "<option value=\"{$group['slug']}\"";
-                            if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
-                                echo " selected";
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-group" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $group_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($groups['group_show'] as $group) {
+                                echo "<option value=\"{$group['slug']}\"";
+                                if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$group['title']}</option>";
                             }
-                            echo ">{$group['title']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if($show_category_filter): ?>
-                    <select name="mc-category" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $category_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        //since this is the main category filter this will always show the
-                        if ($category_filter_parent && !empty($categories['level3'])) {
-                            foreach ($categories['level3'] as $category) {
-                                if ($category['slug'] != $category_filter_parent) {
-                                    continue;
-                                }
-                                echo "<option value=\"{$category['slug']}\"";
-                                if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                    echo " selected";
-                                }
-                                echo ">{$category['name']}</option>";
-                            }
-                        } else {
-                            if ($parent_category != "") {
-                                foreach ($categories_parent["level1"] as $category) {
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-category" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $category_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            //since this is the main category filter this will always show the
+                            if ($category_filter_parent && !empty($categories['level3'])) {
+                                foreach ($categories['level3'] as $category) {
+                                    if ($category['slug'] != $category_filter_parent) {
+                                        continue;
+                                    }
                                     echo "<option value=\"{$category['slug']}\"";
                                     if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
                                         echo " selected";
@@ -171,109 +165,129 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                                     echo ">{$category['name']}</option>";
                                 }
                             } else {
-                                foreach ($categories["show"] as $category) {
-                                    echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                        echo " selected";
+                                if ($parent_category != "") {
+                                    foreach ($categories_parent["level1"] as $category) {
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
                                     }
-                                    echo ">{$category['name']}</option>";
+                                } else {
+                                    foreach ($categories["show"] as $category) {
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
+                                    }
                                 }
                             }
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if($show_category_filter_add1 && $category_filter_parent_add1): ?>
-                    <select name="mc-category_add1" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $category_filter_heading_add1 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($categories["level3"] as $category) {
-                            if ($category["slug"] != $category_filter_parent_add1) {
-                                continue;
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-category_add1" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $category_filter_heading_add1 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($categories["level3"] as $category) {
+                                if ($category["slug"] != $category_filter_parent_add1) {
+                                    continue;
+                                }
+                                echo "<option value=\"{$category['slug']}\"";
+                                if (isset($_GET['mc-category_add1']) && $_GET['mc-category_add1'] == $category['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$category['name']}</option>";
                             }
-                            echo "<option value=\"{$category['slug']}\"";
-                            if (isset($_GET['mc-category_add1']) && $_GET['mc-category_add1'] == $category['slug']) {
-                                echo " selected";
-                            }
-                            echo ">{$category['name']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if($show_category_filter_add2 && $category_filter_parent_add2 != ""): ?>
-                    <select name="mc-category_add2" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $category_filter_heading_add2 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($categories["level3"] as $category) {
-                            if ($category["slug"] != $category_filter_parent_add2) {
-                                continue;
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-category_add2" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $category_filter_heading_add2 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($categories["level3"] as $category) {
+                                if ($category["slug"] != $category_filter_parent_add2) {
+                                    continue;
+                                }
+                                echo "<option value=\"{$category['slug']}\"";
+                                if (isset($_GET['mc-category_add2']) && $_GET['mc-category_add2'] == $category['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$category['name']}</option>";
                             }
-                            echo "<option value=\"{$category['slug']}\"";
-                            if (isset($_GET['mc-category_add2']) && $_GET['mc-category_add2'] == $category['slug']) {
-                                echo " selected";
-                            }
-                            echo ">{$category['name']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php
                 if($show_category_filter_add3 && $category_filter_parent_add3 != ""): ?>
-                    <select name="mc-category_add3" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $category_filter_heading_add3 ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($categories["level3"] as $category) {
-                            if ($category["slug"] != $category_filter_parent_add3) {
-                                continue;
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-category_add3" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $category_filter_heading_add3 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($categories["level3"] as $category) {
+                                if ($category["slug"] != $category_filter_parent_add3) {
+                                    continue;
+                                }
+                                echo "<option value=\"{$category['slug']}\"";
+                                if (isset($_GET['mc-category_add3']) && $_GET['mc-category_add3'] == $category['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$category['name']}</option>";
                             }
-                            echo "<option value=\"{$category['slug']}\"";
-                            if (isset($_GET['mc-category_add3']) && $_GET['mc-category_add3'] == $category['slug']) {
-                                echo " selected";
-                            }
-                            echo ">{$category['name']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php if($show_series_filter && count($series['group_show']) > 0): ?>
-                    <select name="mc-series" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $series_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($series['group_show'] as $serie) {
-                            echo "<option value=\"{$serie['slug']}\"";
-                            if (isset($_GET['mc-series']) && $_GET['mc-series'] == $serie['slug']) {
-                                echo " selected";
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-series" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $series_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($series['group_show'] as $serie) {
+                                echo "<option value=\"{$serie['slug']}\"";
+                                if (isset($_GET['mc-series']) && $_GET['mc-series'] == $serie['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$serie['title']}</option>";
                             }
-                            echo ">{$serie['title']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
 
                 <?php if($show_author_filter && count($authors['group_show']) > 0): ?>
-                    <select name="mc-author" class="brz-articleLayout__filters--form-sorter">
-                        <option value=""><?= $author_filter_heading ?></option>
-                        <option value="">All</option>
-                        <?php
-                        foreach ($authors['group_show'] as $val) {
-                            echo "<option value=\"{$val['slug']}\"";
-                            if (isset($_GET['mc-author']) && $_GET['mc-author'] == $val['slug']) {
-                                echo " selected";
+                    <div class="brz-articleLayout__filters--form-sorter">
+                        <select name="mc-author" class="brz-articleLayout__filters--form-select">
+                            <option value=""><?= $author_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($authors['group_show'] as $val) {
+                                echo "<option value=\"{$val['slug']}\"";
+                                if (isset($_GET['mc-author']) && $_GET['mc-author'] == $val['slug']) {
+                                    echo " selected";
+                                }
+                                echo ">{$val['title']}</option>";
                             }
-                            echo ">{$val['title']}</option>";
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 <?php endif; ?>
             </form>
 
