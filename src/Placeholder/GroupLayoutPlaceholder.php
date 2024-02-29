@@ -186,15 +186,17 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                             <?php
                             //since this is the main category filter this will always show the
                             if ($category_filter_parent) {
-                                foreach ($categories["level3"] as $category) {
-                                    if ($category["parentid"] != $category_filter_parent) {
-                                        continue;
+                                if (!empty($categories["level3"])) {
+                                    foreach ($categories["level3"] as $category) {
+                                        if ($category["parentid"] != $category_filter_parent) {
+                                            continue;
+                                        }
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                            echo " selected";
+                                        }
+                                        echo ">{$category['name']}</option>";
                                     }
-                                    echo "<option value=\"{$category['slug']}\"";
-                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                        echo " selected";
-                                    }
-                                    echo ">{$category['name']}</option>";
                                 }
                             } else {
                                 if ($parent_category != "" && !empty($categories_parent["level1"])) {
