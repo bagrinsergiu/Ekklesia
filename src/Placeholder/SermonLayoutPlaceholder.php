@@ -78,7 +78,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
             if (!empty($rawCategories['show'])) {
                 foreach ($rawCategories['show'] as $category) {
-                    if (!$parent_category || $parent_category == $category['slug']) {
+                    if (!$parent_category || $parent_category == $category['slug'] || $parent_category === $category['bid']) {
                         $categories[$category['slug']] = $category['name'];
                     }
                 }

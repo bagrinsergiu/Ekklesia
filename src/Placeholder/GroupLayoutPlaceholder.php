@@ -118,12 +118,15 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             //filter categories separately since there can be more than 1 category filter
             if (!empty($_GET["mc-category"])) {
                 $catArr = [];
-                foreach ($categories["show"] as $key => $val) {
-                    if ($val["slug"] == $_GET["mc-category"]) {
-                        $catArr[] = $val["name"];
+                if (!empty($categories["show"]) && !empty($content["show"])) {
+                    foreach ($categories["show"] as $key => $val) {
+                        if ($val["slug"] == $_GET["mc-category"]) {
+                            $catArr[] = $val["name"];
+                        }
                     }
+
+                    $content["show"] = self::searchArray($content["show"], $catArr);
                 }
-                $content["show"] = self::searchArray($content["show"], $catArr);
             }
             if (!empty($_GET["mc-category-1"])) {
                 $cat1Arr = [];
