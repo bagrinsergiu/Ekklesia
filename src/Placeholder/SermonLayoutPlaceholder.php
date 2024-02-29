@@ -49,7 +49,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             'howmany'                 => 9,
             'sticky_space'            => 0,
             'defaultCategory'         => '',
-            'show_meta_icons'         => false
+            'show_meta_icons'         => false,
+            'parent_category'         => ''
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -77,7 +78,9 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
             if (!empty($rawCategories['show'])) {
                 foreach ($rawCategories['show'] as $category) {
-                    $categories[$category['slug']] = $category['name'];
+                    if (!$parent_category || $parent_category == $category['slug']) {
+                        $categories[$category['slug']] = $category['name'];
+                    }
                 }
             }
         }
