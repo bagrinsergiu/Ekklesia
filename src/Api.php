@@ -49,7 +49,7 @@ class Api
 	/**
 	 * @throws Exception
 	 */
-	public function getSeries($module = 'sermon')
+	public function getSeries($module)
 	{
 		$series  = $this->monkCms->get(['module' => $module, 'display' => 'list', 'groupby' => 'series']);
 		$options = ['all' => 'All'];
@@ -86,22 +86,33 @@ class Api
 		return $options;
 	}
 
-	public function getStaff()
+	public function getStaff(array $query = [])
 	{
-		$recents = $this->monkCms->get([
-			'module'      => 'member',
-			'display'     => 'list',
-			'order'       => 'recent',
-			'howmany'     => 20,
-			'emailencode' => 'no',
-			'restrict'    => 'no',
-		]);
+        $args = [
+            'module'      => 'member',
+            'display'     => 'list',
+            'order'       => 'recent',
+            'howmany'     => 20,
+            'emailencode' => 'no',
+            'restrict'    => 'no',
+        ];
 
-		$options = ['' => 'All'];
+        if (!empty($query['find_group'])) {
+            $args['find_group'] = $query['find_group'];
+        }
+
+        $recents = $this->monkCms->get($args);
+		$options = [];
+
+        if (empty($recents['show'])) {
+            return [];
+        }
 
 		foreach ($recents['show'] as $recent) {
 			$options[$recent['id']] = $recent['fullname'];
 		}
+
+        asort($options);
 
 		return $options;
 	}
@@ -153,7 +164,7 @@ class Api
 	/**
 	 * @throws Exception
 	 */
-	public function getModule($module)
+	public function getModule($module, $query)
 	{
 		switch ($module) {
 			case 'sermon':
@@ -171,10 +182,9 @@ class Api
 				$data = $this->getCatsLevels('sermon');
 				break;
 			case 'groups':
-			case 'series':
 			case 'forms':
 			case 'staff':
-				$data = $this->{'get'.ucfirst($module)}();
+				$data = $this->{'get'.ucfirst($module)}($query);
 				break;
 			case 'recentSermons':
 				$data = $this->getRecent('sermon');
@@ -191,7 +201,10 @@ class Api
 			case 'articleCategories':
 				$data = $this->getCats('article');
 				break;
-			case 'articleSeries':
+			case 'series':
+				$data = $this->getSeries('sermon');
+				break;
+           case 'articleSeries':
 				$data = $this->getSeries('article');
 				break;
 			case 'articlesLvl':
