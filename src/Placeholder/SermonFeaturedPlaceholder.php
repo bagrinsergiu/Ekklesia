@@ -171,7 +171,7 @@ class SermonFeaturedPlaceholder extends PlaceholderAbstract
 </span>";
                         else echo "<span class='brz-sermonFeatured__item--meta'>Passages: </span>";
                     }
-                    echo "<span>{$item['passages']}</span>";
+                    echo "<span class=\"brz-ministryBrands__item--meta-passage-content\">{$item['passages']}</span>";
                     echo "</h6>";
                 }
                 if ($show_image && $item['imageurl'] && !$show_video) {
