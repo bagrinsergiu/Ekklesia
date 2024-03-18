@@ -498,7 +498,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                             echo "<div class=\"brz-eventLayout--featured__item-content\">";
                             if ($show_title_featured) {
-                                echo "<h5 class=\"brz-eventLayout--featured__item-title\">";
+                                echo "<h5 class=\"brz-eventLayout--featured__item-title brz-ministryBrands__item--meta-title\">";
                                 if ($detail_url) echo "<a href=\"{$item['url']}\" title=\"{$item["title"]}\">";
                                 echo "{$item['title']}";
                                 if ($detail_url) echo "</a>";
@@ -696,7 +696,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 {
                     $grouping_day = date("l", strtotime($day));
                     $grouping_date = date("F j, Y", strtotime($day));
-                    $results .= "<h3 class=\"brz-eventLayout--list-item__title brz-ministryBrands__item--meta-title\">
+                    $results .= "<h3 class=\"brz-eventLayout--list-item__title\">
                             <span class='brz-eventLayout--list-item__grouping-day'>{$grouping_day}</span>
                             <span class='brz-eventLayout--list-item__grouping-date'>{$grouping_date}</span>
                         </h3>";

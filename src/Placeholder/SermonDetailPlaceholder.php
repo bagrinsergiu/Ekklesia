@@ -142,7 +142,7 @@ class SermonDetailPlaceholder extends PlaceholderAbstract
 </span>";
                         else echo "<span class='brz-sermonDetail__item--meta'>Passages: </span>";
                     }
-                    echo "<span>{$item['passages']}</span>";
+                    echo "<span class=\"brz-ministryBrands__item--meta-passage-content\">{$item['passages']}</span>";
                     echo "</h6>";
                 }
 
