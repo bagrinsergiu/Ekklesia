@@ -54,7 +54,7 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
                 'display'     => 'profile',
                 'emailencode' => 'no',
                 'restrict'    => 'no',
-                'find'        => $staff_featured,
+                'find'        => $staff_slug,
             ]);
 
             if (empty($member['show'])) {
