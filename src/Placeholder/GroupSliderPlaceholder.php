@@ -78,6 +78,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                             //remove site group
                             $item['group'] = str_replace("Site Group, ", "", $item['group']);
                             $item['group'] = str_replace("Site Group", "", $item['group']);
+                            $hiddenClass = $key >= $column_count ? "brz-groupSlider-swiper-slide-hidden" : "";
 
                             echo "<article class=\"brz-groupSlider-swiper-slide\">";
                             echo "<div class=\"brz-groupSlider-info\">";
