@@ -80,7 +80,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
                             $item['group'] = str_replace("Site Group", "", $item['group']);
                             $hiddenClass = $key >= $column_count ? "brz-groupSlider-swiper-slide-hidden" : "";
 
-                            echo "<article class=\"brz-groupSlider-swiper-slide\">";
+                            echo "<article class=\"brz-groupSlider-swiper-slide $hiddenClass\">";
                             echo "<div class=\"brz-groupSlider-info\">";
                             if ($show_images && $item['imageurl']) {
                                 if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
