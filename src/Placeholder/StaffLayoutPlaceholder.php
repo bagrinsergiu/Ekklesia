@@ -1,7 +1,5 @@
 <?php
-
 namespace BrizyEkklesia\Placeholder;
-
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
@@ -220,7 +218,6 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             }
                             echo "</ul>";
                         }
-
                         echo "</div>";
                         echo "</article>";
                     }
