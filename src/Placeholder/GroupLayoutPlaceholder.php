@@ -50,7 +50,8 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             'sticky_space'                    => 0,
             'detail_page'                     => false,
             'show_meta_icons'                 => false,
-            'date_format'                     => 'g:i a'
+            'date_format'                     => 'g:i a',
+            'group_slug'                      => ''
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -63,10 +64,11 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         $baseURL        = strtok($_SERVER["REQUEST_URI"], '?') !== FALSE ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
         $filterCountArr = [$show_category_filter, $show_category_filter_add1, $show_category_filter_add2, $show_category_filter_add3, $show_group_filter];
         $filterCount    = count(array_filter($filterCountArr));
-        $group_filter   = isset($_GET['mc-group']) ? $_GET['mc-group'] : false;
+        $requestGroup    = $_GET['mc-group'] ?? false;
         $categories     = $cms->get([
-            'module'  => 'smallgroup',
-            'display' => 'categories'
+            'module'     => 'smallgroup',
+            'display'    => 'categories',
+            'find_group' => $group_slug ?: $requestGroup
         ]);
         $categories_parent = $cms->get([
             'module'          => 'smallgroup',
@@ -78,6 +80,10 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
             'display' => 'list',
             'groupby' => 'group'
         ]);
+
+        if (!isset($groups['group_show'])) {
+            $groups['group_show'] = [];
+        }
 
         if (isset($_GET['mc-search'])) {
             //search is not allowing page so no pagination
@@ -112,7 +118,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                 'emailencode'   => 'no',
                 'howmany'       => '100',
                 'find_category' => $parent_category,
-                'find_group'    => $group_filter,
+                'find_group'    => $group_slug ?: $requestGroup,
                 'show'          => "__endtime format='g:ia'__",
             ]);
             //filter categories separately since there can be more than 1 category filter
@@ -158,11 +164,10 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
         }
 
 ?>
-
         <div id="brz-groupLayout__filters" class="brz-groupLayout__filters">
             <form id="brz-groupLayout__filters--form" name="brz-groupLayout__filters--form" class="brz-groupLayout__filters--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
 
-                <?php if ($show_group_filter && !empty($groups['group_show'])): ?>
+                <?php if ($show_group_filter && !$group_slug): ?>
                     <div class="brz-groupLayout__filters--form-selectWrapper">
                         <select name="mc-group" class='sorter'>
                             <option value=""><?= $group_filter_heading ?></option>
@@ -170,7 +175,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
                             <?php
                             foreach ($groups['group_show'] as $group) {
                                 echo "<option value=\"{$group['slug']}\"";
-                                if (isset($_GET['group']) && $_GET['group'] == $group['slug']) {
+                                if ($requestGroup == $group['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$group['title']}</option>";

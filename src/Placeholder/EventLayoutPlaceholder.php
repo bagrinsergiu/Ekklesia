@@ -63,7 +63,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'featuredActive'               => '',
             'listActive'                   => '',
             'calendarActive'               => '',
-            'date_format'                  => 'g:i a'
+            'date_format'                  => 'g:i a',
+            'group_slug'                   => '',
         ];
 
         $attrs    = $placeholder->getAttributes();
@@ -81,7 +82,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $date2           = new DateTime($calendarEnd);
         $diff            = $date1->diff($date2, true);
         $calendarDays    = $diff->format('%a');
-        $group_filter    = $_GET['mc-group'] ?? false;
+        $requestGroup    = $_GET['mc-group'] ?? false;
         $isEditor        = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($category_filter_list) {
@@ -133,9 +134,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         ${$view . "Active"} = "brz-eventLayout--view-active";
 
         $categories = $cms->get([
-            'module'  => 'event',
-            'display' => 'categories'
+            'module'     => 'event',
+            'display'    => 'categories',
+            'find_group' => $group_slug ?: $requestGroup
         ]);
+
+        if (!isset($categories['show'])) {
+            $categories['show'] = [];
+        }
 
         $categories_parent = $cms->get([
             'module'          => 'event',
@@ -143,12 +149,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             'parent_category' => $parent_category,
         ]);
 
-        $groups = $cms->get([
-            'module'  => 'group',
-            'display' => 'list'
-        ]);
+        $groups = [];
+        if ($show_group_filter) {
+            $groups = $cms->get([
+                'module'  => 'group',
+                'display' => 'list'
+            ]);
+        }
 
-        //test search first
         if (isset($_GET['mc-search'])) {
             $content    = [];
             $search_arr = $cms->get([
@@ -205,7 +213,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                     'groupby'              => 'day',
                     'howmanydays'          => $calendarDays,
                     'find_parent_category' => $parent_category,
-                    'find_group'           => $group_filter
+                    'find_group'           => $group_slug ?: $requestGroup
                 ]);
             }
 
@@ -246,7 +254,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         <div id="brz-eventLayout--filters" class="brz-eventLayout--filters">
             <form id="brz-eventLayout--filters-form" name="brz-eventLayout--filters-form" class="brz-eventLayout--filters-form" action="<?= $baseURL ?>">
 
-                <?php if ($show_group_filter && count($groups['show']) > 0): ?>
+                <?php if ($show_group_filter && !empty($groups['show']) && !$group_slug): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                     <select name="mc-group" class='sorter' >
                                 <option><?= $group_filter_heading ?></option>
@@ -254,7 +262,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                 <?php
                                 foreach ($groups['show'] as $group) {
                                     echo "<option value=\"{$group['slug']}\"";
-                                    if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
+                                    if ($requestGroup == $group['slug']) {
                                         echo " selected";
                                     }
                                     echo ">{$group['title']}</option>";

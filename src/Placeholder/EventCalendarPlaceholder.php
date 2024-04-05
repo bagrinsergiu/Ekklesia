@@ -77,9 +77,8 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
 
         <div class="brz-eventCalendar_wrap">
 
-            <?php //output
-            if (count($content['show']) > 0) {
-                //iterate over each event and assign to month and day
+            <?php
+            if (!empty($content['show'])) {
                 foreach ($content["show"] as $show) {
                     $grouping_month                           = date("Y-m", strtotime($show["eventstart"]));
                     $grouping_day                             = date("Y-m-d", strtotime($show["eventstart"]));

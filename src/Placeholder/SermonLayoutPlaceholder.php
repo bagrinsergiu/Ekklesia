@@ -50,7 +50,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             'sticky_space'            => 0,
             'defaultCategory'         => '',
             'show_meta_icons'         => false,
-            'parent_category'         => ''
+            'parent_category'         => '',
+            'group_slug'              => '',
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -64,7 +65,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $cms             = $this->monkCMS;
         $page            = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
         $category_filter = isset($_GET['mc-category']) ? $_GET['mc-category'] : '';
-        $group_filter    = isset($_GET['mc-group']) ? $_GET['mc-group'] : '';
+        $requestGroup    = $_GET['mc-group'] ?? false;
         $series_filter   = isset($_GET['mc-series']) ? $_GET['mc-series'] : '';
         $speaker_filter  = isset($_GET['mc-speaker']) ? $_GET['mc-speaker'] : '';
 
@@ -74,7 +75,12 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
         $categories = [];
         if ($show_category_filter) {
-            $rawCategories = $cms->get(['module' => 'sermon', 'display' => 'categories']);
+            $rawCategories = $cms->get([
+                'module'     => 'sermon',
+                'order'      => 'title',
+                'display'    => 'categories',
+                'find_group' => $group_slug ?: $requestGroup,
+            ]);
 
             if (!empty($rawCategories['show'])) {
                 foreach ($rawCategories['show'] as $category) {
@@ -85,28 +91,47 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             }
         }
 
-        if ($show_group_filter) {
-            $groups = $cms->get(array(
+        if ($show_group_filter && !$group_slug) {
+            $groups = $cms->get([
                 'module'  => 'sermon',
                 'display' => 'list',
-                'groupby' => 'group'
-            ));
+                'groupby' => 'group',
+                'order'   => 'title',
+            ]);
+
+            if (!isset($groups['group_show'])) {
+                $groups['group_show'] = [];
+            }
         }
 
         if ($show_series_filter) {
-            $series = $cms->get(array(
-                'module'  => 'sermon',
-                'display' => 'list',
-                'groupby' => 'series'
-            ));
+            $series = $cms->get([
+                'module'     => 'sermon',
+                'display'    => 'list',
+                'groupby'    => 'series',
+                'order'      => 'title',
+                'find_group' => $group_slug ?: $requestGroup
+            ]);
+
+            if (!isset($series['group_show'])) {
+                $series['group_show'] = [];
+            }
         }
 
         if ($show_speaker_filter) {
-            $speakers = $cms->get(array(
-                'module'  => 'sermon',
-                'display' => 'list',
-                'groupby' => 'preacher'
-            ));
+            $speakers = $cms->get([
+                'module'     => 'sermon',
+                'display'    => 'list',
+                'groupby'    => 'preacher',
+                'order'      => 'title',
+                'find_group' => $group_slug ?: $requestGroup
+            ]);
+
+            if (!isset($speakers['group_show'])) {
+                $speakers['group_show'] = [];
+            }
+
+            $speakers['group_show'] = array_reverse($speakers['group_show']);
         }
 
         if (!empty($_GET['mc-search'])) {
@@ -141,7 +166,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 'page'          => $page,
                 'howmany'       => $howmany,
                 'find_category' => $category_filter,
-                'find_group'    => $group_filter,
+                'find_group'    => $group_slug ?: $requestGroup,
                 'find_series'   => $series_filter,
                 'find_preacher' => $speaker_filter,
                 'show'          => "__audioplayer__",
@@ -153,17 +178,15 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 
         <div class="brz-sermonLayout__filter">
             <form id="brz-sermonLayout__filter--form" name="brz-sermonLayout__filter--form" class="brz-sermonLayout__filter--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
-                <?php if($show_group_filter && !empty($groups['group_show'])): ?>
+                <?php if ($show_group_filter && !empty($groups['group_show']) && !$group_slug): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
                         <select name="mc-group" class='sorter' >
                             <option value=""><?= $group_filter_heading ?></option>
                             <option value="">All</option>
                             <?php
-                            foreach($groups['group_show'] as $group)
-                            {
+                            foreach ($groups['group_show'] as $group) {
                                 echo "<option value=\"{$group['slug']}\"";
-                                if(isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug'])
-                                {
+                                if ($requestGroup == $group['slug']) {
                                     echo " selected";
                                 }
                                 echo ">{$group['title']}</option>";
@@ -173,7 +196,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     </div>
                 <?php endif; ?>
 
-                <?php if ($show_category_filter && $categories): ?>
+                <?php if ($show_category_filter): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
                         <select name="mc-category" class='sorter'>
                             <option value=""><?= $category_filter_heading ?></option>
@@ -187,7 +210,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     </div>
                 <?php endif; ?>
 
-                <?php if($show_series_filter && !empty($series['group_show'])): ?>
+                <?php if ($show_series_filter): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="mc-series" class='sorter' >
                         <option value=""><?= $series_filter_heading ?></option>
@@ -207,7 +230,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                     </div>
                 <?php endif; ?>
 
-                <?php if($show_speaker_filter && !empty($speakers['group_show'])): ?>
+                <?php if($show_speaker_filter): ?>
                     <div class="brz-sermonLayout__filter--form-selectWrapper">
                     <select name="mc-speaker" class='sorter' >
                         <option value=""><?= $speaker_filter_heading ?></option>
