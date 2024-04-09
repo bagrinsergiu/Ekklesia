@@ -76,7 +76,7 @@ class Api
 
 	public function getSmallgroup($query)
 	{
-		$display = $query['display'] ?? 'list';
+		$display = $query['display'] ?? 'categories';
 		switch ($display) {
 			case "list":
 				return $this->getList('smallgroup', $query);
