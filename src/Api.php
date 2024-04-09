@@ -19,16 +19,83 @@ class Api
 	/**
 	 * @throws Exception
 	 */
-	public function getCats($module)
+	public function getCats($module, $query)
 	{
-		$cats    = $this->monkCms->get(['module' => $module, 'display' => 'categories']);
-		$options = ['all' => 'All'];
+		$cats = $this->monkCms->get([
+			'module' => $module, 
+			'display' => 'categories',
+			'groupby' => $query['groupby'] ?? null,
+			'order' => $query['order'] ?? null
+		]);
 
-		foreach ($cats['show'] as $category) {
+		$options = ['all' => 'All'];
+		
+		$_show = $query['show'] ?? "show";
+		
+		foreach ($cats[$_show] as $category) {
 			$options[$category['slug']] = $category['name'];
 		}
 
 		return $options;
+	}
+
+
+
+	public function getList($module, $query)
+	{
+		$args= $this->monkCms->get([
+			'module' => $module,
+			'display' => 'list',
+			'groupby' => $query['groupby'] ?? null,
+			'order' => $query['order'] ?? null
+		]);
+
+		$options = ['all' => 'All'];
+		
+		$_show = $query['show'] ?? "show";
+		
+		
+		foreach ($args[$_show] as $category) {
+			$options[$category['slug']] = $category['title'];
+		}
+
+		return $options;
+	}
+
+	public function getSermon($query)
+	{
+		$display = $query['display'] ?? 'categories';
+		switch ($display) {
+			case "list":
+				return $this->getList('sermon', $query);
+			case "categories":
+				return $this->getCats('sermon', $query);
+		}
+		return ['all' => 'All'];
+	}
+
+	public function getSmallgroup($query)
+	{
+		$display = $query['display'] ?? 'list';
+		switch ($display) {
+			case "list":
+				return $this->getList('smallgroup', $query);
+			case "categories":
+				return $this->getCats('smallgroup', $query);
+		}
+		return ['all' => 'All'];
+	}
+
+	public function getGroup($query)
+	{
+		$display = $query['display'] ?? 'list';
+		switch ($display) {
+			case "list":
+				return $this->getList('group', $query);
+			case "categories":
+				return $this->getCats('group', $query);
+		}
+		return ['all' => 'All'];
 	}
 
 	/**
@@ -168,9 +235,12 @@ class Api
 	{
 		switch ($module) {
 			case 'sermon':
-			case 'event':
 			case 'smallgroup':
-				$data = $this->getCats($module);
+			case 'group':
+				$data = $this->{'get' . ucfirst($module)}($query);
+				break;
+			case 'event':
+				$data = $this->getCats($module, $query);
 				break;
 			case 'eventsLvl':
 				$data = $this->getCatsLevels('event');
@@ -184,7 +254,7 @@ class Api
 			case 'groups':
 			case 'forms':
 			case 'staff':
-				$data = $this->{'get'.ucfirst($module)}($query);
+				$data = $this->{'get' . ucfirst($module)}($query);
 				break;
 			case 'recentSermons':
 				$data = $this->getRecent('sermon');
@@ -199,12 +269,12 @@ class Api
 				$data = $this->getRecent('article');
 				break;
 			case 'articleCategories':
-				$data = $this->getCats('article');
+				$data = $this->getCats('article', $query);
 				break;
 			case 'series':
 				$data = $this->getSeries('sermon');
 				break;
-           case 'articleSeries':
+			case 'articleSeries':
 				$data = $this->getSeries('article');
 				break;
 			case 'articlesLvl':
