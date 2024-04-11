@@ -110,7 +110,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
                         }
 
                         if ($show_groups && $item['groups']) {
-                            echo "<p class=\"brz-ministryBrands__item--meta-groups brz-staffList__item\">";
+                            echo "<p class=\"brz-ministryBrands__item--meta-group brz-staffList__item\">";
 
                             if ($show_meta_headings || $show_meta_icons) {
                                 echo "<span class=\"brz-ministryBrands__item--wrapper\">";
@@ -124,9 +124,9 @@ class StaffListPlaceholder extends PlaceholderAbstract
                                 }
 
                                 if ($show_meta_headings) {
-                                    echo "<span class=\"brz-ministryBrands__item--data\">Groups: {$item['groups']}</span>";
+                                    echo "Groups: {$item['groups']}";
                                 } else {
-                                    echo "<span class=\"brz-ministryBrands__item--data\">{$item['groups']}</span>";
+                                    echo "{$item['groups']}";
                                 }
                             } else {
                                 echo "{$item['groups']}";
@@ -151,9 +151,9 @@ class StaffListPlaceholder extends PlaceholderAbstract
                                 }
 
                                 if ($show_meta_headings) {
-                                    echo "<span class=\"brz-ministryBrands__item--data\">Phone: {$item['workphone']}</span>";
+                                    echo "Phone: {$item['workphone']}";
                                 } else {
-                                    echo "<span class=\"brz-ministryBrands__item--data\">{$item['workphone']}</span>";
+                                    echo "{$item['workphone']}";
                                 }
                             } else {
                                 echo "{$item['workphone']}";
@@ -178,9 +178,9 @@ class StaffListPlaceholder extends PlaceholderAbstract
                                 }
 
                                  if ($show_meta_headings) {
-                                     echo "<span class=\"brz-ministryBrands__item--data\">Cell: {$item['cellphone']}</span>";
+                                     echo "Cell: {$item['cellphone']}";
                                  } else {
-                                     echo "<span class=\"brz-ministryBrands__item--data\">{$item['cellphone']}</span>";
+                                     echo "{$item['cellphone']}";
                                  }
                             } else {
                                 echo "{$item['cellphone']}";
