@@ -1,5 +1,7 @@
 <?php
+
 namespace BrizyEkklesia\Placeholder;
+
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
@@ -109,38 +111,82 @@ class StaffListPlaceholder extends PlaceholderAbstract
 
                         if ($show_groups && $item['groups']) {
                             echo "<p class=\"brz-ministryBrands__item--meta-groups brz-staffList__item\">";
-                            if ($show_meta_headings) {
+
+                            if ($show_meta_headings || $show_meta_icons) {
+                                echo "<span class=\"brz-ministryBrands__item--wrapper\">";
+
                                 if ($show_meta_icons) {
-                                   echo "<span class=\"brz-ministryBrands__item--wrapper\"><span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\"><path fill=\"currentColor\" d=\"M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z\"></path></svg></span><span class=\"brz-ministryBrands__item--data\">{$item['groups']}</span></span>";
-                                } else {
-                                   echo "{$item['groups']}";
+                                    echo "<span class=\"brz-ministryBrands__meta--icons\">
+                                            <svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\">
+                                                <path fill=\"currentColor\" d=\"M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z\"/>
+                                            </svg>
+                                          </span>";
                                 }
+
+                                if ($show_meta_headings) {
+                                    echo "<span class=\"brz-ministryBrands__item--data\">Groups: {$item['groups']}</span>";
+                                } else {
+                                    echo "<span class=\"brz-ministryBrands__item--data\">{$item['groups']}</span>";
+                                }
+                            } else {
+                                echo "{$item['groups']}";
                             }
-                            echo "</p>";
+
+                            echo "</span></p>";
                         }
+
 
                         if ($show_phone_work && $item['workphone']) {
                             echo "<p class=\"brz-ministryBrands__item--meta-workphone brz-staffList__item\">";
-                            if ($show_meta_headings) {
+
+                            if ($show_meta_headings || $show_meta_icons) {
+                                echo "<span class=\"brz-ministryBrands__item--wrapper\">";
+
                                 if ($show_meta_icons) {
-                                   echo "<span class=\"brz-ministryBrands__item--wrapper\"><span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\"><path d=\"M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z\"/></svg></span><span class=\"brz-ministryBrands__item--data\">{$item['workphone']}</span></span>";
-                                } else {
-                                   echo "{$item['workphone']}";
+                                    echo "<span class=\"brz-ministryBrands__meta--icons\">
+                                            <svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\">
+                                                <path d=\"M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z\"/>
+                                            </svg>
+                                          </span>";
                                 }
+
+                                if ($show_meta_headings) {
+                                    echo "<span class=\"brz-ministryBrands__item--data\">Phone: {$item['workphone']}</span>";
+                                } else {
+                                    echo "<span class=\"brz-ministryBrands__item--data\">{$item['workphone']}</span>";
+                                }
+                            } else {
+                                echo "{$item['workphone']}";
                             }
-                            echo "</p>";
+
+                            echo "</span></p>";
                         }
+
 
                         if ($show_phone_cell && $item['cellphone']) {
                             echo "<p class=\"brz-ministryBrands__item--meta-cellphone brz-staffList__item\">";
-                            if ($show_meta_headings) {
-                                 if ($show_meta_icons) {
-                                    echo "<span class=\"brz-ministryBrands__item--wrapper\"><span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\"><path d=\"M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z\"/></svg></span><span class=\"brz-ministryBrands__item--data\">{$item['cellphone']}</span></span>";
+
+                            if ($show_meta_headings || $show_meta_icons) {
+                                echo "<span class=\"brz-ministryBrands__item--wrapper\">";
+
+                                if ($show_meta_icons) {
+                                    echo "<span class=\"brz-ministryBrands__meta--icons\">
+                                            <svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\">
+                                                <path d=\"M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z\"/>
+                                            </svg>
+                                          </span>";
+                                }
+
+                                 if ($show_meta_headings) {
+                                     echo "<span class=\"brz-ministryBrands__item--data\">Cell: {$item['cellphone']}</span>";
                                  } else {
-                                    echo "{$item['cellphone']}";
+                                     echo "<span class=\"brz-ministryBrands__item--data\">{$item['cellphone']}</span>";
                                  }
+                            } else {
+                                echo "{$item['cellphone']}";
                             }
-                            echo "</p>";
+
+                            echo "</span></p>";
                         }
 
                         if (!$show_images) {
@@ -165,6 +211,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
                             }
                             echo "</ul>";
                         }
+
                         echo "</div>";
                         echo "</article>";
                     }
