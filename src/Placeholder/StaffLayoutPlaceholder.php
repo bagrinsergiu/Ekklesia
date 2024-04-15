@@ -174,11 +174,11 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             echo "</h4>";
                         }
 
-                        if ($show_position && $item['position'] = "POSITION") {
+                        if ($show_position && $item['position']) {
                             echo "<h6 class=\"brz-staffLayout_position brz-ministryBrands__item--meta-position\">{$item['position']}</h6>";
                         }
 
-                        if ($show_groups && $item['groups'] = "GROUP_TEST") {
+                        if ($show_groups && $item['groups']) {
                             echo "<p class=\"brz-staffLayout_meta brz-ministryBrands__item--meta-groups\">";
                             if ($show_meta_headings) {
                                 if ($show_meta_icons) {
@@ -191,7 +191,7 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             echo "</p>";
                         }
 
-                        if ($show_phone_work && $item['workphone'] = '032423894273924') {
+                        if ($show_phone_work && $item['workphone']) {
                             echo "<p class=\"brz-staffLayout_meta brz-ministryBrands__item--meta-workphone\">";
                             if ($show_meta_headings) {
                                 if ($show_meta_icons) {
@@ -204,7 +204,7 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             echo "</p>";
                         }
 
-                        if ($show_phone_cell && $item['cellphone'] = '312321321') {
+                        if ($show_phone_cell && $item['cellphone']) {
                             echo "<p class=\"brz-staffLayout_meta brz-ministryBrands__item--meta-cellphone\">";
                             if ($show_meta_headings) {
                                 if ($show_meta_icons) {
