@@ -25,7 +25,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             'speaker_filter_heading'  => 'Speaker',
             'show_search'             => false,
             'search_placeholder'      => 'Search',
-            // Constent Settings
+            'search_value'            => '',
             'column_count'            => 3,
             'column_count_tablet'     => 2,
             'column_count_mobile'     => 1,
@@ -68,6 +68,11 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         $requestGroup    = $_GET['mc-group'] ?? false;
         $series_filter   = isset($_GET['mc-series']) ? $_GET['mc-series'] : '';
         $speaker_filter  = isset($_GET['mc-speaker']) ? $_GET['mc-speaker'] : '';
+        $search    = $_GET['mc-search'] ?? '';
+
+        if (empty($_GET)) {
+            $search = $search_value;
+        }
 
 	    if (!isset($_GET['mc-category']) && $defaultCategory) {
 		    $category_filter = $defaultCategory;
@@ -134,13 +139,13 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             $speakers['group_show'] = array_reverse($speakers['group_show']);
         }
 
-        if (!empty($_GET['mc-search'])) {
+        if (!empty($search)) {
             $content = $cms->get([
                 'module'        => 'search',
                 'display'       => 'results',
                 'howmany'       => (int)$howmany,
                 'offset'        => ($page - 1) * (int)$howmany,
-                'keywords'      => $_GET['mc-search'],
+                'keywords'      => $search,
                 'find_module'   => 'sermon',
                 'after_show'    => '__pagination__',
                 'find_category' => $category_filter,
@@ -255,7 +260,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             <?php if($show_search): ?>
                 <form method="get" id="brz-sermonLayout__filter--form-search" name="brz-sermonLayout__filter--form-search" class="brz-sermonLayout__filter--form-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="ekklesia360_sermon_layout_search_term" name="mc-search" value="<?= !empty($_GET['mc-search']) ? $_GET['mc-search'] : '' ?>" placeholder="<?= $search_placeholder ?>" />
+                        <input type="text" id="ekklesia360_sermon_layout_search_term" name="mc-search" value="<?= $search ?>" placeholder="<?= $search_placeholder ?>" />
                         <button type="submit" id="ekklesia360_sermon_layout_search_submit" value=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-icon-svg" data-type="fa" data-name="search"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></button>
                     </fieldset>
                 </form>
@@ -263,8 +268,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
         </div>
 
         <?php
-            if (isset($_GET['mc-search'])) {
-                echo "<h5 class=\"brz-sermonLayout-results-heading\"><a href=\"{$baseURL}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h5>";
+            if (!empty($_GET['mc-search'])) {
+                echo "<h5 class=\"brz-sermonLayout-results-heading\"><a href=\"$baseURL\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"$search\"</h5>";
             }
         ?>
 
@@ -441,8 +446,8 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
                 $pagination = str_replace('?', "?mc-speaker={$_GET['mc-speaker']}&", $pagination);
             }
 
-            if (!empty($_GET['mc-search'])) {
-                $pagination = str_replace('?', "?mc-search={$_GET['mc-search']}&", $pagination);
+            if (!empty($search)) {
+                $pagination = str_replace('?', "?mc-search=$search&", $pagination);
             }
 
             echo $pagination;
