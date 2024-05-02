@@ -28,7 +28,7 @@ class Api
 			'order' => $query['order'] ?? null
 		]);
 
-		$options = ['all' => 'All'];
+		$options = [];
 		
 		$_show = $query['show'] ?? "show";
 		
@@ -50,7 +50,7 @@ class Api
 			'order' => $query['order'] ?? null
 		]);
 
-		$options = ['all' => 'All'];
+		$options = [];
 		
 		$_show = $query['show'] ?? "show";
 		
@@ -71,7 +71,7 @@ class Api
 			case "categories":
 				return $this->getCats('sermon', $query);
 		}
-		return ['all' => 'All'];
+		return [];
 	}
 
 	public function getSmallgroup($query)
@@ -83,7 +83,7 @@ class Api
 			case "categories":
 				return $this->getCats('smallgroup', $query);
 		}
-		return ['all' => 'All'];
+		return [];
 	}
 
 	public function getGroup($query)
@@ -95,7 +95,7 @@ class Api
 			case "categories":
 				return $this->getCats('group', $query);
 		}
-		return ['all' => 'All'];
+		return [];
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Api
 	public function getGroups()
 	{
 		$groups  = $this->monkCms->get(['module' => 'group', 'display' => 'list']);
-		$options = ['all' => 'All'];
+		$options = [];
 
 		foreach ($groups['show'] as $group) {
 			$options[$group['slug']] = $group['title'];
@@ -119,7 +119,7 @@ class Api
 	public function getSeries($module)
 	{
 		$series  = $this->monkCms->get(['module' => $module, 'display' => 'list', 'groupby' => 'series']);
-		$options = ['all' => 'All'];
+		$options = [];
 
 		foreach ($series['group_show'] as $serie) {
 			$options[$serie['slug']] = $serie['title'];
@@ -144,7 +144,7 @@ class Api
 			'emailencode' => 'no',
 		]);
 
-		$options = ["all" => "All"];
+		$options = [];
 
 		foreach ($recents['show'] as $recent) {
 			$options[$recent['slug']] = isset($recent['title']) ? $recent['title'] : $recent['name'];
