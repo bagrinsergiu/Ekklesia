@@ -152,12 +152,12 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
             ]);
 
             if (!empty($content['show'])) {
-                foreach ($content['show'] as &$item) {
-                    $item              = $cms->get([
+                foreach ($content['show'] as &$itemShow) {
+                    $itemShow = $cms->get([
                         'module'      => 'sermon',
                         'display'     => 'detail',
                         'emailencode' => 'no',
-                        'find'        => $item['slug'],
+                        'find'        => $itemShow['slug'],
                         'show'        => "__audioplayer__",
                     ])['show'];
                 }
