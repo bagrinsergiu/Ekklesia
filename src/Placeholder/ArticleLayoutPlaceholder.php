@@ -502,7 +502,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                     echo $paginationOutput;
                 }
             } else { ?>
-                <p>There are no items available.</p>
+                <p class="brz-articleLayout-no-results">There are no items available.</p>
             <?php } ?>
         </div>
         <?php
