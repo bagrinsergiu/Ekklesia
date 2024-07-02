@@ -324,7 +324,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
 
                         if ($show_images && $item['imageurl'] && !$show_video) {
                             if ($detail_url) {
-                                echo "<a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\">";
+                                echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                             }
                             echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                             if ($detail_url) {
@@ -352,7 +352,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                         if ($show_title) {
                             echo "<h4 class=\"brz-articleLayout__heading\">";
                             if ($detail_url) {
-                                echo "<a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\">";
+                                echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
                             }
                             echo "{$item['title']}";
                             if ($detail_url) {
@@ -451,7 +451,7 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                         }
 
                         if ($detail_url && $detail_page_button_text) {
-                            echo "<p class=\"brz-articleLayout__detail_button\"><a href=\"{$detail_url}?ekklesia360_article_slug={$item['slug']}\" class=\"brz-articleLayout__button-link\"><span class=\"brz-articleLayout__button-text\">{$detail_page_button_text}</span></a></p>";
+                            echo "<p class=\"brz-articleLayout__detail_button\"><a href=\"{$detail_url}?mc-slug={$item['slug']}\" class=\"brz-articleLayout__button-link\"><span class=\"brz-articleLayout__button-text\">{$detail_page_button_text}</span></a></p>";
                         }
 
                         echo "</div>";
