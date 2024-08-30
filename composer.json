@@ -12,7 +12,7 @@
     "php": ">=5.6.0",
     "twig/twig": "^1.0||^2.0",
     "bagrinsergiu/monkcms-php": "^1.0",
-    "bagrinsergiu/content-placeholder": "^2.0.15",
+    "bagrinsergiu/content-placeholder": "^3.0.0",
     "kigkonsult/icalcreator": "^2.39"
   },
   "require-dev": {
