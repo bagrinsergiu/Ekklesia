@@ -20,13 +20,15 @@ class FormPlaceholder extends PlaceholderAbstract
         $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($isEditor) {
+            $formUrl      = getenv('MB_FORM_URL') ?: 'https://forms.ministryforms.net';
             $twigFormHtml = file_get_contents(__DIR__ . '/../views/editor-form.html.twig');
             $template     = $this->twig->createTemplate($twigFormHtml);
 
             echo $template->render(
                 [
                     'formId'   => $atts['form'],
-                    'uniqueId' => md5($atts['form'])
+                    'uniqueId' => md5($atts['form']),
+                    'formUrl' => $formUrl
                 ]
             );
 

@@ -23,7 +23,8 @@ class PrayerPlaceholder extends PlaceholderAbstract
 
         if ($isEditor) {
             $uniqueId = md5(json_encode($form));
-            echo "<iframe id=\"mb-formbuilder-container\" data-uniqueid=\"{$uniqueId}\" src=\"https://forms.ministryforms.net/viewForm.aspx?formid={$formId}&direct-link=&embed=true&frameid={$uniqueId}\" style=\"width: 100%; height: 95%; border:0\" allow=\"payment\"></iframe>";
+            $formUrl  = getenv('MB_FORM_URL') ?: 'https://forms.ministryforms.net';
+            echo "<iframe id=\"mb-formbuilder-container\" data-uniqueid=\"{$uniqueId}\" src=\"{$formUrl}/viewForm.aspx?formid={$formId}&direct-link=&embed=true&frameid={$uniqueId}\" style=\"width: 100%; height: 95%; border:0\" allow=\"payment\"></iframe>";
             return;
         }
         echo isset($form['show']['embedhtml']) ? $form['show']['embedhtml'] : '';
