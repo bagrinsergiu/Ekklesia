@@ -51,14 +51,15 @@ class EkklesiaConfig
      */
     static public function factoryFromJson($json)
     {
-        $data   = $json ? json_decode($json, true) : [];
-        $siteId = isset($data['site_id']) ? $data['site_id'] : null;
-        $secret = isset($data['secret']) ? $data['secret'] : null;
-	    $accountId = isset($data['MBAccountID']) ? $data['MBAccountID'] : '';
-	    $visitorId = isset($data['MBVisitorID']) ? $data['MBVisitorID'] : '';
-	    $themeName = isset($data['MBThemeName']) ? $data['MBThemeName'] : '';
+        $data      = $json ? json_decode($json, true) : [];
+        $siteId    = isset($data['site_id']) ? $data['site_id'] : null;
+        $secret    = isset($data['secret']) ? $data['secret'] : null;
+        $accountId = isset($data['MBAccountID']) ? $data['MBAccountID'] : '';
+        $visitorId = isset($data['MBVisitorID']) ? $data['MBVisitorID'] : '';
+        $themeName = isset($data['MBThemeName']) ? $data['MBThemeName'] : '';
+        $url       = isset($data['url']) ? $data['url'] : '';
 
-        return new self($siteId, $secret, $accountId, $visitorId, $themeName);
+        return new self($siteId, $secret, $accountId, $visitorId, $themeName, $url);
     }
 
     public function toArray()
