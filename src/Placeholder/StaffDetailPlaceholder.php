@@ -28,6 +28,7 @@ class StaffDetailPlaceholder extends PlaceholderAbstract
             'show_meta_headings' => true,
             'show_about'         => true,
             'show_meta_icons'    => false,
+            'show_previous_page' => false,
         ], $placeholder->getAttributes());
 
         extract($settings);
@@ -155,9 +156,11 @@ class StaffDetailPlaceholder extends PlaceholderAbstract
                         echo "<div class=\"brz-staffDetail__item--about\">{$item['about']}</div>";
                     }
 
-                    echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
+                    if ($show_previous_page) {
+                        echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg>
                     Previous Page</div>';
+                    }
                     ?>
                 </div>
                 <?php
