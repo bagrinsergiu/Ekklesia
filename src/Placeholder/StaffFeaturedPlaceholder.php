@@ -29,6 +29,8 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
             'show_meta_headings' => true,
             'show_about'         => true,
             'show_meta_icons'    => false,
+            'show_full_email'    => false,
+            'show_previous_page' => false,
         ], $placeholder->getAttributes());
 
         extract($settings);
@@ -95,6 +97,22 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
                     echo "</h6>";
                 }
 
+                if ($show_full_email && ($member['emailaddress'] || $member['altemailaddress'])) {
+                    if ($member['altemailaddress']) {
+                        $member['emailaddress'] = $member['altemailaddress'];
+                    }
+                    echo "<p class=\"brz-staffFeatured__item--meta brz-ministryBrands__item--meta-full-email\">";
+                    if ($show_meta_headings) {
+                        if ($show_meta_icons) {
+                            echo "<span class=\"brz-ministryBrands__meta--icons\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></span>";
+                        } else {
+                            echo "<span>Email: </span>";
+                        }
+                    }
+                    echo "<a class='brz-staffFeatured__link brz-staffFeatured__link--full-email' href=\"mailto:{$member['emailaddress']}\" title=\"Email\">{$member['emailaddress']}</a>";
+                    echo "</p>";
+                }
+
                 if ($show_phone_work && $member['workphone']) {
                     echo "<h6 class=\"brz-staffFeatured__item--meta brz-ministryBrands__item--meta-workphone\">";
                     if ($show_meta_headings) {
@@ -123,7 +141,7 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
 
                 echo "<ul class=\"brz-staffFeatured__item--social\">";
 
-                if ($show_email && ($member['emailaddress'] || $member['altemailaddress'])) {
+                if (!$show_full_email && $show_email && ($member['emailaddress'] || $member['altemailaddress'])) {
                     if ($member['altemailaddress']) {
                         $member['emailaddress'] = $member['altemailaddress'];
                     }
@@ -156,9 +174,11 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
                     echo "<div class=\"brz-staffFeatured__item--about\">{$member['about']}</div>";
                 }
 
-                echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
+                if ($show_previous_page) {
+                    echo '<div class="brz-ministryBrands__item--meta--links brz-ministryBrands__item--meta--links--previous">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="brz-icon-svg align-[initial]"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg>
                 Previous Page</div>';
+                }
                 ?>
             </div>
         </div>
