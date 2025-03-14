@@ -30,6 +30,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
             'detail_page_button_text' => '',
             'detail_page'             => '',
             'show_full_email'         => false,
+            'show_pagination'         => true,
         ], $placeholder->getAttributes());
 
         extract($settings);
@@ -42,15 +43,21 @@ class StaffListPlaceholder extends PlaceholderAbstract
             'order'       => 'position',
             'emailencode' => 'no',
             'restrict'    => 'no',
-            'howmany'     => $howmany,
             'find_group'  => $group,
         ]);
+
+        $_content  = isset($content["show"]) ? $content["show"] : [];
+        $page      = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
+
+        $pagination = new CustomPagination($_content , (isset($page) ? $page : 1), $howmany);
+        $pagination->setShowFirstAndLast(true);
+        $resultsPagination = $pagination->getResults();
         ?>
         <div class="brz-staffList__wrap">
-            <?php if (!empty($content['show'])) { ?>
+            <?php if (count($resultsPagination) > 0) { ?>
                 <div class="brz-staffList__container">
                     <?php
-                    foreach ($content['show'] as $item) {
+                    foreach ($resultsPagination as $key => $item) {
                         echo "<article>";
                         if ($show_images && $item['photourl']) {
                             echo "<div class=\"brz-ministryBrands__item--media\">";
@@ -235,6 +242,9 @@ class StaffListPlaceholder extends PlaceholderAbstract
                     ?>
                 </div>
                 <?php
+                if ($show_pagination) {
+                    echo '<p id="brz-staffList__pagination" class="brz-staffList__pagination">' . $pagination->getLinks($_GET, 'mc-page') . '</p>';
+                }
             } else {
                 ?>
 
