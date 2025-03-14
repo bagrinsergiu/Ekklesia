@@ -29,7 +29,9 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
             'detail_page'             => '',
             'show_meta_icons'         => false,
             'search_placeholder'      => 'Search',
-            'group_filter_heading'    => 'Group'
+            'group_filter_heading'    => 'Group',
+            'howmany'                 => 9,
+            'show_pagination'         => true,
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
@@ -41,6 +43,7 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
         $cms         = $this->monkCMS;
         $filterCount = count(array_filter([$show_group_filter]));
         $groups      = $show_group_filter ? $cms->get(['module' => 'group', 'display' => 'list',]) : [];
+        $page      = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
 
         if (isset($_GET['mc-search_term'])) {
             $content  = [];
@@ -74,6 +77,10 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
             ]);
         }
 
+        $_content  = isset($content["show"]) ? $content["show"] : [];
+        $pagination = new CustomPagination($_content , (isset($page) ? $page : 1), $howmany);
+        $pagination->setShowFirstAndLast(true);
+        $resultsPagination = $pagination->getResults();
 ?>
 
         <div id="brz-staffLayout__filters" class="brz-staffLayout__filters">
@@ -116,10 +123,10 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
         }
         ?>
         <div class="brz-staffLayout__container">
-            <?php if (!empty($content['show'])) { ?>
+            <?php if (count($resultsPagination) > 0) { ?>
                 <div class="brz-staffLayout__content">
                     <?php
-                    foreach ($content['show'] as $item) {
+                    foreach ($resultsPagination as $key => $item) {
                         echo "<article>";
                         if ($show_images && $item['photourl']) {
                             echo "<div class=\"brz-ministryBrands__item--media\">";
@@ -261,7 +268,11 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                     }
                     ?>
                 </div>
-            <?php } else { ?>
+            <?php
+                if ($show_pagination){
+                    echo '<p id="brz-staffLayout__pagination" class="brz-staffLayout__pagination">' . $pagination->getLinks($_GET, 'mc-page') . '</p>';
+                }
+            } else { ?>
 
                 <p class="brz-staffLayout-no-results">There are no staff available.</p>
 
