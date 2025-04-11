@@ -147,7 +147,8 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             echo "<ul class=\"brz-staffLayout_social brz-ministryBrands__item--meta-email\">";
                             if (!$item['customhideemail'] && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
-                                echo "<li><a href=\"mailto:{$item['emailaddress']}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
+                                $encoded_email = base64_encode($item['emailaddress']);
+                                echo "<li><a data-brz-email =\"{$encoded_email}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
                             }
                             if ($show_facebook && $item['facebookurl']) {
                                 echo "<li><a href=\"{$item['facebookurl']}\" title=\"Facebook\" target=\"_blank\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 512\"><path d=\"M279.1 288l14.2-92.7h-88.9v-60.1c0-25.4 12.4-50.1 52.2-50.1h40.4V6.3S260.4 0 225.4 0c-73.2 0-121.1 44.4-121.1 124.7v70.6H22.9V288h81.4v224h100.2V288z\"/></svg></a></li>";
@@ -207,7 +208,8 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                                     echo "<span>Email: </span>";
                                 }
                             }
-                            echo "<a class='brz-staffLayout__link brz-staffLayout__link--full-email' href=\"mailto:{$item['emailaddress']}\" title=\"Email\">{$item['emailaddress']}</a>";
+                            $encoded_email = base64_encode($item['emailaddress']);
+                            echo "<a class='brz-staffLayout__link brz-staffLayout__link--full-email' data-brz-email=\"{$encoded_email}\" title=\"Email\">{$item['emailaddress']}</a>";
                             echo "</p>";
                         }
 
@@ -241,7 +243,8 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                             echo "<ul class=\"brz-staffLayout_social no-image\">";
                             if (!$item['customhideemail'] && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
-                                echo "<li><a href=\"mailto:{$item['emailaddress']}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
+                                $encoded_email = base64_encode($item['emailaddress']);
+                                echo "<li><a data-brz-email=\"{$encoded_email}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
                             }
                             if ($show_facebook && $item['facebookurl']) {
                                 echo "<li><a href=\"{$item['facebookurl']}\" title=\"Facebook\" target=\"_blank\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 512\"><path d=\"M279.1 288l14.2-92.7h-88.9v-60.1c0-25.4 12.4-50.1 52.2-50.1h40.4V6.3S260.4 0 225.4 0c-73.2 0-121.1 44.4-121.1 124.7v70.6H22.9V288h81.4v224h100.2V288z\"/></svg></a></li>";
