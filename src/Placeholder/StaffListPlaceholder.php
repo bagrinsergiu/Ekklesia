@@ -78,7 +78,8 @@ class StaffListPlaceholder extends PlaceholderAbstract
                             echo "<ul class=\"brz-staffList__social\">";
                             if (!$item['customhideemail'] && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
-                                echo "<li><a class='brz-staffList__link' href=\"mailto:{$item['emailaddress']}\" title=\"Email\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" class=\"brz-icon-svg align-[initial]\"><path d=\"M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z\"></path></svg></a></li>";
+                                $encoded_email = base64_encode($item['emailaddress']);
+                                echo "<li><a class='brz-staffList__link' data-brz-email=\"{$encoded_email}\" title=\"Email\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" class=\"brz-icon-svg align-[initial]\"><path d=\"M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z\"></path></svg></a></li>";
                             }
                             if ($show_facebook && $item['facebookurl']) {
                                 echo "<li><a class='brz-staffList__link' href=\"{$item['facebookurl']}\" title=\"Facebook\" target=\"_blank\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 512\" class=\"brz-icon-svg align-[initial]\"><path d=\"m279.14 288 14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z\"></path></svg></a></li>";
@@ -151,7 +152,8 @@ class StaffListPlaceholder extends PlaceholderAbstract
                                     echo "<span>Email: </span>";
                                 }
                             }
-                            echo "<a class='brz-staffList__link brz-staffList__link--full-email' href=\"mailto:{$item['emailaddress']}\" title=\"Email\">{$item['emailaddress']}</a>";
+                            $encoded_email = base64_encode($item['emailaddress']);
+                            echo "<a class='brz-staffList__link brz-staffList__link--full-email' data-brz-email=\"{$encoded_email}\" title=\"Email\">{$item['emailaddress']}</a>";
                             echo "</p>";
                         }
 
@@ -213,7 +215,8 @@ class StaffListPlaceholder extends PlaceholderAbstract
                             echo "<ul class=\"brz-staffList__social brz-staffList_no-image\">";
                             if (!$item['customhideemail'] && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
-                                echo "<li><a class='brz-staffList__link' href=\"mailto:{$item['emailaddress']}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
+                                $encoded_email = base64_encode($item['emailaddress']);
+                                echo "<li><a class='brz-staffList__link' data-brz-email=\"{$encoded_email}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
                             }
                             if ($show_facebook && $item['facebookurl']) {
                                 echo "<li><a class='brz-staffList__link' href=\"{$item['facebookurl']}\" title=\"Facebook\" target=\"_blank\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 512\"><path d=\"M279.1 288l14.2-92.7h-88.9v-60.1c0-25.4 12.4-50.1 52.2-50.1h40.4V6.3S260.4 0 225.4 0c-73.2 0-121.1 44.4-121.1 124.7v70.6H22.9V288h81.4v224h100.2V288z\"/></svg></a></li>";
