@@ -23,8 +23,7 @@ namespace BrizyEkklesia\Placeholder;
  *   along with PHP Array Pagination ; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
-\************************************************************/
-
+ * \************************************************************/
 class CustomPagination
 {
 
@@ -48,16 +47,16 @@ class CustomPagination
     /**
      * Constructor
      *
-     * @param array $array   Array of results to be paginated
-     * @param int   $curPage The current page interger that should used
-     * @param int   $perPage The amount of items that should be show per page
+     * @param array $array Array of results to be paginated
+     * @param int $curPage The current page interger that should used
+     * @param int $perPage The amount of items that should be show per page
      * @return void
      * @access public
      */
     public function __construct($array, $curPage = null, $perPage = null)
     {
-        $this->array   = $array;
-        $this->curPage = ($curPage == null ? $this->defaults['page']    : $curPage);
+        $this->array = $array;
+        $this->curPage = ($curPage == null ? $this->defaults['page'] : $curPage);
         $this->perPage = ($perPage == null ? $this->defaults['perPage'] : $perPage);
     }
 
@@ -66,7 +65,7 @@ class CustomPagination
      *
      * Utilises the properties array
      *
-     * @param string $name  The name of the property to set
+     * @param string $name The name of the property to set
      * @param string $value The value that the property is assigned
      * @return void
      * @access public
@@ -173,38 +172,44 @@ class CustomPagination
         // Concatenate the get variables to add to the page numbering string
         $queryUrl = '';
         if (!empty($params)) {
-            $queryUrl = '&amp;'.http_build_query($params);
+            $queryUrl = '&amp;' . http_build_query($params);
         }
 
         // If we have more then one pages
         if (($this->pages) > 1) {
-            // Assign the 'previous page' link into the array if we are not on the first page
-            if ($this->page != 1) {
-                if ($this->_showFirstAndLast) {
-                    //$plinks[] = ' <a href="?page=1'.$queryUrl.'" class="first">First </a> ';
-                }
-                $plinks[] = " <a href=\"?$name=".($this->page - 1) . $queryUrl . $anchorTag.'" id="previous">Previous</a> ';
+            if ($this->_showFirstAndLast) {
+                //$plinks[] = ' <a href="?page=1'.$queryUrl.'" class="first">First </a> ';
             }
+
+            $prevHref = ($this->page > 1)
+                ? "?" . $name . '=' . ($this->page - 1) . $queryUrl
+                : '#';
+
+            $nextHref = ($this->page < $this->pages)
+                ? "?" . $name . '=' . ($this->page + 1) . $queryUrl
+                : '#';
+
+            $prevId = ($this->page > 1) ? 'previous' : 'off';
+            $nextId = ($this->page < $this->pages) ? 'next' : 'off';
+
+            $plinks[] = '<a href="' . $prevHref . '" id="' . $prevId . '">Previous</a>';
 
             // Assign all the page numbers & links to the array
             for ($j = 1; $j < ($this->pages + 1); $j++) {
                 if ($this->page == $j) {
                     $links[] = ' <a id="current">' . $j . '</a> '; // If we are on the same page as the current item
                 } else {
-                    $links[] = " <a href=\"?$name=". $j . $queryUrl . $anchorTag . '" class="number">' . $j . '</a> '; // add the link to the array
+                    $links[] = " <a href=\"?$name=" . $j . $queryUrl . $anchorTag . '" class="number">' . $j . '</a> '; // add the link to the array
                 }
             }
 
-            // Assign the 'next page' if we are not on the last page
-            if ($this->page < $this->pages) {
-                $slinks[] = " <a href=\"?$name=" . ($this->page + 1) . $queryUrl . $anchorTag . '" id="next">Next</a> ';
-                if ($this->_showFirstAndLast) {
-                    //$slinks[] = ' <a href="?page='.($this->pages).$queryUrl.'" class="last">Last</a> ';
-                }
+            $slinks[] = '<a href="' . $nextHref . '" id="' . $nextId . '">Next</a>';
+            if ($this->_showFirstAndLast) {
+                //$slinks[] = ' <a href="?page='.($this->pages).$queryUrl.'" class="last">Last</a> ';
             }
 
             // Push the array into a string using any some glue
-            return implode(' ', $plinks).implode($this->mainSeperator, $links).implode(' ', $slinks);
+            return implode(' ', $plinks) . implode($this->mainSeperator, $links) . implode(' ', $slinks);
         }
 
         return '';
