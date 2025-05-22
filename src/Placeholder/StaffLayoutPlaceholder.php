@@ -1,5 +1,7 @@
 <?php
+
 namespace BrizyEkklesia\Placeholder;
+
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
@@ -10,51 +12,63 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $options = [
-            'show_group_filter'       => true,
-            'show_search'             => true,
-            'show_images'             => true,
-            'show_title'              => true,
-            'show_position'           => true,
-            'show_groups'             => true,
-            'show_phone_work'         => false,
-            'show_phone_cell'         => false,
-            'show_email'              => false,
-            'show_facebook'           => false,
-            'show_twitter'            => false,
-            'show_website'            => false,
-            'show_instagram'          => false,
-            'show_meta_headings'      => false,
-            'show_full_email'         => false,
-            'show_res'                => false,
+            'show_group_filter' => true,
+            'show_search' => true,
+            'show_images' => true,
+            'show_title' => true,
+            'show_position' => true,
+            'show_groups' => true,
+            'show_phone_work' => false,
+            'show_phone_cell' => false,
+            'show_email' => false,
+            'show_facebook' => false,
+            'show_twitter' => false,
+            'show_website' => false,
+            'show_instagram' => false,
+            'show_meta_headings' => false,
+            'show_full_email' => false,
+            'show_res' => false,
             'detail_page_button_text' => 'Read More',
-            'detail_page'             => '',
-            'show_meta_icons'         => false,
-            'search_placeholder'      => 'Search',
-            'group_filter_heading'    => 'Group',
-            'howmany'                 => 9,
-            'show_pagination'         => true,
+            'detail_page' => '',
+            'show_meta_icons' => false,
+            'search_placeholder' => 'Search',
+            'group_filter_heading' => 'Group',
+            'howmany' => 9,
+            'show_pagination' => true,
+            'series' => '',
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
 
         extract($settings);
 
-        $baseURL     = strtok($_SERVER['REQUEST_URI'], '?') !== false ? strtok($_SERVER['REQUEST_URI'], '?') : $_SERVER['REQUEST_URI'];
-        $detail_url  = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : '';
-        $cms         = $this->monkCMS;
+        $baseURL = strtok($_SERVER['REQUEST_URI'], '?') !== false ? strtok($_SERVER['REQUEST_URI'], '?') : $_SERVER['REQUEST_URI'];
+        $detail_url = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : '';
+        $cms = $this->monkCMS;
         $filterCount = count(array_filter([$show_group_filter]));
-        $groups      = $show_group_filter ? $cms->get(['module' => 'group', 'display' => 'list',]) : [];
-        $page      = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
+        $series_filter = ($settings['series'] && $settings['series'] != '') ? $settings['series'] : false;
+
+        $groups_queryArr = array(
+            'module' => 'group',
+            'display' => 'list',
+        );
+
+        if ($series_filter) {
+            $groups_queryArr['find_series'] = $series_filter;
+        }
+
+        $groups = $show_group_filter ? $cms->get($groups_queryArr) : [];
+        $page = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
 
         if (isset($_GET['mc-search_term'])) {
-            $content  = [];
+            $content = [];
             $keywords = array_filter(explode(' ', $_GET['mc-search_term']));
-            $members  = $cms->get([
-                'module'      => 'member',
-                'display'     => 'list',
-                'order'       => 'position',
+            $members = $cms->get([
+                'module' => 'member',
+                'display' => 'list',
+                'order' => 'position',
                 'emailencode' => 'no',
-                'restrict'    => 'no',
+                'restrict' => 'no',
             ]);
 
             foreach ($members['show'] as $member) {
@@ -68,29 +82,45 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                 }
             }
         } else {
-            $content = $cms->get([
-                'module'      => 'member',
-                'display'     => 'list',
-                'order'       => 'position',
+            $queryArr = array(
+                'module' => 'member',
+                'display' => 'list',
+                'order' => 'position',
                 'emailencode' => 'no',
-                'restrict'    => 'no',
-                'find_group'  => isset($_GET['mc-group']) ? $_GET['mc-group'] : '',
-            ]);
+                'restrict' => 'no',
+            );
+
+
+            $group_filter = isset($_GET['mc-group']) ? $_GET['mc-group'] : '';
+
+            if ($group_filter) {
+                $queryArr['find_group'] = $group_filter;
+            }
+
+            if ($series_filter) {
+                $queryArr['find_group_series'] = $series_filter;
+                $queryArr['groupby'] = 'none'; //No duplicates due to odd default
+
+            }
+
+            $content = $cms->get($queryArr);
         }
 
-        $_content  = isset($content["show"]) ? $content["show"] : [];
-        $pagination = new CustomPagination($_content , (isset($page) ? $page : 1), $howmany);
+        $_content = isset($content["show"]) ? $content["show"] : [];
+
+        $pagination = new CustomPagination($_content, (isset($page) ? $page : 1), $howmany);
         $pagination->setShowFirstAndLast(true);
         $resultsPagination = $pagination->getResults();
-?>
+        ?>
 
         <div id="brz-staffLayout__filters" class="brz-staffLayout__filters">
-            
+
             <?php if ($show_group_filter && !empty($groups['show'])) : ?>
-                <form id="brz-staffLayout__filters--form" name="brz-staffLayout__filters--form" class="brz-staffLayout__filters--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+                <form id="brz-staffLayout__filters--form" name="brz-staffLayout__filters--form"
+                      class="brz-staffLayout__filters--form" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
                     <div class="brz-staffLayout__filters--form-selectWrapper">
                         <select name="mc-group">
-                        <option value=""><?= $group_filter_heading ?></option>
+                            <option value=""><?= $group_filter_heading ?></option>
                             <option value="">All</option>
                             <?php
                             foreach ($groups['show'] as $group) {
@@ -104,15 +134,21 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                         </select>
                     </div>
                 </form>
-                <?php endif; ?>
+            <?php endif; ?>
 
             <?php if ($show_search) : ?>
-                <form method="get" id="brz-staffLayout__filters--form-search" name="search" class="brz-staffLayout__filters--form-search" action="<?= $baseURL ?>" data-count="<?= $filterCount ?>">
+                <form method="get" id="brz-staffLayout__filters--form-search" name="search"
+                      class="brz-staffLayout__filters--form-search" action="<?= $baseURL ?>"
+                      data-count="<?= $filterCount ?>">
                     <fieldset>
-                        <input type="text" id="brz-staffLayout__filters--form-search_term" name="mc-search_term" value="" placeholder="<?= $search_placeholder ?>" />
-                        <button type="submit" id="brz-staffLayout__filters--form-search_submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-icon-svg align-[initial]" data-type="fa" data-name="search">
+                        <input type="text" id="brz-staffLayout__filters--form-search_term" name="mc-search_term"
+                               value="" placeholder="<?= $search_placeholder ?>"/>
+                        <button type="submit" id="brz-staffLayout__filters--form-search_submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 class="brz-icon-svg align-[initial]" data-type="fa" data-name="search">
                                 <path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
-                            </svg></button>
+                            </svg>
+                        </button>
                     </fieldset>
                 </form>
             <?php endif; ?>
@@ -272,18 +308,18 @@ class StaffLayoutPlaceholder extends PlaceholderAbstract
                     }
                     ?>
                 </div>
-            <?php
-                if ($show_pagination){
+                <?php
+                if ($show_pagination) {
                     echo '<p id="brz-staffLayout__pagination" class="brz-staffLayout__pagination">' . $pagination->getLinks($_GET, 'mc-page') . '</p>';
                 }
             } else { ?>
 
                 <p class="brz-staffLayout-no-results">There are no staff available.</p>
 
-            <?php
+                <?php
             }
             ?>
         </div>
-<?php
+        <?php
     }
 }
