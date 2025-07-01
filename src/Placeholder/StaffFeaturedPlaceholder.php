@@ -31,9 +31,13 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
             'show_meta_icons'    => false,
             'show_full_email'    => false,
             'show_previous_page' => false,
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
         ], $placeholder->getAttributes());
 
         extract($settings);
+        $detail_url         = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
+
 
         if (!$staff_slug) {
             $recent = $this->monkCMS->get([
@@ -71,13 +75,19 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
             <div class="brz-staffFeatured__item">
                 <?php
                 if ($show_image && $member['photourl']) {
-                    echo "<div class=\"brz-ministryBrands__item--media\">
-                    <img src=\"{$member['photourl']}\" alt=\"\" />
-                    </div>";
+                    echo "<div class=\"brz-ministryBrands__item--media\">";
+                    if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$member['slug']}\">";
+                    echo "<img src=\"{$member['photourl']}\" alt=\"\" />";
+                    if ($detail_url) echo "</a>";
+                    echo "</div>";
                 }
 
                 if ($show_title) {
-                    echo "<h3 class=\"brz-staffFeatured__item--meta--title brz-ministryBrands__item--meta-title\">{$member['fullname']}</h3>";
+                    echo "<h3 class=\"brz-staffFeatured__item--meta--title brz-ministryBrands__item--meta-title\">";
+                    if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$member['slug']}\">";
+                    echo "{$member['fullname']}";
+                    if ($detail_url) echo "</a>";
+                    echo "</h3>";
                 }
 
                 if ($show_position && $member['position']) {
@@ -170,6 +180,10 @@ class StaffFeaturedPlaceholder extends PlaceholderAbstract
 
                 if ($show_about && $member['about']) {
                     echo "<div class=\"brz-staffFeatured__item--about\">{$member['about']}</div>";
+                }
+
+                if ($detail_url && $detail_page_button_text) {
+                    echo "<p class=\"brz-ministryBrands__item--meta--button\"><a href=\"{$detail_url}?mc-slug={$member['slug']}\" class=\"brz-ministryBrands__item--meta--links\"><span class=\"brz-button-text\">{$detail_page_button_text}</span></a></p>";
                 }
 
                 if ($show_previous_page) {
