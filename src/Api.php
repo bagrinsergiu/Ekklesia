@@ -228,6 +228,21 @@ class Api
 		return $options;
 	}
 
+    /**
+     * @throws Exception
+     */
+    public function getGroupSeries()
+    {
+        $groups  = $this->monkCms->get(['module'  => 'series', 'display' => 'list', 'type' => 'group']);
+        $options = [];
+
+        foreach ($groups['show'] as $serie) {
+            $options[$serie['slug']] = $serie['title'];
+        }
+
+        return $options;
+    }
+
 	/**
 	 * @throws Exception
 	 */
@@ -237,6 +252,10 @@ class Api
 			case 'sermon':
 			case 'smallgroup':
 			case 'group':
+            case 'staff':
+            case 'forms':
+            case 'groups':
+            case 'groupSeries':
 				$data = $this->{'get' . ucfirst($module)}($query);
 				break;
 			case 'event':
@@ -251,12 +270,7 @@ class Api
 			case 'sermonsLvl':
 				$data = $this->getCatsLevels('sermon');
 				break;
-			case 'groups':
-			case 'forms':
-			case 'staff':
-				$data = $this->{'get' . ucfirst($module)}($query);
-				break;
-			case 'recentSermons':
+            case 'recentSermons':
 				$data = $this->getRecent('sermon');
 				break;
 			case 'events':
