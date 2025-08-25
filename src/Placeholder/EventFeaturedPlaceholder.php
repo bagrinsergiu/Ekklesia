@@ -105,6 +105,11 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
         ?>
             <?php
             echo "<div class=\"brz-eventFeatured__item\">";
+            if ($show_image && $item['imageurl']) {
+                if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slugLink}\">";
+                echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                if ($detail_url) echo "</a>";
+            }
             if ($show_title) {
                 echo "<h2 class=\"brz-eventFeatured__item--meta--title brz-ministryBrands__item--meta-title\">";
                 if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slugLink}\">";
@@ -118,11 +123,6 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
                 $frequency = $item['eventtimesremarks'];
 
                 echo "<h5 class=\"brz-eventFeatured__item--meta--date brz-ministryBrands__item--meta-date\">{$frequency}, {$starttime} - {$endtime}</h5>";
-            }
-            if ($show_image && $item['imageurl']) {
-                if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$slugLink}\">";
-                echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
-                if ($detail_url) echo "</a>";
             }
             if ($show_category && $item['category']) {
                 echo "<h6 class=\"brz-eventFeatured__item--meta brz-ministryBrands__item--meta-category\">";

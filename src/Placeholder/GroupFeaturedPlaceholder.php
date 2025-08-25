@@ -95,6 +95,10 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
 
             <div class="brz-groupFeatured__item">
                 <?php
+                if ($show_image && $item['imageurl']) {
+                    echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
+                }
+
                 if ($show_title) {
                     echo "<h2 class=\"brz-groupFeatured__item--meta--title brz-ministryBrands__item--meta-title\">";
                     if ($detail_url) echo "<a href=\"{$detail_url}?mc-slug={$item['slug']}\">";
@@ -120,10 +124,6 @@ class GroupFeaturedPlaceholder extends PlaceholderAbstract
                     if ($item['starttime']) echo date($date_format, strtotime($item['starttime']));
                     if ($item['endtime']) echo " - " . date($date_format, strtotime($item['endtime']));
                     echo "</h5>";
-                }
-
-                if ($show_image && $item['imageurl']) {
-                    echo "<div class=\"brz-ministryBrands__item--media\"><img src=\"{$item['imageurl']}\" alt=\"\" /></div>";
                 }
 
                 if ($show_category && $item['category']) {
