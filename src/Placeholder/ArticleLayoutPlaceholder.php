@@ -133,6 +133,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $group_filter_heading ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($groups["group_show"], function($a, $b) {
+                                return strcasecmp($a["title"], $b["title"]);
+                            });
                             foreach ($groups['group_show'] as $group) {
                                 echo "<option value=\"{$group['slug']}\"";
                                 if (isset($_GET['mc-group']) && $_GET['mc-group'] == $group['slug']) {
@@ -154,6 +157,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <?php
                             //since this is the main category filter this will always show the
                             if ($category_filter_parent && !empty($categories['level3'])) {
+                                usort($categories["level3"], function($a, $b) {
+                                    return strcasecmp($a["name"], $b["name"]);
+                                });
                                 foreach ($categories['level3'] as $category) {
                                     if ($category['slug'] != $category_filter_parent) {
                                         continue;
@@ -166,6 +172,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                                 }
                             } else {
                                 if ($parent_category != "") {
+                                    usort($categories_parent["level1"], function($a, $b) {
+                                        return strcasecmp($a["name"], $b["name"]);
+                                    });
                                     foreach ($categories_parent["level1"] as $category) {
                                         echo "<option value=\"{$category['slug']}\"";
                                         if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
@@ -174,6 +183,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                                         echo ">{$category['name']}</option>";
                                     }
                                 } else {
+                                    usort($categories["show"], function($a, $b) {
+                                        return strcasecmp($a["name"], $b["name"]);
+                                    });
                                     foreach ($categories["show"] as $category) {
                                         echo "<option value=\"{$category['slug']}\"";
                                         if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
@@ -195,6 +207,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $category_filter_heading_add1 ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($categories["level3"], function($a, $b) {
+                                return strcasecmp($a["name"], $b["name"]);
+                            });
                             foreach ($categories["level3"] as $category) {
                                 if ($category["slug"] != $category_filter_parent_add1) {
                                     continue;
@@ -217,6 +232,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $category_filter_heading_add2 ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($categories["level3"], function ($a, $b) {
+                                return strcasecmp($a["name"], $b["name"]);
+                            });
                             foreach ($categories["level3"] as $category) {
                                 if ($category["slug"] != $category_filter_parent_add2) {
                                     continue;
@@ -239,6 +257,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $category_filter_heading_add3 ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($categories["level3"], function ($a, $b) {
+                                return strcasecmp($a["name"], $b["name"]);
+                            });
                             foreach ($categories["level3"] as $category) {
                                 if ($category["slug"] != $category_filter_parent_add3) {
                                     continue;
@@ -260,6 +281,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $series_filter_heading ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($series['group_show'], function ($a, $b) {
+                                return strcasecmp($a["title"], $b["title"]);
+                            });
                             foreach ($series['group_show'] as $serie) {
                                 echo "<option value=\"{$serie['slug']}\"";
                                 if (isset($_GET['mc-series']) && $_GET['mc-series'] == $serie['slug']) {
@@ -278,6 +302,9 @@ class ArticleLayoutPlaceholder extends PlaceholderAbstract
                             <option value=""><?= $author_filter_heading ?></option>
                             <option value="">All</option>
                             <?php
+                            usort($authors["group_show"], function($a, $b) {
+                                return strcasecmp($a["title"], $b["title"]);
+                            });
                             foreach ($authors['group_show'] as $val) {
                                 echo "<option value=\"{$val['slug']}\"";
                                 if (isset($_GET['mc-author']) && $_GET['mc-author'] == $val['slug']) {
