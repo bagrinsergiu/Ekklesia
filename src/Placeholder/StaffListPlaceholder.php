@@ -12,44 +12,44 @@ class StaffListPlaceholder extends PlaceholderAbstract
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $settings = array_merge([
-            'group'                   => '',
-            'show_images'             => true,
-            'show_title'              => true,
-            'show_position'           => true,
-            'show_groups'             => false,
-            'show_phone_work'         => false,
-            'show_phone_cell'         => false,
-            'show_email'              => false,
-            'show_facebook'           => false,
-            'show_twitter'            => false,
-            'show_website'            => false,
-            'show_instagram'          => false,
-            'show_meta_headings'      => false,
-            'show_meta_icons'         => false,
-            'howmany'                 => 9,
+            'group' => '',
+            'show_images' => true,
+            'show_title' => true,
+            'show_position' => true,
+            'show_groups' => false,
+            'show_phone_work' => false,
+            'show_phone_cell' => false,
+            'show_email' => false,
+            'show_facebook' => false,
+            'show_twitter' => false,
+            'show_website' => false,
+            'show_instagram' => false,
+            'show_meta_headings' => false,
+            'show_meta_icons' => false,
+            'howmany' => 9,
             'detail_page_button_text' => '',
-            'detail_page'             => '',
-            'show_full_email'         => false,
-            'show_pagination'         => true,
+            'detail_page' => '',
+            'show_full_email' => false,
+            'show_pagination' => true,
         ], $placeholder->getAttributes());
 
         extract($settings);
 
         $detail_url = $detail_page ? $this->replacer->replacePlaceholders(urldecode($detail_page), $context) : '';
-        $cms        = $this->monkCMS;
-        $content    = $cms->get([
-            'module'      => 'member',
-            'display'     => 'list',
-            'order'       => 'position',
+        $cms = $this->monkCMS;
+        $content = $cms->get([
+            'module' => 'member',
+            'display' => 'list',
+            'order' => 'position',
             'emailencode' => 'no',
-            'restrict'    => 'no',
-            'find_group'  => $group,
+            'restrict' => 'no',
+            'find_group' => $group,
         ]);
 
-        $_content  = isset($content["show"]) ? $content["show"] : [];
-        $page      = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
+        $_content = isset($content["show"]) ? $content["show"] : [];
+        $page = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
 
-        $pagination = new CustomPagination($_content , (isset($page) ? $page : 1), $howmany);
+        $pagination = new CustomPagination($_content, (isset($page) ? $page : 1), $howmany);
         $pagination->setShowFirstAndLast(true);
         $resultsPagination = $pagination->getResults();
         ?>
@@ -76,7 +76,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
                             echo "</div>";
 
                             echo "<ul class=\"brz-staffList__social\">";
-                            if (!empty($item['customhideemail']) && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
+                            if (empty($item['customhideemail']) && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
                                 $encoded_email = base64_encode($item['emailaddress']);
                                 echo "<li><a class='brz-staffList__link' data-brz-email=\"{$encoded_email}\" title=\"Email\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" class=\"brz-icon-svg align-[initial]\"><path d=\"M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z\"></path></svg></a></li>";
@@ -144,7 +144,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
                             echo "</span></p>";
                         }
 
-                        if (!empty($item['customhideemail']) && $show_full_email && ($item['emailaddress'] || $item['altemailaddress'])) {
+                        if (empty($item['customhideemail']) && $show_full_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                             $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
                             echo "<p class=\"brz-staffList__item--meta brz-ministryBrands__item--meta-full-email\">";
                             if ($show_meta_headings) {
@@ -201,11 +201,11 @@ class StaffListPlaceholder extends PlaceholderAbstract
                                           </span>";
                                 }
 
-                                 if ($show_meta_headings) {
-                                     echo "Cell: {$item['cellphone']}";
-                                 } else {
-                                     echo "{$item['cellphone']}";
-                                 }
+                                if ($show_meta_headings) {
+                                    echo "Cell: {$item['cellphone']}";
+                                } else {
+                                    echo "{$item['cellphone']}";
+                                }
                             } else {
                                 echo "{$item['cellphone']}";
                             }
@@ -215,7 +215,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
 
                         if (!$show_images) {
                             echo "<ul class=\"brz-staffList__social brz-staffList_no-image\">";
-                            if (!empty($item['customhideemail']) && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
+                            if (empty($item['customhideemail']) && !$show_full_email && $show_email && ($item['emailaddress'] || $item['altemailaddress'])) {
                                 $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
                                 $encoded_email = base64_encode($item['emailaddress']);
                                 echo "<li><a class='brz-staffList__link' data-brz-email=\"{$encoded_email}\" title=\"Email\"><svg class=\"brz-icon-svg align-[initial]\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z\"/></svg></a></li>";
