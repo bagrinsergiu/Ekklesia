@@ -101,7 +101,7 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
 
 	public function getPlaceholder()
 	{
-		// TODO: Implement getPlaceholder() method.
+        return $this->name;
 	}
 
 	public function setPlaceholder($placeholder)
