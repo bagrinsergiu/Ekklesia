@@ -7,7 +7,7 @@ use BrizyPlaceholders\ContextInterface;
 
 class SermonDetailPlaceholder extends PlaceholderAbstract
 {
-	protected $name = 'ekk_sermon_detail';
+    const NAME = 'ekk_sermon_detail';
 
 	public function echoValue( ContextInterface $context, ContentPlaceholder $placeholder )
 	{

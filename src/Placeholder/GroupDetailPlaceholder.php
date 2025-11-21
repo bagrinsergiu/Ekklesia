@@ -7,7 +7,7 @@ use BrizyPlaceholders\ContextInterface;
 
 class GroupDetailPlaceholder extends PlaceholderAbstract
 {
-	protected $name = 'ekk_group_detail';
+	const NAME = 'ekk_group_detail';
 
 	public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
 	{
