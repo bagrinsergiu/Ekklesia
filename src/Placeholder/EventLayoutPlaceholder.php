@@ -13,7 +13,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_event_layout';
+    const NAME = 'ekk_event_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

@@ -10,7 +10,7 @@ use DateTimeZone;
 
 class EventDetailPlaceholder extends PlaceholderAbstract
 {
-    protected $name = 'ekk_event_detail';
+    const NAME = 'ekk_event_detail';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

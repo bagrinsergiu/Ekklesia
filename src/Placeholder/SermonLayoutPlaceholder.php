@@ -10,7 +10,7 @@ class SermonLayoutPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_sermon_layout';
+    const NAME = 'ekk_sermon_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

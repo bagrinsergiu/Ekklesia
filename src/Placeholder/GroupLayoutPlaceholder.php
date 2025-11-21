@@ -10,7 +10,7 @@ class GroupLayoutPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_group_layout';
+    const NAME = 'ekk_group_layout';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
