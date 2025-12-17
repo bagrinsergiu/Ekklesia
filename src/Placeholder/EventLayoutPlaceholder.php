@@ -8,6 +8,8 @@ use BrizyPlaceholders\ContextInterface;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Exception;
+use ArrayIterator;
 
 class EventLayoutPlaceholder extends PlaceholderAbstract
 {
@@ -18,53 +20,53 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $options = [
-            'show_featured_view'           => true,
-            'view_order_featured'          => 1,
-            'view_featured_heading'        => 'Featured Events',
-            'howmanyfeatured'              => 9,
-            'column_count_featured'        => 3,
-            'column_count_featured_tablet' => 2,
-            'column_count_featured_mobile' => 1,
-            'show_images_featured'         => true,
-            'show_title_featured'          => true,
-            'show_date_featured'           => true,
-            'show_preview_featured'        => true,
-            'show_list_view'               => true,
-            'view_order_list'              => 2,
-            'view_list_heading'            => 'Events List',
-            'show_calendar_view'           => true,
-            'view_order_calendar'          => 3,
-            'view_calendar_heading'        => 'Full Calendar',
-            'howmanymonths'                => 1,
-            'detail_page'                  => false,
-            'detail_page_button_text'      => '',
-            'sticky_space'                 => 0,
-            'parent_category'              => '',
-            'category_filter_list'         => '',
-            'category_filter_list_add1'    => '',
-            'category_filter_list_add2'    => '',
-            'category_filter_list_add3'    => '',
-            'show_category_filter'         => true,
-            'category_filter_parent'       => '',
-            'category_filter_heading'      => 'Category',
-            'show_category_filter_add1'    => false,
-            'category_filter_parent_add1'  => '',
-            'category_filter_heading_add1' => 'Category',
-            'show_category_filter_add2'    => false,
-            'category_filter_parent_add2'  => '',
-            'category_filter_heading_add2' => 'Category',
-            'show_category_filter_add3'    => true,
-            'category_filter_parent_add3'  => '',
-            'category_filter_heading_add3' => 'Category',
-            'show_group_filter'            => false,
-            'group_filter_heading'         => 'Group',
-            'show_search'                  => true,
-            'search_placeholder'           => 'Search',
-            'featuredActive'               => '',
-            'listActive'                   => '',
-            'calendarActive'               => '',
-            'date_format'                  => 'g:i a',
-            'group_slug'                   => '',
+                'show_featured_view'           => true,
+                'view_order_featured'          => 1,
+                'view_featured_heading'        => 'Featured Events',
+                'howmanyfeatured'              => 9,
+                'column_count_featured'        => 3,
+                'column_count_featured_tablet' => 2,
+                'column_count_featured_mobile' => 1,
+                'show_images_featured'         => true,
+                'show_title_featured'          => true,
+                'show_date_featured'           => true,
+                'show_preview_featured'        => true,
+                'show_list_view'               => true,
+                'view_order_list'              => 2,
+                'view_list_heading'            => 'Events List',
+                'show_calendar_view'           => true,
+                'view_order_calendar'          => 3,
+                'view_calendar_heading'        => 'Full Calendar',
+                'howmanymonths'                => 1,
+                'detail_page'                  => false,
+                'detail_page_button_text'      => '',
+                'sticky_space'                 => 0,
+                'parent_category'              => '',
+                'category_filter_list'         => '',
+                'category_filter_list_add1'    => '',
+                'category_filter_list_add2'    => '',
+                'category_filter_list_add3'    => '',
+                'show_category_filter'         => true,
+                'category_filter_parent'       => '',
+                'category_filter_heading'      => 'Category',
+                'show_category_filter_add1'    => false,
+                'category_filter_parent_add1'  => '',
+                'category_filter_heading_add1' => 'Category',
+                'show_category_filter_add2'    => false,
+                'category_filter_parent_add2'  => '',
+                'category_filter_heading_add2' => 'Category',
+                'show_category_filter_add3'    => true,
+                'category_filter_parent_add3'  => '',
+                'category_filter_heading_add3' => 'Category',
+                'show_group_filter'            => false,
+                'group_filter_heading'         => 'Group',
+                'show_search'                  => true,
+                'search_placeholder'           => 'Search',
+                'featuredActive'               => '',
+                'listActive'                   => '',
+                'calendarActive'               => '',
+                'date_format'                  => 'g:i a',
+                'group_slug'                   => '',
         ];
 
         $attrs    = $placeholder->getAttributes();
@@ -134,9 +136,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         ${$view . "Active"} = "brz-eventLayout--view-active";
 
         $categories = $cms->get([
-            'module'     => 'event',
-            'display'    => 'categories',
-            'find_group' => $group_slug ?: $requestGroup
+                'module'     => 'event',
+                'display'    => 'categories',
+                'find_group' => $group_slug ?: $requestGroup
         ]);
 
         if (!isset($categories['show'])) {
@@ -144,40 +146,40 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         }
 
         $categories_parent = $cms->get([
-            'module'          => 'event',
-            'display'         => 'categories',
-            'parent_category' => $parent_category,
+                'module'          => 'event',
+                'display'         => 'categories',
+                'parent_category' => $parent_category,
         ]);
 
         $groups = [];
         if ($show_group_filter) {
             $groups = $cms->get([
-                'module'  => 'group',
-                'display' => 'list'
+                    'module'  => 'group',
+                    'display' => 'list'
             ]);
         }
 
         if (isset($_GET['mc-search'])) {
             $content    = [];
             $search_arr = $cms->get([
-                'module'        => 'search',
-                'display'       => 'results',
-                'howmany'       => $howmanyfeatured,
-                'find_category' => $parent_category,
-                'keywords'      => $_GET['mc-search'],
-                'find_module'   => 'event',
-                'hide_module'   => 'media',
-                'after_show'    => '__pagination__'
+                    'module'        => 'search',
+                    'display'       => 'results',
+                    'howmany'       => $howmanyfeatured,
+                    'find_category' => $parent_category,
+                    'keywords'      => $_GET['mc-search'],
+                    'find_module'   => 'event',
+                    'hide_module'   => 'media',
+                    'after_show'    => '__pagination__'
             ]);
 
             if(isset($search_arr['show'])){
                 foreach ($search_arr['show'] as $search) {
                     //$search['slug'] = str_replace('/event/','',$search['url']);
                     $item = $cms->get([
-                        'module'      => 'event',
-                        'display'     => 'detail',
-                        'emailencode' => 'no',
-                        'find'        => $search['slug'],
+                            'module'      => 'event',
+                            'display'     => 'detail',
+                            'emailencode' => 'no',
+                            'find'        => $search['slug'],
                     ]);
 
                     if (!isset($item['show'])) {
@@ -196,24 +198,24 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
             if ($view == "featured") {
                 $content = $cms->get([
-                    'module'               => 'event',
-                    'display'              => 'list',
-                    'emailencode'          => 'no',
-                    'features'             => 'features',
-                    'howmany'              => $howmanyfeatured,
-                    'find_parent_category' => $parent_category
+                        'module'               => 'event',
+                        'display'              => 'list',
+                        'emailencode'          => 'no',
+                        'features'             => 'features',
+                        'howmany'              => $howmanyfeatured,
+                        'find_parent_category' => $parent_category
                 ]);
             } else {
                 $content = $cms->get([
-                    'module'               => 'event',
-                    'display'              => 'list',
-                    'emailencode'          => 'no',
-                    'recurring'            => 'yes',
-                    'repeatevent'          => 'yes',
-                    'groupby'              => 'day',
-                    'howmanydays'          => $calendarDays,
-                    'find_parent_category' => $parent_category,
-                    'find_group'           => $group_slug ?: $requestGroup
+                        'module'               => 'event',
+                        'display'              => 'list',
+                        'emailencode'          => 'no',
+                        'recurring'            => 'yes',
+                        'repeatevent'          => 'yes',
+                        'groupby'              => 'day',
+                        'howmanydays'          => $calendarDays,
+                        'find_parent_category' => $parent_category,
+                        'find_group'           => $group_slug ?: $requestGroup
                 ]);
             }
 
@@ -231,21 +233,21 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                 $content["show"] = self::searchArray($content["show"], $_GET["mc-category-3"]);
             }
         }
-?>
+        ?>
 
-    <div id="brz-eventLayout--view" class="brz-eventLayout--view">
+        <div id="brz-eventLayout--view" class="brz-eventLayout--view">
             <ul>
                 <?php if ($show_featured_view): ?>
                     <li class="featured <?= $featuredActive ?>" data-order="<?= $view_order_featured ?>"><a
-                        href="<?= $baseURL ?>?mc-view=featured"><?= $view_featured_heading ?></a></li>
+                                href="<?= $baseURL ?>?mc-view=featured"><?= $view_featured_heading ?></a></li>
                 <?php endif; ?>
                 <?php if ($show_list_view): ?>
                     <li class="<?= $listActive ?>" data-order="<?= $view_order_list ?>"><a
-                        href="<?= $this->buildViewUrl($baseURL, 'list'); ?>"><?= $view_list_heading ?></a></li>
+                                href="<?= $this->buildViewUrl($baseURL, 'list'); ?>"><?= $view_list_heading ?></a></li>
                 <?php endif; ?>
                 <?php if ($show_calendar_view): ?>
                     <li class="<?= $calendarActive ?>" data-order="<?= $view_order_calendar ?>"><a
-                        href="<?= $this->buildViewUrl($baseURL, 'calendar'); ?>"><?= $view_calendar_heading ?></a></li>
+                                href="<?= $this->buildViewUrl($baseURL, 'calendar'); ?>"><?= $view_calendar_heading ?></a></li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -256,47 +258,56 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
                 <?php if ($show_group_filter && !empty($groups['show']) && !$group_slug): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="mc-group" class='sorter' >
-                                <option><?= $group_filter_heading ?></option>
-                                <option value="">All</option>
-                                <?php
-                                foreach ($groups['show'] as $group) {
-                                    echo "<option value=\"{$group['slug']}\"";
-                                    if ($requestGroup == $group['slug']) {
-                                        echo " selected";
-                                    }
-                                    echo ">{$group['title']}</option>";
+                        <select name="mc-group" class='sorter' >
+                            <option><?= $group_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            foreach ($groups['show'] as $group) {
+                                echo "<option value=\"{$group['slug']}\"";
+                                if ($requestGroup == $group['slug']) {
+                                    echo " selected";
                                 }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+                                echo ">{$group['title']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
 
-                    <?php
+                <?php
                 if ($show_category_filter): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
                         <select name="mc-category" class='sorter' >
-                                <option value=""><?= $category_filter_heading ?></option>
-                                <option value="">All</option>
-                                <?php
-                                if (is_array($category_filter_list)) {
-                                    foreach ($category_filter_list as $category) {
-                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                        $catMatch = $categories['show'][$catKey];
-                                        if ($catKey !== FALSE) {
-                                            echo "<option value=\"{$catMatch['slug']}\"";
-                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $catMatch['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$catMatch['name']}</option>";
+                            <option value=""><?= $category_filter_heading ?></option>
+                            <option value="">All</option>
+                            <?php
+                            if (is_array($category_filter_list)) {
+                                foreach ($category_filter_list as $category) {
+                                    $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                    $catMatch = $categories['show'][$catKey];
+                                    if ($catKey !== FALSE) {
+                                        echo "<option value=\"{$catMatch['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $catMatch['slug']) {
+                                            echo " selected";
                                         }
+                                        echo ">{$catMatch['name']}</option>";
                                     }
-                                } //since this is the main category filter this will always show
-                                elseif ($category_filter_parent) {
-                                    foreach ($categories["level3"] as $category) {
-                                        if ($category["parentid"] != $category_filter_parent) {
-                                            continue;
-                                        }
+                                }
+                            } //since this is the main category filter this will always show
+                            elseif ($category_filter_parent) {
+                                foreach ($categories["level3"] as $category) {
+                                    if ($category["parentid"] != $category_filter_parent) {
+                                        continue;
+                                    }
+                                    echo "<option value=\"{$category['slug']}\"";
+                                    if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                        echo " selected";
+                                    }
+                                    echo ">{$category['name']}</option>";
+                                }
+                            } else {
+                                if ($parent_category != "") {
+                                    foreach ($categories_parent["level1"] as $category) {
                                         echo "<option value=\"{$category['slug']}\"";
                                         if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
                                             echo " selected";
@@ -304,137 +315,128 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                                         echo ">{$category['name']}</option>";
                                     }
                                 } else {
-                                    if ($parent_category != "") {
-                                        foreach ($categories_parent["level1"] as $category) {
-                                            echo "<option value=\"{$category['slug']}\"";
-                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$category['name']}</option>";
+                                    foreach ($categories["show"] as $category) {
+                                        echo "<option value=\"{$category['slug']}\"";
+                                        if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
+                                            echo " selected";
                                         }
-                                    } else {
-                                        foreach ($categories["show"] as $category) {
-                                            echo "<option value=\"{$category['slug']}\"";
-                                            if (isset($_GET['mc-category']) && $_GET['mc-category'] == $category['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$category['name']}</option>";
-                                        }
+                                        echo ">{$category['name']}</option>";
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
 
-                    <?php
+                <?php
                 if ($show_category_filter_add1 && ($category_filter_parent_add1 != "" || is_array($category_filter_list_add1))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="mc-category-1" class='sorter' >
-                                <option value=""><?= $category_filter_heading_add1 ?></option>
-                                <option value="">All</option>
-                                <?php
-                                if (is_array($category_filter_list_add1)) {
-                                    foreach ($category_filter_list_add1 as $category) {
-                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                        $catMatch = $categories['show'][$catKey];
-                                        if ($catKey !== FALSE) {
-                                            echo "<option value=\"{$catMatch['slug']}\"";
-                                            if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $catMatch['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$catMatch['name']}</option>";
-                                        }
-                                    }
-                                } else {
-                                    foreach ($categories["level3"] as $category) {
-                                        if ($category["parentid"] != $category_filter_parent_add1) {
-                                            continue;
-                                        }
-                                        echo "<option value=\"{$category['slug']}\"";
-                                        if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $category['slug']) {
+                        <select name="mc-category-1" class='sorter' >
+                            <option value=""><?= $category_filter_heading_add1 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            if (is_array($category_filter_list_add1)) {
+                                foreach ($category_filter_list_add1 as $category) {
+                                    $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                    $catMatch = $categories['show'][$catKey];
+                                    if ($catKey !== FALSE) {
+                                        echo "<option value=\"{$catMatch['slug']}\"";
+                                        if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $catMatch['slug']) {
                                             echo " selected";
                                         }
-                                        echo ">{$category['name']}</option>";
+                                        echo ">{$catMatch['name']}</option>";
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+                            } else {
+                                foreach ($categories["level3"] as $category) {
+                                    if ($category["parentid"] != $category_filter_parent_add1) {
+                                        continue;
+                                    }
+                                    echo "<option value=\"{$category['slug']}\"";
+                                    if (isset($_GET['mc-category-1']) && $_GET['mc-category-1'] == $category['slug']) {
+                                        echo " selected";
+                                    }
+                                    echo ">{$category['name']}</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
 
-                    <?php
+                <?php
                 if ($show_category_filter_add2 && ($category_filter_parent_add2 != "" || is_array($category_filter_list_add2))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="mc-category-2" class='sorter' >
-                                <option value=""><?= $category_filter_heading_add2 ?></option>
-                                <option value="">All</option>
-                                <?php
-                                if (is_array($category_filter_list_add2)) {
-                                    foreach ($category_filter_list_add2 as $category) {
-                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                        $catMatch = $categories['show'][$catKey];
-                                        if ($catKey !== FALSE) {
-                                            echo "<option value=\"{$catMatch['slug']}\"";
-                                            if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $catMatch['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$catMatch['name']}</option>";
-                                        }
-                                    }
-                                } else {
-                                    foreach ($categories["level3"] as $category) {
-                                        if ($category["parentid"] != $category_filter_parent_add2) {
-                                            continue;
-                                        }
-                                        echo "<option value=\"{$category['slug']}\"";
-                                        if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $category['slug']) {
+                        <select name="mc-category-2" class='sorter' >
+                            <option value=""><?= $category_filter_heading_add2 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            if (is_array($category_filter_list_add2)) {
+                                foreach ($category_filter_list_add2 as $category) {
+                                    $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                    $catMatch = $categories['show'][$catKey];
+                                    if ($catKey !== FALSE) {
+                                        echo "<option value=\"{$catMatch['slug']}\"";
+                                        if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $catMatch['slug']) {
                                             echo " selected";
                                         }
-                                        echo ">{$category['name']}</option>";
+                                        echo ">{$catMatch['name']}</option>";
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+                            } else {
+                                foreach ($categories["level3"] as $category) {
+                                    if ($category["parentid"] != $category_filter_parent_add2) {
+                                        continue;
+                                    }
+                                    echo "<option value=\"{$category['slug']}\"";
+                                    if (isset($_GET['mc-category-2']) && $_GET['mc-category-2'] == $category['slug']) {
+                                        echo " selected";
+                                    }
+                                    echo ">{$category['name']}</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
 
-                    <?php
+                <?php
                 if ($show_category_filter_add3 && ($category_filter_parent_add3 != "" || is_array($category_filter_list_add3))): ?>
                     <div class="brz-eventLayout--filters-form-selectWrapper">
-                    <select name="mc-category-3" class='sorter' >
-                                <option value=""><?= $category_filter_heading_add3 ?></option>
-                                <option value="">All</option>
-                                <?php
-                                if (is_array($category_filter_list_add3)) {
-                                    foreach ($category_filter_list_add3 as $category) {
-                                        $catKey = array_search($category, array_column($categories['show'], "slug"));
-                                        $catMatch = $categories['show'][$catKey];
-                                        if ($catKey !== FALSE) {
-                                            echo "<option value=\"{$catMatch['slug']}\"";
-                                            if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $catMatch['slug']) {
-                                                echo " selected";
-                                            }
-                                            echo ">{$catMatch['name']}</option>";
-                                        }
-                                    }
-                                } else {
-                                    foreach ($categories["level3"] as $category) {
-                                        if ($category["parentid"] != $category_filter_parent_add3) {
-                                            continue;
-                                        }
-                                        echo "<option value=\"{$category['slug']}\"";
-                                        if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $category['slug']) {
+                        <select name="mc-category-3" class='sorter' >
+                            <option value=""><?= $category_filter_heading_add3 ?></option>
+                            <option value="">All</option>
+                            <?php
+                            if (is_array($category_filter_list_add3)) {
+                                foreach ($category_filter_list_add3 as $category) {
+                                    $catKey = array_search($category, array_column($categories['show'], "slug"));
+                                    $catMatch = $categories['show'][$catKey];
+                                    if ($catKey !== FALSE) {
+                                        echo "<option value=\"{$catMatch['slug']}\"";
+                                        if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $catMatch['slug']) {
                                             echo " selected";
                                         }
-                                        echo ">{$category['name']}</option>";
+                                        echo ">{$catMatch['name']}</option>";
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
-                    <input type="hidden" name="mc-view" value="<?= $view ?>"/>
+                            } else {
+                                foreach ($categories["level3"] as $category) {
+                                    if ($category["parentid"] != $category_filter_parent_add3) {
+                                        continue;
+                                    }
+                                    echo "<option value=\"{$category['slug']}\"";
+                                    if (isset($_GET['mc-category-3']) && $_GET['mc-category-3'] == $category['slug']) {
+                                        echo " selected";
+                                    }
+                                    echo ">{$category['name']}</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+                <input type="hidden" name="mc-view" value="<?= $view ?>"/>
             </form>
 
             <?php if ($show_search): ?>
@@ -448,23 +450,23 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             <?php endif; ?>
         </div>
 
-            <?php if (isset($_GET['mc-search'])) {
-                echo "<h5 class=\"brz-eventLayout-results-heading\"><a href=\"{$baseURL}?mc-view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h5>";
-            }
-            ?>
-        <?php endif; //end hide from featured
+        <?php if (isset($_GET['mc-search'])) {
+            echo "<h5 class=\"brz-eventLayout-results-heading\"><a href=\"{$baseURL}?mc-view=list\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 352 512\" class=\"brz-icon-svg align-[initial]\" data-type=\"fa\" data-name=\"times\"><path d=\"M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z\"></path></svg></a> Search results for \"{$_GET['mc-search']}\"</h5>";
+        }
+        ?>
+    <?php endif; //end hide from featured
         ?>
 
         <?php
         //featured view
         if ($show_featured_view && ($view == "featured" || $isEditor)):
 
-        ?>
+            ?>
             <div class="brz-eventLayout--featured__container">
                 <?php //output
                 if (!empty($content['show'])) {
-                ?>
-                
+                    ?>
+
                     <div class="brz-eventLayout--featured" data-columncount="<?php echo $column_count_featured; ?>"
                          data-columncount-tablet="<?php echo $column_count_featured_tablet; ?>"
                          data-columncount-mobile="<?php echo $column_count_featured_mobile; ?>">
@@ -529,14 +531,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
                         }
                         ?>
                     </div>
-                <?php
+                    <?php
                 } //no output
                 else {
-                ?>
+                    ?>
 
                     <p class="brz-eventLayout-no-results">There are no events available.</p>
 
-                <?php
+                    <?php
                 }
                 ?>
             </div>
@@ -547,68 +549,56 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         <?php
         //list view
         if ($show_list_view && ($view == "list" || $isEditor)):
-        ?>
+            ?>
             <div class="brz-eventLayout--list__container">
-
-                <?php //output
+                <?php
+                $listHtml = '';
                 if (isset($content['show']) && count($content['show']) > 0) {
-                    //iterate over each event and assign to month and day
                     foreach ($content["show"] as $show) {
                         $grouping_month = date("Y-m", strtotime($show["eventstart"]));
                         $grouping_day = date("Y-m-d", strtotime($show["eventstart"]));
                         $events[$grouping_month][$grouping_day][] = $show;//set first dimension to day and then assign all events as second level to that day
                     }
-                    echo "<div class=\"brz-eventLayout--list\">";
-                    echo self::draw_list($events, $detail_url, $date_format);
-                    echo "</div>";
-                } //no output
-                else {
-                ?>
 
-                    <p class="brz-eventLayout-no-results">There are no events available.</p>
-
-                <?php
+                    $listHtml = self::draw_list($events, $detail_url, $date_format);
                 }
                 ?>
+                <?php if ($listHtml): ?>
+                    <div class="brz-eventLayout--list">
+                        <?php echo $listHtml; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="brz-eventLayout-no-results">There are no events available.</p>
+                <?php endif; ?>
             </div>
-        <?php endif; //end list view
-        ?>
+        <?php endif; //end list view ?>
 
         <?php
-        //calendar view
-        if ($show_calendar_view && ($view == "calendar" || $isEditor)):
-        ?>
+        if ($show_calendar_view && ($view == "calendar" || $isEditor)): ?>
             <div class="brz-eventLayout--calendar__container">
-
-                <?php //output
+                <?php
+                $calendarHtml = '';
                 if (!empty($content['show'])) {
                     //iterate over each event and assign to month and day
                     foreach ($content["show"] as $show) {
-                        $grouping_month = date("Y-m", strtotime($show["eventstart"]));
-                        $grouping_day = date("Y-m-d", strtotime($show["eventstart"]));
+                        $grouping_month                           = date("Y-m", strtotime($show["eventstart"]));
+                        $grouping_day                             = date("Y-m-d", strtotime($show["eventstart"]));
                         $events[$grouping_month][$grouping_day][] = $show;//set first dimension to day and then assign all events as second level to that day
                     }
-                ?>
 
-                    <div class="brz-eventLayout--calendar">
-                        <?php
-                        echo self::draw_calendar($events, $detail_url);
-                        ?>
-                    </div>
-                <?php
-                } //no output
-                else {
-                ?>
-
-                    <p class="brz-eventLayout-no-results">There are no events available.</p>
-
-                <?php
+                    $calendarHtml = self::draw_calendar($events, $detail_url);
                 }
                 ?>
+                <?php if ($calendarHtml): ?>
+                    <div class="brz-eventLayout--calendar">
+                        <?php echo $calendarHtml; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="brz-eventLayout-no-results">There are no events available.</p>
+                <?php endif ?>
             </div>
-        <?php endif; //end calendar view
-        ?>
-<?php
+        <?php endif; //end calendar view ?>
+        <?php
     }
 
     /*
@@ -643,8 +633,11 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
         $results  	= false;
         $period   	= self::get_period($events);
-        
         $period_arr = iterator_to_array($period);
+
+        if (empty($period_arr)) {
+            return '';
+        }
 
         $start_month = reset($period_arr);
         $start_month_format = $start_month->format("Y-m");
@@ -768,9 +761,14 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
     private function draw_calendar($events = null, $detail_url = null)
     {
-        $results            = false;
-        $period             = self::get_period($events);
-        $period_arr         = iterator_to_array($period);
+        $results    = false;
+        $period     = self::get_period($events);
+        $period_arr = iterator_to_array($period);
+
+        if (empty($period_arr)) {
+            return '';
+        }
+
         $start_month        = reset($period_arr);
         $start_month_format = $start_month->format("Y-m");
         $end_month          = end($period_arr);
@@ -820,9 +818,9 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
             else {
                 //get table of month and pass/format events
                 $results .= self::draw_calendar_table($month_format_month,
-                    $month_format_year,
-                    $events[$month_format],
-                    $detail_url);
+                        $month_format_year,
+                        $events[$month_format],
+                        $detail_url);
 
             }//end if
 
@@ -922,12 +920,18 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
     //get period between two months
     private function get_period($events){
-        $last 		= key(end($events));
-        $first 		= key(reset($events));
+        try {
+            $last  = key(end($events));
+            $first = key(reset($events));
+        } catch (Exception $ex) {
+            return new ArrayIterator([]);
+        }
+
         $start    	= (new DateTime($first))->modify('first day of this month');
         $end      	= (new DateTime($last))->modify('first day of next month');
         $interval 	= DateInterval::createFromDateString('1 month');
         $period   	= new DatePeriod($start, $interval, $end);
+
         return $period;
     }
 
