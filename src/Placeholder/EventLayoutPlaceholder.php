@@ -75,10 +75,8 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         extract($settings);
 
         $cms             = $this->monkCMS;
-        $baseURL         = (strtok($_SERVER["REQUEST_URI"], '?') !== false) ? strtok($_SERVER["REQUEST_URI"],
-                '?') : $_SERVER["REQUEST_URI"];
-        $detail_url      = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']),
-                $context) : false;
+        $baseURL         = (strtok($_SERVER["REQUEST_URI"], '?') !== false) ? strtok($_SERVER["REQUEST_URI"], '?') : $_SERVER["REQUEST_URI"];
+        $detail_url      = $settings['detail_page'] ? $this->replacer->replacePlaceholders(urldecode($settings['detail_page']), $context) : false;
         $parent_category = $parent_category ? [$parent_category] : [];
         $calendarStart   = date('Y-m-d');
         $calendarEnd     = date('Y-m-d', strtotime("+{$howmanymonths} months"));
@@ -87,8 +85,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
         $diff            = $date1->diff($date2, true);
         $calendarDays    = $diff->format('%a');
         $requestGroup    = $_GET['mc-group'] ?? false;
-        $isEditor        = strpos($_SERVER['REQUEST_URI'],
-                        'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
+        $isEditor        = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
 
         if ($category_filter_list) {
             $category_filter_list = preg_replace("/\s+/", "", $category_filter_list);
@@ -224,8 +221,7 @@ class EventLayoutPlaceholder extends PlaceholderAbstract
 
             //filter categories separately since there can be more than 1 category filter
             if (!empty($_GET["mc-category"])) {
-                $content["show"] = self::searchArray(empty($content["show"]) ? [] : $content["show"],
-                        $_GET["mc-category"]);
+                $content["show"] = self::searchArray(empty($content["show"]) ? [] : $content["show"], $_GET["mc-category"]);
             }
             if (!empty($_GET["mc-category-1"])) {
                 $content["show"] = self::searchArray($content["show"], $_GET["mc-category-1"]);
