@@ -10,7 +10,8 @@ class EventFeaturedPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_event_featured';
+    const NAME = 'ekk_event_featured';
+
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $options = [

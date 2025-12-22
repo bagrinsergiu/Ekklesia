@@ -10,7 +10,7 @@ class GroupListPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_group_list';
+    const NAME = 'ekk_group_list';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

@@ -10,7 +10,7 @@ use DateTime;
 
 class EventCalendarPlaceholder extends PlaceholderAbstract
 {
-    protected $name = 'ekk_event_calendar';
+    const NAME = 'ekk_event_calendar';
 
     private $time = false;
 

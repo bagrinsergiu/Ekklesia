@@ -10,7 +10,7 @@ class GroupSliderPlaceholder extends PlaceholderAbstract
 {
     use HelperTrait;
 
-    protected $name = 'ekk_group_slider';
+    const NAME = 'ekk_group_slider';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

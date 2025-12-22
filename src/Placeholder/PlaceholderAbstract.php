@@ -13,11 +13,6 @@ use Twig_Environment;
 abstract class PlaceholderAbstract extends AbstractPlaceholder
 {
     /**
-     * @var string
-     */
-    protected $name = '';
-
-    /**
      * @var Twig_Environment
      */
     protected $twig;
@@ -42,15 +37,6 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
         $this->twig     = $twig;
         $this->monkCMS  = $monkCMS;
         $this->replacer = $replacer;
-    }
-
-    /**
-     * @param $placeholderName
-     * @return bool
-     */
-    public function support($placeholderName)
-    {
-        return $placeholderName == $this->name;
     }
 
     /**
@@ -101,7 +87,7 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
 
 	public function getPlaceholder()
 	{
-        return $this->name;
+        return static::NAME;
 	}
 
 	public function setPlaceholder($placeholder)

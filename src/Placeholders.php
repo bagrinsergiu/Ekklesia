@@ -50,30 +50,78 @@ class Placeholders
     public function getPlaceholders(Replacer $replacer)
     {
         return [
-            new SermonListPlaceholder($this->monkCms, $this->twig, $replacer),
-            new SermonLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
-            new SermonDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new SermonFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
-            new EventListPlaceholder($this->monkCms, $this->twig, $replacer),
-            new EventCalendarPlaceholder($this->monkCms, $this->twig, $replacer),
-            new EventLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
-            new EventDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new EventFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
-            new GroupListPlaceholder($this->monkCms, $this->twig, $replacer),
-            new GroupSliderPlaceholder($this->monkCms, $this->twig, $replacer),
-            new GroupLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
-            new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
-            new FormPlaceholder($this->monkCms, $this->twig, $replacer),
-            new PrayerPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleListPlaceholder($this->monkCms, $this->twig, $replacer),
-            new ArticleLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
-            new StaffListPlaceholder($this->monkCms, $this->twig, $replacer),
-            new StaffLayoutPlaceholder($this->monkCms, $this->twig, $replacer),
-            new StaffDetailPlaceholder($this->monkCms, $this->twig, $replacer),
-            new StaffFeaturedPlaceholder($this->monkCms, $this->twig, $replacer),
+            SermonListPlaceholder::NAME => function () use ($replacer) {
+                return new SermonListPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            SermonLayoutPlaceholder::NAME => function () use ($replacer) {
+                return new SermonLayoutPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            SermonDetailPlaceholder::NAME => function () use ($replacer) {
+                return new SermonDetailPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            SermonFeaturedPlaceholder::NAME => function () use ($replacer) {
+                return new SermonFeaturedPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            EventListPlaceholder::NAME => function () use ($replacer) {
+                return new EventListPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            EventCalendarPlaceholder::NAME => function () use ($replacer) {
+                return new EventCalendarPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            EventLayoutPlaceholder::NAME => function () use ($replacer) {
+                return new EventLayoutPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            EventDetailPlaceholder::NAME => function () use ($replacer) {
+                return new EventDetailPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            EventFeaturedPlaceholder::NAME => function () use ($replacer) {
+                return new EventFeaturedPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            GroupListPlaceholder::NAME => function () use ($replacer) {
+                return new GroupListPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            GroupSliderPlaceholder::NAME => function () use ($replacer) {
+                return new GroupSliderPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            GroupLayoutPlaceholder::NAME => function () use ($replacer) {
+                return new GroupLayoutPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            GroupDetailPlaceholder::NAME => function () use ($replacer) {
+                return new GroupDetailPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            GroupFeaturedPlaceholder::NAME => function () use ($replacer) {
+                return new GroupFeaturedPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            FormPlaceholder::NAME => function () use ($replacer) {
+                return new FormPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            PrayerPlaceholder::NAME => function () use ($replacer) {
+                return new PrayerPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            ArticleDetailPlaceholder::NAME => function () use ($replacer) {
+                return new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            ArticleFeaturedPlaceholder::NAME => function () use ($replacer) {
+                return new ArticleFeaturedPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            ArticleListPlaceholder::NAME => function () use ($replacer) {
+                return new ArticleListPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            ArticleLayoutPlaceholder::NAME => function () use ($replacer) {
+                return new ArticleLayoutPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            StaffListPlaceholder::NAME => function () use ($replacer) {
+                return new StaffListPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            StaffLayoutPlaceholder::NAME => function () use ($replacer) {
+                return new StaffLayoutPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            StaffDetailPlaceholder::NAME => function () use ($replacer) {
+                return new StaffDetailPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            StaffFeaturedPlaceholder::NAME => function () use ($replacer) {
+                return new StaffFeaturedPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
         ];
     }
 }
