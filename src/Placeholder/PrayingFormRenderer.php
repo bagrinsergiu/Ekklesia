@@ -111,42 +111,54 @@ class PrayingFormRenderer
     }
 
     /**
-     * Render the prayer form container with header and footer
+     * Render the complete prayer form with wrapper, form element, and all content
      */
-    public static function renderFormContainer($headerTitle = 'Submit a Prayer Request', $showCloseButton = false, $footerButtons = [])
+    public static function renderFormContainer($classPrefix = 'brz-ministryBrands-PrayingForm', $headerTitle = 'Submit a Prayer Request', $showCloseButton = false, $footerButtons = [])
     {
         ?>
-        <div class="brz-ministryBrands-PrayingForm-container">
-            <!-- Header -->
-            <div class="brz-ministryBrands-PrayingForm-header">
-                <div class="brz-ministryBrands-PrayingForm-title-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrands-PrayingForm-icon" viewBox="0 0 16 12.891" fill="currentColor">
-                        <path d="M8.755 1.149a.8.8 0 0 1 .583-.097c.194.049.365.17.462.34l2.917 4.376c.219.316.34.681.34 1.07v1.799c0 .146.097.316.243.365l1.945.632a.78.78 0 0 1 .535.729v2.334c0 .243-.122.486-.316.632s-.438.194-.681.122l-4.084-1.094A3.096 3.096 0 0 1 8.39 9.366V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v1.945c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.376c0-.17-.049-.34-.146-.486L8.487 2.219c-.049-.073-.073-.17-.097-.243a.8.8 0 0 1 0-.34.8.8 0 0 1 .365-.486zm-1.531 0a.8.8 0 0 1 .365.486.8.8 0 0 1 0 .34c-.024.073-.049.17-.097.243L5.4 5.89a.86.86 0 0 0-.122.486v2.042c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v2.893c0 1.41-.948 2.625-2.309 2.99L1.195 13.45c-.243.073-.486.024-.681-.122s-.292-.389-.292-.632v-2.333c0-.316.194-.632.51-.729l1.945-.632c.146-.073.267-.219.267-.389V6.838c0-.389.097-.754.316-1.07l2.918-4.375a.73.73 0 0 1 .802-.34c.097.024.17.049.243.097z"/>
-                    </svg>
-                    <h5 class="brz-ministryBrands-PrayingForm-title"><?php echo self::escapeHtml($headerTitle); ?></h5>
-                </div>
-                <?php if ($showCloseButton): ?>
-                    <button type="button" class="brz-ministryBrands-PrayingForm-close" data-dismiss="modal" aria-label="Close"
-                            style="position: absolute; right: 16px; top: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                <?php endif; ?>
-            </div>
-            <hr class="brz-ministryBrands-PrayingForm-divider">
+        <div id="emb_prayerform" class="<?php echo self::escapeHtml($classPrefix); ?>-form">
+            <form id="EmbPrayerForm" tabindex="-1" role="dialog" method="post">
+                <input type="hidden" name="action" value="ajaxEmbCreatePrayer"/>
+                <div class="<?php echo self::escapeHtml($classPrefix); ?>-content brz-p-relative">
+                    <div class="brz-p-absolute" style="top: 0; left: 0; right: 0; bottom: 0; display: none; justify-content: center; align-items: center; background: rgba(255,255,255,0.7); z-index: 1051;">
+                        <div class="<?php echo self::escapeHtml($classPrefix); ?>-spinner" role="status">
+                            <span class="<?php echo self::escapeHtml($classPrefix); ?>-visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="brz-ministryBrands-PrayingForm-container">
+                        <!-- Header -->
+                        <div class="brz-ministryBrands-PrayingForm-header">
+                            <div class="brz-ministryBrands-PrayingForm-title-wrapper">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrands-PrayingForm-icon" viewBox="0 0 16 12.891" fill="currentColor">
+                                    <path d="M8.755 1.149a.8.8 0 0 1 .583-.097c.194.049.365.17.462.34l2.917 4.376c.219.316.34.681.34 1.07v1.799c0 .146.097.316.243.365l1.945.632a.78.78 0 0 1 .535.729v2.334c0 .243-.122.486-.316.632s-.438.194-.681.122l-4.084-1.094A3.096 3.096 0 0 1 8.39 9.366V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v1.945c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.376c0-.17-.049-.34-.146-.486L8.487 2.219c-.049-.073-.073-.17-.097-.243a.8.8 0 0 1 0-.34.8.8 0 0 1 .365-.486zm-1.531 0a.8.8 0 0 1 .365.486.8.8 0 0 1 0 .34c-.024.073-.049.17-.097.243L5.4 5.89a.86.86 0 0 0-.122.486v2.042c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v2.893c0 1.41-.948 2.625-2.309 2.99L1.195 13.45c-.243.073-.486.024-.681-.122s-.292-.389-.292-.632v-2.333c0-.316.194-.632.51-.729l1.945-.632c.146-.073.267-.219.267-.389V6.838c0-.389.097-.754.316-1.07l2.918-4.375a.73.73 0 0 1 .802-.34c.097.024.17.049.243.097z"/>
+                                </svg>
+                                <h5 class="brz-ministryBrands-PrayingForm-title"><?php echo self::escapeHtml($headerTitle); ?></h5>
+                            </div>
+                            <?php if ($showCloseButton): ?>
+                                <button type="button" class="brz-ministryBrands-PrayingForm-close" data-dismiss="modal" aria-label="Close"
+                                        style="position: absolute; right: 16px; top: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <hr class="brz-ministryBrands-PrayingForm-divider">
 
-            <!-- Body -->
-            <div class="brz-ministryBrands-PrayingForm-fields">
-                <?php self::renderFormFields(); ?>
-            </div>
+                        <!-- Body -->
+                        <div class="brz-ministryBrands-PrayingForm-fields">
+                            <?php self::renderFormFields(); ?>
+                        </div>
 
-            <!-- Footer -->
-            <?php if (!empty($footerButtons)): ?>
-                <div class="brz-ministryBrands-PrayingForm-footer">
-                    <?php foreach ($footerButtons as $button): ?>
-                        <?php echo $button; ?>
-                    <?php endforeach; ?>
+                        <!-- Footer -->
+                        <?php if (!empty($footerButtons)): ?>
+                            <div class="brz-ministryBrands-PrayingForm-footer">
+                                <?php foreach ($footerButtons as $button): ?>
+                                    <?php echo $button; ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            <?php endif; ?>
+            </form>
         </div>
         <?php
     }
