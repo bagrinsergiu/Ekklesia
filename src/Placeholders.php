@@ -26,6 +26,7 @@ use BrizyEkklesia\Placeholder\StaffLayoutPlaceholder;
 use BrizyEkklesia\Placeholder\StaffListPlaceholder;
 use BrizyEkklesia\Placeholder\PrayerPlaceholder;
 use BrizyEkklesia\Placeholder\PrayerButtonPlaceholder;
+use BrizyEkklesia\Placeholder\PrayerFormPlaceholder;
 use BrizyEkklesia\Placeholder\StaffFeaturedPlaceholder;
 use BrizyPlaceholders\Replacer;
 use Twig_Environment;
@@ -101,6 +102,9 @@ class Placeholders
             },
             PrayerButtonPlaceholder::NAME => function () use ($replacer) {
                 return new PrayerButtonPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            PrayerFormPlaceholder::NAME => function () use ($replacer) {
+                return new PrayerFormPlaceholder($this->monkCms, $this->twig, $replacer);
             },
             ArticleDetailPlaceholder::NAME => function () use ($replacer) {
                 return new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer);
