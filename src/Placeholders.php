@@ -27,6 +27,7 @@ use BrizyEkklesia\Placeholder\StaffListPlaceholder;
 use BrizyEkklesia\Placeholder\PrayerPlaceholder;
 use BrizyEkklesia\Placeholder\PrayerButtonPlaceholder;
 use BrizyEkklesia\Placeholder\PrayerFormPlaceholder;
+use BrizyEkklesia\Placeholder\PrayerWallPlaceholder;
 use BrizyEkklesia\Placeholder\StaffFeaturedPlaceholder;
 use BrizyPlaceholders\Replacer;
 use Twig_Environment;
@@ -43,10 +44,23 @@ class Placeholders
      */
     private $twig;
 
-    public function __construct(MonkCms $monkCms, Twig_Environment $twig)
+    /**
+     * @var PrayerCloudApi|null
+     */
+    private $prayerCloudApi;
+
+    /**
+     * Endpoint URL for Prayer Wall htmx requests.
+     * @var string|null
+     */
+    private $prayerWallEndpointUrl;
+
+    public function __construct(MonkCms $monkCms, Twig_Environment $twig, PrayerCloudApi $prayerCloudApi = null, string $prayerWallEndpointUrl = null)
     {
-        $this->monkCms = $monkCms;
-        $this->twig    = $twig;
+        $this->monkCms               = $monkCms;
+        $this->twig                  = $twig;
+        $this->prayerCloudApi        = $prayerCloudApi;
+        $this->prayerWallEndpointUrl = $prayerWallEndpointUrl;
     }
 
     public function getPlaceholders(Replacer $replacer)
@@ -105,6 +119,9 @@ class Placeholders
             },
             PrayerFormPlaceholder::NAME => function () use ($replacer) {
                 return new PrayerFormPlaceholder($this->monkCms, $this->twig, $replacer);
+            },
+            PrayerWallPlaceholder::NAME => function () use ($replacer) {
+                return new PrayerWallPlaceholder($this->monkCms, $this->twig, $replacer, $this->prayerCloudApi, $this->prayerWallEndpointUrl);
             },
             ArticleDetailPlaceholder::NAME => function () use ($replacer) {
                 return new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer);
