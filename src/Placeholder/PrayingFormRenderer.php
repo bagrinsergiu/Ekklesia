@@ -136,7 +136,7 @@ class PrayingFormRenderer
                             </div>
                             <?php if ($showCloseButton): ?>
                                 <button type="button" class="brz-ministryBrands-PrayingForm-close" data-dismiss="modal" aria-label="Close"
-                                        style="position: absolute; right: 16px; top: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
+                                        style="background: none; border: none; font-size: 24px; cursor: pointer;">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             <?php endif; ?>
