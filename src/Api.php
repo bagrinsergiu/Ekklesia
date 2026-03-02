@@ -11,9 +11,15 @@ class Api
 	 */
 	private $monkCms;
 
-	public function __construct(MonkCms $monkCms)
+	/**
+	 * @var PrayerCloudApi|null
+	 */
+	private $prayerCloudApi;
+
+	public function __construct(MonkCms $monkCms, PrayerCloudApi $prayerCloudApi = null)
 	{
 		$this->monkCms = $monkCms;
+		$this->prayerCloudApi = $prayerCloudApi;
 	}
 
 	/**
@@ -243,6 +249,28 @@ class Api
         return $options;
     }
 
+	public function getPrayer($query)
+	{
+		if (!$this->prayerCloudApi) {
+			return [];
+		}
+
+		$tags = $this->prayerCloudApi->getTags('category');
+
+		if (!$tags || !isset($tags->data->category)) {
+			return [];
+		}
+
+		$options = [];
+		foreach ($tags->data->category as $tag) {
+			if (isset($tag->data->slug, $tag->data->name)) {
+				$options[$tag->data->slug] = $tag->data->name;
+			}
+		}
+
+		return $options;
+	}
+
 	/**
 	 * @throws Exception
 	 */
@@ -256,6 +284,7 @@ class Api
             case 'forms':
             case 'groups':
             case 'groupSeries':
+			case 'prayer':
 				$data = $this->{'get' . ucfirst($module)}($query);
 				break;
 			case 'event':

@@ -210,6 +210,24 @@ class PrayerCloudApi
         return $this->authenticatedRequest($this->approvalUrl($uuid), 'DELETE') !== null;
     }
 
+    /**
+     * Acknowledge a prayer using the full acknowledge link from the API response.
+     *
+     * @param string $ackLink Full URL from $prayer->links->acknowledge_prayer_link
+     *
+     * @return object|null Decoded JSON response or null on failure
+     */
+    public function acknowledgePrayer($ackLink)
+    {
+        $response = $this->authenticatedGet($ackLink);
+
+        if ($response === null) {
+            return null;
+        }
+
+        return json_decode($response);
+    }
+
     // ---------------------------------------------------------------
     //  Tags / Categories
     // ---------------------------------------------------------------

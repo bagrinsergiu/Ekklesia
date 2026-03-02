@@ -15,88 +15,34 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
     const HTMX_CDN_URL = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js';
 
-    /** @var bool Emit htmx script only once per page when rendering full HTML */
     private static $htmxScriptEmitted = false;
-
-    /**
-     * Endpoint URL for htmx requests (including any required query params, e.g. ?action=...).
-     * Set by the host (e.g. WordPress) when registering the placeholder.
-     */
-    protected $endpointUrl;
-
+    
     /**
      * @var PrayerCloudApi|null
      */
     protected $prayerCloudApi;
 
     public function __construct(
-        MonkCms $monkCMS,
+        MonkCms          $monkCMS,
         Twig_Environment $twig,
-        Replacer $replacer = null,
-        PrayerCloudApi $prayerCloudApi = null,
-        string $endpointUrl = null
+        Replacer         $replacer = null,
+        PrayerCloudApi   $prayerCloudApi = null
     ) {
         parent::__construct($monkCMS, $twig, $replacer);
         $this->prayerCloudApi = $prayerCloudApi;
-        $this->endpointUrl = $endpointUrl ?? '';
+        $this->endpointUrl    = '/m-b/placeholder/render';
     }
 
-    /**
-     * Parse endpoint URL into base URL (scheme + host + path) and existing query params.
-     * Used to build request URLs and to detect AJAX requests.
-     */
-    private function getEndpointBaseAndParams(): array
-    {
-        $parsed = parse_url($this->endpointUrl);
-        if ($parsed === false) {
-            return ['base' => $this->endpointUrl, 'params' => []];
-        }
-        $base = (isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '')
-            . ($parsed['host'] ?? '')
-            . (isset($parsed['path']) ? $parsed['path'] : '');
-        $params = [];
-        if (!empty($parsed['query'])) {
-            parse_str($parsed['query'], $params);
-        }
-        return ['base' => $base, 'params' => $params];
-    }
-
-    /**
-     * Whether the current request is an AJAX request for this endpoint (based on endpoint URL params).
-     */
-    private function isEndpointRequest(): bool
-    {
-        if ($this->endpointUrl === '') {
-            return false;
-        }
-        $endpointParams = $this->getEndpointBaseAndParams()['params'];
-        foreach ($endpointParams as $key => $value) {
-            if (!isset($_REQUEST[$key]) || (string) $_REQUEST[$key] !== (string) $value) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Escape HTML output
-     */
     private static function escapeHtml($text)
     {
         return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
     }
-    
-    /**
-     * Escape HTML attribute value (alias for consistency)
-     */
+
     private static function escapeAttr($text)
     {
         return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
     }
-    
-    /**
-     * Build placeholder string from settings
-     */
+
     private function buildPlaceholderString(array $settings): string
     {
         $attrs = [];
@@ -105,55 +51,32 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                 $attrs[] = $key . "='" . self::escapeAttr($value) . "'";
             }
         }
+
         return '{{ekk_prayer_wall ' . implode(' ', $attrs) . '}}';
     }
-    
-    /**
-     * Build htmx request URL (merges endpoint params with request params).
-     */
-    private function buildHtmxUrl(string $placeholderString, int $page, string $instanceId): string
+
+    private function buildHtmxUrl(string $placeholderString, int $page): string
     {
-        if ($this->endpointUrl === '') {
-            return '#';
-        }
-        $baseAndParams = $this->getEndpointBaseAndParams();
-        $params = array_merge($baseAndParams['params'], [
+        $params = [
             'placeholder' => $placeholderString,
             'page' => $page,
-            'instance_id' => $instanceId,
-        ]);
-        return $baseAndParams['base'] . '?' . http_build_query($params);
+        ];
+        return $this->endpointUrl . '?' . http_build_query($params);
     }
 
-    /**
-     * Build URL for ack (acknowledge) request - used by htmx on the ack button.
-     */
     private function buildAckRequestUrl(string $placeholderString, string $prayerId, string $ackLink, int $ackCount): string
     {
-        if ($this->endpointUrl === '') {
-            return '#';
-        }
-        $baseAndParams = $this->getEndpointBaseAndParams();
-        $params = array_merge($baseAndParams['params'], [
+        $params = [
             'placeholder' => $placeholderString,
             'ack_prayer_id' => $prayerId,
             'ack_link' => $ackLink,
             'ack_count' => $ackCount,
-        ]);
-        return $baseAndParams['base'] . '?' . http_build_query($params);
+        ];
+        return $this->endpointUrl . '?' . http_build_query($params);
     }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-        // Handle ack (acknowledge) request: call server, return updated button HTML for htmx swap
-        if (!empty($_REQUEST['ack_prayer_id']) && !empty($_REQUEST['ack_link'])) {
-            $this->handleAckRequest();
-            return;
-        }
-        
-        // Generate unique ID for this placeholder instance
-        $instanceId = 'prayer-wall-' . uniqid();
-        
         $options = [
             'show_name' => true,
             'show_email' => true,
@@ -168,36 +91,26 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             'overflow_behavior' => 'pagination',
             'privacy_settings' => 'submitter_choice',
             'prayer_category' => 'all',
+            'page' => 1,
         ];
 
         $settings = array_merge($options, $placeholder->getAttributes());
 
         $show_name = (bool) $settings['show_name'];
-        $show_email = (bool) $settings['show_email'];
-        $show_phone = (bool) $settings['show_phone'];
-        $show_prayer_content = (bool) $settings['show_prayer_content'];
-        $show_date = (bool) $settings['show_date'];
-        $show_acknowledgment_count = (bool) $settings['show_acknowledgment_count'];
-        $show_acknowledgment_button = (bool) $settings['show_acknowledgment_button'];
-        $show_category = (bool) $settings['show_category'];
         $show_prayer_request_button = (bool) $settings['show_prayer_request_button'];
         $prayers_per_page = max(1, (int) $settings['prayers_per_page']);
         $overflow_behavior = $settings['overflow_behavior'];
         $privacy_settings = $settings['privacy_settings'];
         $selected_category = $settings['prayer_category'] ?? 'all';
 
-        // Get page from request (for htmx pagination)
-        $requestedPage = isset($_REQUEST['page']) ? max(1, (int) $_REQUEST['page']) : 1;
-        $isAjaxRequest = $this->isEndpointRequest();
-
         $prayers = [];
         $totalPages = 1;
-        $currentPage = $requestedPage;
+        $currentPage = $settings['page'];
 
         if ($this->prayerCloudApi !== null && $this->prayerCloudApi->isConnected()) {
             $prayersData = $this->prayerCloudApi->getPrayers(
                 $prayers_per_page,
-                $requestedPage,
+                $currentPage,
                 'approved',
                 $selected_category
             );
@@ -241,47 +154,24 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             }
         }
 
-        // Build placeholder string for htmx requests (needed for both AJAX and non-AJAX)
-        $placeholderString = $this->buildPlaceholderString($settings);
-        
-        // If AJAX request, return prayer cards HTML and pagination
-        if ($isAjaxRequest) {
-            // Get instance ID from request if available, otherwise generate new one
-            $requestInstanceId = isset($_REQUEST['instance_id']) ? filter_var($_REQUEST['instance_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : $instanceId;
-            
-            // For lazy loading, return only the cards HTML (no wrapper) so htmx can append directly
-            // For regular pagination, return cards wrapped in container div
-            $isLazyLoad = ($overflow_behavior === 'lazy_load');
-            
-            if (!$isLazyLoad) {
-                echo '<div id="' . self::escapeAttr($requestInstanceId . '__cards') . '" class="brz-ministryBrandsPrayerWall__cards">';
-                // Loading overlay for regular pagination (shown during request)
-                $this->renderLoadingOverlay($requestInstanceId);
-            }
-            
-            $this->renderPrayerCards($prayers, $settings, $privacy_settings, $placeholderString);
-            
-            if (!$isLazyLoad) {
-                echo '</div>';
-            }
-            
-            // Always update pagination
-            if ($totalPages > 1) {
-                $this->renderPagination($totalPages, $currentPage, $prayers_per_page, $overflow_behavior, $placeholderString, true, $requestInstanceId);
-            }
-            return;
-        }
+        $settings['page'] = $currentPage + 1;
 
-        // Load htmx once per page (only when rendering full HTML, not on AJAX)
+        $placeholderString = $this->buildPlaceholderString($settings);
+
         if (!self::$htmxScriptEmitted) {
             echo '<script src="' . self::escapeAttr(self::HTMX_CDN_URL) . '" defer></script>';
+            echo '<meta name="htmx-config" content=\'{"selfRequestsOnly": false}\'>';
+            echo "<script>
+                    function handleLike(event) {
+                        const response = JSON.parse(event.detail.xhr.responseText);
+                        document.getElementById('ack-btn-' + response.data.uuid).innerText = response.data.acknowledgment_count;
+                    }
+                 </script>";
             self::$htmxScriptEmitted = true;
         }
-        
-        // Start main container
+
         echo '<div class="brz-ministryBrandsPrayerWall__container">';
 
-        // Prayer Request Button
         if ($show_prayer_request_button) {
             echo '<div class="brz-ministryBrandsPrayerWall__request-button-wrapper">
                 <button class="brz-ministryBrandsPrayerWall__request-button" type="button">
@@ -293,22 +183,16 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             </div>';
         }
 
-        // Prayer cards container with unique ID
-        echo '<div id="' . self::escapeAttr($instanceId . '__cards') . '" class="brz-ministryBrandsPrayerWall__cards">';
-        // Loading overlay (shown during htmx requests)
-        $this->renderLoadingOverlay($instanceId);
-        // Prayer cards content
+        echo '<div class="brz-ministryBrandsPrayerWall__cards">';
         $this->renderPrayerCards($prayers, $settings, $privacy_settings, $placeholderString);
-        echo '</div>'; // cards container
+        echo '</div>';
 
-        // Pagination / Lazy Load
         if ($totalPages > 1) {
-            $this->renderPagination($totalPages, $currentPage, $prayers_per_page, $overflow_behavior, $placeholderString, false, $instanceId);
+            $this->renderPagination($totalPages, $currentPage, $prayers_per_page, $overflow_behavior, $placeholderString);
         }
 
-        echo '</div>'; // main container
+        echo '</div>';
 
-        // Prayer Form Modal
         if ($show_prayer_request_button) {
             echo '<div class="brz-ministryBrands-PrayerWall-modal">';
             echo '<div class="brz-ministryBrands-PrayerWall-modal-backdrop"></div>';
@@ -327,7 +211,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                 ]
             );
 
-            echo '</div>'; // form
+            echo '</div>';
 
             echo '<!-- Response Section -->
             <div id="sfprayerresponse" class="brz-ministryBrands-PrayerWall-response" style="display: none;">';
@@ -336,20 +220,12 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
             echo '</div>';
 
-            echo '</div>'; // modal-content
-            echo '</div>'; // modal-dialog
-            echo '</div>'; // modal
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
         }
     }
 
-    /**
-     * Render prayer cards HTML
-     *
-     * @param array $prayers
-     * @param array $settings
-     * @param string $privacy_settings
-     * @param string $placeholderString Used to build ack request URL for htmx
-     */
     private function renderPrayerCards(array $prayers, array $settings, string $privacy_settings, string $placeholderString = '')
     {
         $show_name = (bool) $settings['show_name'];
@@ -377,7 +253,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                 echo '<div class="brz-ministryBrandsPrayerWall__card">';
                 echo '<div class="brz-ministryBrandsPrayerWall__card-body">';
 
-                // Category badges
                 if ($show_category) {
                     $categories = !empty($prayer['categories']) ? $prayer['categories'] : (!empty($prayer['category']) ? [$prayer['category']] : []);
                     if (!empty($categories)) {
@@ -389,8 +264,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                     }
                 }
 
-                // Name and Date
-                if ($show_name || $show_date) {
+                if ($show_name || (bool) $settings['show_date']) {
                     echo '<div class="brz-ministryBrandsPrayerWall__title">';
 
                     if ($show_name) {
@@ -404,23 +278,20 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                     echo '</div>';
                 }
 
-                // Prayer content
                 if ($show_prayer_content && !empty($prayer['prayer'])) {
                     echo '<div class="brz-ministryBrandsPrayerWall__content">';
                     echo '<p>' . self::escapeHtml($prayer['prayer']) . '</p>';
                     echo '</div>';
                 }
 
-                echo '</div>'; // card-body
+                echo '</div>';
 
-                // Card footer
                 $hasFooterLeft = $show_acknowledgment_button;
                 $hasFooterRight = $show_phone || $show_email;
 
                 if ($hasFooterLeft || $hasFooterRight) {
                     echo '<div class="brz-ministryBrandsPrayerWall__card-footer">';
 
-                    // Acknowledgment button, share dropdown, reply
                     if ($show_acknowledgment_button) {
                         $ackLink = $prayer['ackLink'] ?? '#';
                         $ackLinkEsc = self::escapeHtml($ackLink);
@@ -429,31 +300,19 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
                         echo '<div class="brz-ministryBrandsPrayerWall__footer-left">';
 
-                        // Acknowledge button (htmx: request goes to placeholder, server increments and returns updated button)
-                        if ($placeholderString !== '') {
-                            $ackRequestUrl = $this->buildAckRequestUrl($placeholderString, $prayer['uuid'], $ackLink, $ackCount);
-                            $this->renderAckButtonHtml($prayer['uuid'], $ackCount, $ackRequestUrl, $show_acknowledgment_count, false);
-                        } else {
-                            echo '<a href="#" class="brz-ministryBrandsPrayerWall__ack-button" data-prayer-id="' . $prayerId . '" data-link="' . $ackLinkEsc . '">';
-                            echo '<svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__ack-icon" viewBox="0 0 16 12.891" fill="currentColor">';
-                            echo '<path d="M8.755 1.149a.8.8 0 0 1 .583-.097c.194.049.365.17.462.34l2.917 4.376c.219.316.34.681.34 1.07v1.799c0 .146.097.316.243.365l1.945.632a.78.78 0 0 1 .535.729v2.334c0 .243-.122.486-.316.632s-.438.194-.681.122l-4.084-1.094A3.096 3.096 0 0 1 8.39 9.366V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v1.945c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.376c0-.17-.049-.34-.146-.486L8.487 2.219c-.049-.073-.073-.17-.097-.243a.8.8 0 0 1 0-.34.8.8 0 0 1 .365-.486zm-1.531 0a.8.8 0 0 1 .365.486.8.8 0 0 1 0 .34c-.024.073-.049.17-.097.243L5.4 5.89a.86.86 0 0 0-.122.486v2.042c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v2.893c0 1.41-.948 2.625-2.309 2.99L1.195 13.45c-.243.073-.486.024-.681-.122s-.292-.389-.292-.632v-2.333c0-.316.194-.632.51-.729l1.945-.632c.146-.073.267-.219.267-.389V6.838c0-.389.097-.754.316-1.07l2.918-4.375a.73.73 0 0 1 .802-.34c.097.024.17.049.243.097z"/>';
-                            echo '</svg>';
-                            if ($show_acknowledgment_count) {
-                                echo '<span class="brz-ministryBrandsPrayerWall__ack-count">' . $ackCount . '</span>';
-                            }
-                            echo '</a>';
-                        }
+                            $this->renderAckButtonHtml($prayer['uuid'],
+                                $ackCount,
+                                $ackLink,
+                                $show_acknowledgment_count,
+                                false
+                            );
 
-                        // Share dropdown
-                        echo self::renderShareDropdown($prayer);
-
-                        // Reply button
-                        echo self::renderReplyButton($prayer);
+                            echo self::renderShareDropdown($prayer);
+                            echo self::renderReplyButton($prayer);
 
                         echo '</div>';
                     }
 
-                    // Contact info
                     if ($hasFooterRight) {
                         echo '<div class="brz-ministryBrandsPrayerWall__footer-right">';
 
@@ -474,222 +333,123 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                         echo '</div>';
                     }
 
-                    echo '</div>'; // card-footer
+                    echo '</div>';
                 }
 
-                echo '</div>'; // card
+                echo '</div>';
             }
         }
     }
 
-    /**
-     * Render pagination controls
-     *
-     * @param int $totalPages
-     * @param int $currentPage
-     * @param int $prayers_per_page
-     * @param string $overflow_behavior
-     * @param string $placeholderString
-     * @param bool $isAjaxRequest
-     * @param string $instanceId
-     */
-    private function renderPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $overflow_behavior, string $placeholderString, bool $isAjaxRequest = false, string $instanceId = '')
+    private function renderPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $overflow_behavior, string $placeholderString)
     {
-        $instanceId = $instanceId ?: 'prayer-wall-' . uniqid();
-        $paginationId = $instanceId . '__pagination';
-        $cardsId = $instanceId . '__cards';
-        $swapOob = $isAjaxRequest ? ' hx-swap-oob="true"' : '';
-        
-        echo '<div id="' . self::escapeAttr($paginationId) . '" class="brz-ministryBrandsPrayerWall__pagination"' . $swapOob . '>';
-        
+        echo '<div class="brz-ministryBrandsPrayerWall__pagination">';
+
         if ($overflow_behavior === 'lazy_load') {
-            $this->renderLazyLoadPagination($totalPages, $currentPage, $prayers_per_page, $placeholderString, $instanceId, $cardsId);
+            $this->renderLazyLoadPagination($totalPages, $currentPage, $prayers_per_page, $placeholderString);
         } else {
-            $this->renderRegularPagination($totalPages, $currentPage, $placeholderString, $instanceId, $cardsId);
+            $this->renderRegularPagination($totalPages, $currentPage, $placeholderString);
         }
-        
+
         echo '</div>';
     }
-    
-    /**
-     * Render lazy load pagination (Show More button)
-     */
-    private function renderLazyLoadPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $placeholderString, string $instanceId, string $cardsId): void
+
+    private function renderLazyLoadPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $placeholderString): void
     {
         if ($currentPage >= $totalPages) {
-            return; // No button needed if we've reached the last page
+            return;
         }
-        
+
         $nextPage = $currentPage + 1;
-        $url = $this->buildHtmxUrl($placeholderString, $nextPage, $instanceId);
-        $overlayId = '#' . $instanceId . '__loading-overlay';
-        
-        echo '<button 
-            class="brz-ministryBrandsPrayerWall__load-more-btn" 
+        $url = $this->buildHtmxUrl($placeholderString, $nextPage);
+
+        echo '<button
+            class="brz-ministryBrandsPrayerWall__load-more-btn"
             hx-get="' . self::escapeAttr($url) . '"
-            hx-target="#' . self::escapeAttr($cardsId) . '"
-            hx-swap="beforeend"
-            hx-indicator="' . self::escapeAttr($overlayId) . '"
+            hx-target="closest .brz-ministryBrandsPrayerWall__container"
+            hx-select=".brz-ministryBrandsPrayerWall__container"
+            hx-swap="outerHTML"
         >Show Next ' . $prayers_per_page . '</button>';
     }
-    
-    /**
-     * Render regular pagination (page numbers)
-     */
-    private function renderRegularPagination(int $totalPages, int $currentPage, string $placeholderString, string $instanceId, string $cardsId): void
+
+    private function renderRegularPagination(int $totalPages, int $currentPage, string $placeholderString): void
     {
-        $overlayId = '#' . $instanceId . '__loading-overlay';
-        
+        $htmxAttrs = function (int $page) use ($placeholderString) {
+            $url = $this->buildHtmxUrl($placeholderString, $page);
+            return 'hx-get="' . self::escapeAttr($url) . '"'
+                . ' hx-target="closest .brz-ministryBrandsPrayerWall__container"'
+                . ' hx-select=".brz-ministryBrandsPrayerWall__container"'
+                . ' hx-swap="outerHTML"';
+        };
+
         echo '<nav>';
         echo '<ul class="brz-ministryBrandsPrayerWall__pagination-list">';
-        
-        // Previous button
+
         echo '<li class="brz-ministryBrandsPrayerWall__pagination-item">';
         if ($currentPage > 1) {
-            $url = $this->buildHtmxUrl($placeholderString, $currentPage - 1, $instanceId);
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" 
-                hx-get="' . self::escapeAttr($url) . '"
-                hx-target="#' . self::escapeAttr($cardsId) . '"
-                hx-swap="innerHTML"
-                hx-indicator="' . self::escapeAttr($overlayId) . '"
-            >&laquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage - 1) . '>&laquo;</button>';
         } else {
             echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&laquo;</button>';
         }
         echo '</li>';
-        
-        // Page numbers
+
         for ($i = 1; $i <= $totalPages; $i++) {
             $activeClass = ($i === $currentPage) ? ' brz-ministryBrandsPrayerWall__pagination-link--active' : '';
             echo '<li class="brz-ministryBrandsPrayerWall__pagination-item">';
-            
+
             if ($i === $currentPage) {
                 echo '<button class="brz-ministryBrandsPrayerWall__pagination-link' . $activeClass . '" disabled>' . $i . '</button>';
             } else {
-                $url = $this->buildHtmxUrl($placeholderString, $i, $instanceId);
-                echo '<button class="brz-ministryBrandsPrayerWall__pagination-link' . $activeClass . '" 
-                    hx-get="' . self::escapeAttr($url) . '"
-                    hx-target="#' . self::escapeAttr($cardsId) . '"
-                    hx-swap="innerHTML"
-                    hx-indicator="' . self::escapeAttr($overlayId) . '"
-                >' . $i . '</button>';
+                echo '<button class="brz-ministryBrandsPrayerWall__pagination-link' . $activeClass . '" ' . $htmxAttrs($i) . '>' . $i . '</button>';
             }
             echo '</li>';
         }
-        
-        // Next button
+
         echo '<li class="brz-ministryBrandsPrayerWall__pagination-item">';
         if ($currentPage < $totalPages) {
-            $url = $this->buildHtmxUrl($placeholderString, $currentPage + 1, $instanceId);
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" 
-                hx-get="' . self::escapeAttr($url) . '"
-                hx-target="#' . self::escapeAttr($cardsId) . '"
-                hx-swap="innerHTML"
-                hx-indicator="' . self::escapeAttr($overlayId) . '"
-            >&raquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage + 1) . '>&raquo;</button>';
         } else {
             echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&raquo;</button>';
         }
         echo '</li>';
-        
+
         echo '</ul>';
         echo '</nav>';
     }
-    
-    /**
-     * Handle ack request: call external ack URL, then output updated button HTML for htmx swap
-     */
-    private function handleAckRequest(): void
+
+    private function parseAckCount($result, int $fallback): int
     {
-        $prayerId = isset($_REQUEST['ack_prayer_id']) ? filter_var($_REQUEST['ack_prayer_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : '';
-        $ackLink = isset($_REQUEST['ack_link']) ? filter_var($_REQUEST['ack_link'], FILTER_SANITIZE_URL) : '';
-        $currentCount = isset($_REQUEST['ack_count']) ? max(0, (int) $_REQUEST['ack_count']) : 0;
-        $placeholderString = isset($_REQUEST['placeholder']) ? stripslashes((string) $_REQUEST['placeholder']) : '';
-
-        if ($prayerId === '' || $ackLink === '' || $ackLink === '#') {
-            return;
-        }
-
-        $newCount = $currentCount;
-        if (function_exists('wp_remote_get')) {
-            $response = wp_remote_get($ackLink, ['timeout' => 15]);
-            if (!is_wp_error($response)) {
-                $code = wp_remote_retrieve_response_code($response);
-                $body = wp_remote_retrieve_body($response);
-                if ($code >= 200 && $code < 300) {
-                    $newCount = $this->parseAckCountFromResponse($body, $currentCount);
+        if (is_object($result)) {
+            foreach (['count', 'ackCount', 'acknowledgment_count', 'acknowledgments'] as $key) {
+                if (isset($result->$key) && is_numeric($result->$key)) {
+                    return (int) $result->$key;
                 }
             }
-        } else {
-            $context = stream_context_create(['http' => ['timeout' => 15]]);
-            $body = @file_get_contents($ackLink, false, $context);
-            if ($body !== false) {
-                $newCount = $this->parseAckCountFromResponse($body, $currentCount);
-            }
-        }
-
-        $ackRequestUrl = $this->buildAckRequestUrl($placeholderString, $prayerId, $ackLink, $newCount);
-        $this->renderAckButtonHtml($prayerId, $newCount, $ackRequestUrl, true, true);
-    }
-
-    /**
-     * Parse updated acknowledgment count from API response (JSON or HTML)
-     */
-    private function parseAckCountFromResponse(string $body, int $fallback): int
-    {
-        $decoded = @json_decode($body, true);
-        if (is_array($decoded)) {
-            $count = $decoded['count'] ?? $decoded['ackCount'] ?? $decoded['acknowledgment_count'] ?? $decoded['acknowledgments'] ?? null;
-            if ($count !== null && is_numeric($count)) {
-                return (int) $count;
+            if (isset($result->data->acknowledgment_count) && is_numeric($result->data->acknowledgment_count)) {
+                return (int) $result->data->acknowledgment_count;
             }
         }
         return $fallback + 1;
     }
 
-    /**
-     * Render the ack button HTML (with optional htmx attributes for server-driven increment)
-     */
     private function renderAckButtonHtml(string $prayerId, int $ackCount, string $ackRequestUrl, bool $showCount, bool $acknowledged = false): void
     {
-        $btnId = 'ack-btn-' . self::escapeAttr($prayerId);
-        $classes = 'brz-ministryBrandsPrayerWall__ack-button';
         if ($acknowledged) {
             $classes .= ' brz-ministryBrandsPrayerWall__ack-button--acknowledged';
         }
-        echo '<a id="' . $btnId . '" href="#" class="' . $classes . '" data-prayer-id="' . self::escapeAttr($prayerId) . '"';
-        echo ' hx-get="' . self::escapeAttr($ackRequestUrl) . '" hx-target="this" hx-swap="outerHTML"';
+        echo '<a id="ack-btn-' . self::escapeAttr($prayerId) . '" href="#" class="brz-ministryBrandsPrayerWall__ack-button"';
+        echo ' data-link="' . self::escapeAttr($ackRequestUrl) . '"';
         echo '>';
         echo '<svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__ack-icon" viewBox="0 0 16 12.891" fill="currentColor">';
         echo '<path d="M8.755 1.149a.8.8 0 0 1 .583-.097c.194.049.365.17.462.34l2.917 4.376c.219.316.34.681.34 1.07v1.799c0 .146.097.316.243.365l1.945.632a.78.78 0 0 1 .535.729v2.334c0 .243-.122.486-.316.632s-.438.194-.681.122l-4.084-1.094A3.096 3.096 0 0 1 8.39 9.366V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v1.945c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.376c0-.17-.049-.34-.146-.486L8.487 2.219c-.049-.073-.073-.17-.097-.243a.8.8 0 0 1 0-.34.8.8 0 0 1 .365-.486zm-1.531 0a.8.8 0 0 1 .365.486.8.8 0 0 1 0 .34c-.024.073-.049.17-.097.243L5.4 5.89a.86.86 0 0 0-.122.486v2.042c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v2.893c0 1.41-.948 2.625-2.309 2.99L1.195 13.45c-.243.073-.486.024-.681-.122s-.292-.389-.292-.632v-2.333c0-.316.194-.632.51-.729l1.945-.632c.146-.073.267-.219.267-.389V6.838c0-.389.097-.754.316-1.07l2.918-4.375a.73.73 0 0 1 .802-.34c.097.024.17.049.243.097z"/>';
         echo '</svg>';
+
         if ($showCount) {
-            echo '<span class="brz-ministryBrandsPrayerWall__ack-count">' . (int) $ackCount . '</span>';
+            echo '<span class="brz-ministryBrandsPrayerWall__ack-count">' . $ackCount . '</span>';
         }
         echo '</a>';
     }
 
-    /**
-     * Render loading overlay (shown during htmx requests, replaces content)
-     */
-    private function renderLoadingOverlay(string $instanceId): void
-    {
-        $overlayId = $instanceId . '__loading-overlay';
-        echo '<div id="' . self::escapeAttr($overlayId) . '" class="brz-ministryBrandsPrayerWall__loading-overlay htmx-indicator" aria-hidden="true">';
-        echo '<div class="brz-ministryBrandsPrayerWall__loading-overlay-content">';
-        echo '<span class="brz-ministryBrandsPrayerWall__loading-spinner"></span>';
-        echo '<p class="brz-ministryBrandsPrayerWall__loading-text">Loading prayers...</p>';
-        echo '</div>';
-        echo '</div>';
-    }
-
-    /**
-     * Render the share dropdown for a prayer card.
-     *
-     * @param array $prayer
-     *
-     * @return string
-     */
     private static function renderShareDropdown(array $prayer)
     {
         $uuid = self::escapeHtml($prayer['uuid'] ?? '');
@@ -717,13 +477,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         </div>';
     }
 
-    /**
-     * Render the reply button for a prayer card.
-     *
-     * @param array $prayer
-     *
-     * @return string
-     */
     private static function renderReplyButton(array $prayer)
     {
         $email = $prayer['email'] ?? '';
