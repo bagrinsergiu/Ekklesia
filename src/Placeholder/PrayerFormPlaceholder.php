@@ -16,14 +16,14 @@ class PrayerFormPlaceholder extends PlaceholderAbstract
             'Submit a Prayer Request',
             false,
             [
-                '<button id="ekklesia360-prayer-submit" type="submit" name="submit" class="brz-ministryBrands-PrayingForm-btn">' . __('Submit') . '</button>'
+                '<button id="ekklesia360-prayer-submit" type="submit" name="submit" class="brz-ministryBrands-PrayingForm-btn">Submit</button>'
             ]
         );
 
         echo '<!-- Response Section -->
         <div id="sfprayerresponse" class="brz-ministryBrands-PrayerForm-response" style="display: none;">';
         
-        PrayingFormRenderer::renderResponseModalContent(showCloseButton: false);
+        PrayingFormRenderer::renderResponseModalContent('Thank you for your prayer request. Your prayer is pending approval.', 'Create Another Prayer Request', false);
         
         echo '</div>';
     }

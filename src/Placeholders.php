@@ -49,18 +49,11 @@ class Placeholders
      */
     private $prayerCloudApi;
 
-    /**
-     * Endpoint URL for Prayer Wall htmx requests.
-     * @var string|null
-     */
-    private $prayerWallEndpointUrl;
-
-    public function __construct(MonkCms $monkCms, Twig_Environment $twig, PrayerCloudApi $prayerCloudApi = null, string $prayerWallEndpointUrl = null)
+    public function __construct(MonkCms $monkCms, Twig_Environment $twig, PrayerCloudApi $prayerCloudApi = null)
     {
-        $this->monkCms               = $monkCms;
-        $this->twig                  = $twig;
-        $this->prayerCloudApi        = $prayerCloudApi;
-        $this->prayerWallEndpointUrl = $prayerWallEndpointUrl;
+        $this->monkCms        = $monkCms;
+        $this->twig           = $twig;
+        $this->prayerCloudApi = $prayerCloudApi;
     }
 
     public function getPlaceholders(Replacer $replacer)
@@ -121,7 +114,7 @@ class Placeholders
                 return new PrayerFormPlaceholder($this->monkCms, $this->twig, $replacer);
             },
             PrayerWallPlaceholder::NAME => function () use ($replacer) {
-                return new PrayerWallPlaceholder($this->monkCms, $this->twig, $replacer, $this->prayerCloudApi, $this->prayerWallEndpointUrl);
+                return new PrayerWallPlaceholder($this->monkCms, $this->twig, $replacer, $this->prayerCloudApi);
             },
             ArticleDetailPlaceholder::NAME => function () use ($replacer) {
                 return new ArticleDetailPlaceholder($this->monkCms, $this->twig, $replacer);

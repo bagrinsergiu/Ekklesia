@@ -21,7 +21,7 @@ class PrayerButtonPlaceholder extends PlaceholderAbstract
             true,
             [
                 '<button type="button" class="brz-ministryBrands-PrayingForm-btn" data-dismiss="modal">Close</button>',
-                '<button id="ekklesia360-prayer-submit" type="submit" name="submit" class="brz-ministryBrands-PrayingForm-btn">' . __('Submit') . '</button>'
+                '<button id="ekklesia360-prayer-submit" type="submit" name="submit" class="brz-ministryBrands-PrayingForm-btn">Submit</button>'
             ]
         );
         

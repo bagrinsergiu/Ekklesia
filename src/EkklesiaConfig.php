@@ -34,14 +34,26 @@ class EkklesiaConfig
      */
     private $themeName;
 
-    public function __construct($siteId, $secret, $accountId, $visitorId, $themeName, $url = '')
+    /**
+     * @var string
+     */
+    private $churchUuid;
+
+    /**
+     * @var string
+     */
+    private $apiKey;
+
+    public function __construct($siteId, $secret, $accountId, $visitorId, $themeName, $url = '', $churchUuid = '', $apiKey = '')
     {
-	    $this->site_id   = $siteId;
-	    $this->secret    = $secret;
-	    $this->apiUrl    = $url;
-	    $this->accountId = $accountId;
-	    $this->visitorId = $visitorId;
-	    $this->themeName = $themeName;
+	    $this->site_id    = $siteId;
+	    $this->secret     = $secret;
+	    $this->apiUrl     = $url;
+	    $this->accountId  = $accountId;
+	    $this->visitorId  = $visitorId;
+	    $this->themeName  = $themeName;
+	    $this->churchUuid = $churchUuid;
+	    $this->apiKey     = $apiKey;
     }
 
     /**
@@ -57,17 +69,21 @@ class EkklesiaConfig
         $accountId = isset($data['MBAccountID']) ? $data['MBAccountID'] : '';
         $visitorId = isset($data['MBVisitorID']) ? $data['MBVisitorID'] : '';
         $themeName = isset($data['MBThemeName']) ? $data['MBThemeName'] : '';
-        $url       = isset($data['url']) ? $data['url'] : '';
+        $url        = isset($data['url']) ? $data['url'] : '';
+        $churchUuid = isset($data['church_uuid']) ? $data['church_uuid'] : '';
+        $apiKey     = isset($data['api_key']) ? $data['api_key'] : '';
 
-        return new self($siteId, $secret, $accountId, $visitorId, $themeName, $url);
+        return new self($siteId, $secret, $accountId, $visitorId, $themeName, $url, $churchUuid, $apiKey);
     }
 
     public function toArray()
     {
         return [
-            'siteId'     => $this->getSiteId(),
-            'siteSecret' => $this->getSecret(),
-            'url'        => $this->getUrl()
+            'siteId'      => $this->getSiteId(),
+            'siteSecret'  => $this->getSecret(),
+            'url'         => $this->getUrl(),
+            'church_uuid' => $this->getChurchUuid(),
+            'api_key'     => $this->getApiKey(),
         ];
     }
 
@@ -174,4 +190,29 @@ class EkklesiaConfig
 	{
 		$this->themeName = $themeName;
 	}
+
+    public function getChurchUuid()
+    {
+        return $this->churchUuid;
+    }
+
+    public function setChurchUuid($churchUuid)
+    {
+        $this->churchUuid = $churchUuid;
+    }
+
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    public function hasPrayerCloudCredentials()
+    {
+        return !empty($this->churchUuid) && !empty($this->apiKey);
+    }
 }
