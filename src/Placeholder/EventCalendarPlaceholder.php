@@ -13,6 +13,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
     const NAME = 'ekk_event_calendar';
 
     private $time = false;
+    private $timeFormat = '24';
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
@@ -24,6 +25,7 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
             'detail_page'                   => false,
             'howmanymonths'                 => 3,
             'time'                          => false,
+            'time_format'                   => '24',
             'showSubscribeToCalendarButton' => false,
         ];
 
@@ -45,7 +47,8 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
         $date2         = new DateTime($calendarEnd);
         $diff          = $date1->diff($date2, true);
         $calendarDays  = $diff->format('%a');
-        $this->time    = $time;
+        $this->time       = $time;
+        $this->timeFormat = isset($settings['time_format']) ? $settings['time_format'] : '24';
 
         if ($features) {
             $nonfeatures = '';
@@ -242,7 +245,8 @@ class EventCalendarPlaceholder extends PlaceholderAbstract
                 $calendar .= "<ul class=\"brz-eventCalendar-links\">";
                 foreach ($events[$cur_date] as $v) {
                     if ($this->time && !empty($v['eventstart']) && $time = strtotime($v['eventstart'])) {
-                        $calendar .= '<span class="brz-eventCalendar__event-start-time">'.date('H:i ', $time).'</span>';
+                        $format = $this->timeFormat === '12' ? 'g:i A ' : 'H:i ';
+                        $calendar .= '<span class="brz-eventCalendar__event-start-time">'.date($format, $time).'</span>';
                     }
                     $calendar .= "<li>";
                     $calendar .= "<div class=\"brz-eventCalendar-title\">";
