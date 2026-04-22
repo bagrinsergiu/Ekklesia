@@ -24,7 +24,9 @@ class PrayerPlaceholder extends PlaceholderAbstract
                 return;
             }
 
-            return 'Something went wrong. Please contact the site administrator.';
+            echo 'Something went wrong. Please contact the site administrator.';
+
+            return;
         }
 
         $formId = $form['show']['id'];
