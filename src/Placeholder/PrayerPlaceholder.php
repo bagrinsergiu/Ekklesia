@@ -11,12 +11,21 @@ class PrayerPlaceholder extends PlaceholderAbstract
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
-        $form = $this->monkCMS->get([
-            'module'  => 'fmsform',
-            'display' => 'detail',
-            'find'    => 'prayer-request',
-            'show'    => '__embedhtml__'
-        ]);
+        try {
+            $form = $this->monkCMS->get([
+                'module'  => 'fmsform',
+                'display' => 'detail',
+                'find'    => 'prayer-request',
+                'show'    => '__embedhtml__'
+            ]);
+        } catch (\Exception $e) {
+            if ($e->getCode() == 404) {
+                echo 'There is no prayer form on this site. Please add one.';
+                return;
+            }
+
+            return 'Something went wrong. Please contact the site administrator.';
+        }
 
         $formId = $form['show']['id'];
         $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
