@@ -30,7 +30,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
     ) {
         parent::__construct($monkCMS, $twig, $replacer);
         $this->prayerCloudApi = $prayerCloudApi;
-        $this->endpointUrl    = '/m-b/placeholder/render';
+        $this->endpointUrl    = '/mb/placeholder/render';
     }
 
     private static function escapeHtml($text)

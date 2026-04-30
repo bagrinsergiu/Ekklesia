@@ -117,7 +117,7 @@ class PrayingFormRenderer
     {
         ?>
         <div id="emb_prayerform" class="<?php echo self::escapeHtml($classPrefix); ?>-form">
-            <form id="EmbPrayerForm" tabindex="-1" role="dialog" method="post" action="/m-b/prayer/submit">
+            <form id="EmbPrayerForm" tabindex="-1" role="dialog" method="post" action="/mb/prayer/submit">
                 <input type="hidden" name="action" value="ajaxEmbCreatePrayer"/>
                 <div class="<?php echo self::escapeHtml($classPrefix); ?>-content brz-p-relative">
                     <div class="brz-p-absolute" style="top: 0; left: 0; right: 0; bottom: 0; display: none; justify-content: center; align-items: center; background: rgba(255,255,255,0.7); z-index: 1051;">
