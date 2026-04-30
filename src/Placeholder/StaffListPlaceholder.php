@@ -145,7 +145,7 @@ class StaffListPlaceholder extends PlaceholderAbstract
                         }
 
                         if (empty($item['customhideemail']) && $show_full_email && ($item['emailaddress'] || $item['altemailaddress'])) {
-                            $item['emailaddress'] = $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
+                            $item['emailaddress'] = isset($item['customdisplayemail']) && $item['customdisplayemail'] ?: ($item['altemailaddress'] ?: $item['emailaddress']);
                             echo "<p class=\"brz-staffList__item--meta brz-ministryBrands__item--meta-full-email\">";
                             if ($show_meta_headings) {
                                 if ($show_meta_icons) {
