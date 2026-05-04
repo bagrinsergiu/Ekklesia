@@ -16,21 +16,21 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
     const HTMX_CDN_URL = 'https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js';
 
     private static $htmxScriptEmitted = false;
-    
+
     /**
      * @var PrayerCloudApi|null
      */
     protected $prayerCloudApi;
 
     public function __construct(
-        MonkCms          $monkCMS,
+        MonkCms $monkCMS,
         Twig_Environment $twig,
-        Replacer         $replacer = null,
-        PrayerCloudApi   $prayerCloudApi = null
+        Replacer $replacer = null,
+        PrayerCloudApi $prayerCloudApi = null
     ) {
         parent::__construct($monkCMS, $twig, $replacer);
         $this->prayerCloudApi = $prayerCloudApi;
-        $this->endpointUrl    = '/m-b/placeholder/render';
+        $this->endpointUrl = '/m-b/placeholder/render';
     }
 
     private static function escapeHtml($text)
@@ -154,7 +154,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             }
         }
 
-        $settings['page'] = $currentPage + 1;
+        $settings['page'] = $currentPage;
 
         $placeholderString = $this->buildPlaceholderString($settings);
 
@@ -188,7 +188,13 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         echo '</div>';
 
         if ($totalPages > 1) {
-            $this->renderPagination($totalPages, $currentPage, $prayers_per_page, $overflow_behavior, $placeholderString);
+            $this->renderPagination(
+                $totalPages,
+                $currentPage,
+                $prayers_per_page,
+                $overflow_behavior,
+                $settings
+            );
         }
 
         echo '</div>';
@@ -300,15 +306,16 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
                         echo '<div class="brz-ministryBrandsPrayerWall__footer-left">';
 
-                            $this->renderAckButtonHtml($prayer['uuid'],
-                                $ackCount,
-                                $ackLink,
-                                $show_acknowledgment_count,
-                                false
-                            );
+                        $this->renderAckButtonHtml(
+                            $prayer['uuid'],
+                            $ackCount,
+                            $ackLink,
+                            $show_acknowledgment_count,
+                            false
+                        );
 
-                            echo self::renderShareDropdown($prayer);
-                            echo self::renderReplyButton($prayer);
+                        echo self::renderShareDropdown($prayer);
+                        echo self::renderReplyButton($prayer);
 
                         echo '</div>';
                     }
@@ -341,27 +348,44 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         }
     }
 
-    private function renderPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $overflow_behavior, string $placeholderString)
-    {
+    private function renderPagination(
+        int $totalPages,
+        int $currentPage,
+        int $prayers_per_page,
+        string $overflow_behavior,
+        array $settings
+    ) {
         echo '<div class="brz-ministryBrandsPrayerWall__pagination">';
 
         if ($overflow_behavior === 'lazy_load') {
-            $this->renderLazyLoadPagination($totalPages, $currentPage, $prayers_per_page, $placeholderString);
+            $this->renderLazyLoadPagination(
+                $totalPages,
+                $currentPage,
+                $prayers_per_page,
+                $settings
+            );
         } else {
-            $this->renderRegularPagination($totalPages, $currentPage, $placeholderString);
+            $this->renderRegularPagination($totalPages, $currentPage, $settings);
         }
 
         echo '</div>';
     }
 
-    private function renderLazyLoadPagination(int $totalPages, int $currentPage, int $prayers_per_page, string $placeholderString): void
-    {
+    private function renderLazyLoadPagination(
+        int $totalPages,
+        int $currentPage,
+        int $prayers_per_page,
+        array $settings
+    ): void {
         if ($currentPage >= $totalPages) {
             return;
         }
 
         $nextPage = $currentPage + 1;
-        $url = $this->buildHtmxUrl($placeholderString, $nextPage);
+        $nextPlaceholder = $this->buildPlaceholderString(
+            array_merge($settings, ['page' => $nextPage])
+        );
+        $url = $this->buildHtmxUrl($nextPlaceholder, $nextPage);
 
         echo '<button
             class="brz-ministryBrandsPrayerWall__load-more-btn"
@@ -372,10 +396,13 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         >Show Next ' . $prayers_per_page . '</button>';
     }
 
-    private function renderRegularPagination(int $totalPages, int $currentPage, string $placeholderString): void
+    private function renderRegularPagination(int $totalPages, int $currentPage, array $settings): void
     {
-        $htmxAttrs = function (int $page) use ($placeholderString) {
-            $url = $this->buildHtmxUrl($placeholderString, $page);
+        $htmxAttrs = function (int $page) use ($settings) {
+            $placeholderForPage = $this->buildPlaceholderString(
+                array_merge($settings, ['page' => $page])
+            );
+            $url = $this->buildHtmxUrl($placeholderForPage, $page);
             return 'hx-get="' . self::escapeAttr($url) . '"'
                 . ' hx-target="closest .brz-ministryBrandsPrayerWall__container"'
                 . ' hx-select=".brz-ministryBrandsPrayerWall__container"'
@@ -434,9 +461,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
     private function renderAckButtonHtml(string $prayerId, int $ackCount, string $ackRequestUrl, bool $showCount, bool $acknowledged = false): void
     {
-        if ($acknowledged) {
-            $classes .= ' brz-ministryBrandsPrayerWall__ack-button--acknowledged';
-        }
         echo '<a id="ack-btn-' . self::escapeAttr($prayerId) . '" href="#" class="brz-ministryBrandsPrayerWall__ack-button"';
         echo ' data-link="' . self::escapeAttr($ackRequestUrl) . '"';
         echo '>';
