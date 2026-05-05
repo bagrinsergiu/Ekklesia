@@ -64,17 +64,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         return $this->endpointUrl . '?' . http_build_query($params);
     }
 
-    private function buildAckRequestUrl(string $placeholderString, string $prayerId, string $ackLink, int $ackCount): string
-    {
-        $params = [
-            'placeholder' => $placeholderString,
-            'ack_prayer_id' => $prayerId,
-            'ack_link' => $ackLink,
-            'ack_count' => $ackCount,
-        ];
-        return $this->endpointUrl . '?' . http_build_query($params);
-    }
-
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
         $options = [
@@ -171,18 +160,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         }
 
         echo '<div class="brz-ministryBrandsPrayerWall__container">';
-
-        if ($show_prayer_request_button) {
-            echo '<div class="brz-ministryBrandsPrayerWall__request-button-wrapper">
-                <button class="brz-ministryBrandsPrayerWall__request-button" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__request-button-icon" viewBox="0 0 16 12.891" fill="currentColor">
-                        <path d="M8.755 1.149a.8.8 0 0 1 .583-.097c.194.049.365.17.462.34l2.917 4.376c.219.316.34.681.34 1.07v1.799c0 .146.097.316.243.365l1.945.632a.78.78 0 0 1 .535.729v2.334c0 .243-.122.486-.316.632s-.438.194-.681.122l-4.084-1.094A3.096 3.096 0 0 1 8.39 9.366V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v1.945c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.376c0-.17-.049-.34-.146-.486L8.487 2.219c-.049-.073-.073-.17-.097-.243a.8.8 0 0 1 0-.34.8.8 0 0 1 .365-.486zm-1.531 0a.8.8 0 0 1 .365.486.8.8 0 0 1 0 .34c-.024.073-.049.17-.097.243L5.4 5.89a.86.86 0 0 0-.122.486v2.042c0 .219.17.389.389.389a.4.4 0 0 0 .389-.389V6.473c0-.413.34-.778.778-.778a.8.8 0 0 1 .778.778v2.893c0 1.41-.948 2.625-2.309 2.99L1.195 13.45c-.243.073-.486.024-.681-.122s-.292-.389-.292-.632v-2.333c0-.316.194-.632.51-.729l1.945-.632c.146-.073.267-.219.267-.389V6.838c0-.389.097-.754.316-1.07l2.918-4.375a.73.73 0 0 1 .802-.34c.097.024.17.049.243.097z"/>
-                    </svg>
-                    Create Prayer Request
-                </button>
-            </div>';
-        }
-
         echo '<div class="brz-ministryBrandsPrayerWall__cards">';
         $this->renderPrayerCards($prayers, $settings, $privacy_settings, $placeholderString);
         echo '</div>';
@@ -442,21 +419,6 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
         echo '</ul>';
         echo '</nav>';
-    }
-
-    private function parseAckCount($result, int $fallback): int
-    {
-        if (is_object($result)) {
-            foreach (['count', 'ackCount', 'acknowledgment_count', 'acknowledgments'] as $key) {
-                if (isset($result->$key) && is_numeric($result->$key)) {
-                    return (int) $result->$key;
-                }
-            }
-            if (isset($result->data->acknowledgment_count) && is_numeric($result->data->acknowledgment_count)) {
-                return (int) $result->data->acknowledgment_count;
-            }
-        }
-        return $fallback + 1;
     }
 
     private function renderAckButtonHtml(string $prayerId, int $ackCount, string $ackRequestUrl, bool $showCount, bool $acknowledged = false): void
