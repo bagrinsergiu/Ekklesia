@@ -249,6 +249,21 @@ class Api
         return $options;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function getArticleSeries()
+    {
+        $series  = $this->monkCms->get(['module' => 'series', 'display' => 'list', 'type' => 'article']);
+        $options = [];
+
+        foreach ($series['show'] as $serie) {
+            $options[$serie['slug']] = $serie['title'];
+        }
+
+        return $options;
+    }
+
 	public function getPrayer($query)
 	{
 		if (!$this->prayerCloudApi) {
@@ -318,7 +333,7 @@ class Api
 				$data = $this->getSeries('sermon');
 				break;
 			case 'articleSeries':
-				$data = $this->getSeries('article');
+				$data = $this->getArticleSeries();
 				break;
 			case 'articlesLvl':
 				$data = $this->getCatsLevels('article');
