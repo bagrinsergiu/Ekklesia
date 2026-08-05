@@ -74,6 +74,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             'show_date' => true,
             'show_acknowledgment_count' => true,
             'show_acknowledgment_button' => true,
+            'show_reply_button' => true,
+            'show_share_button' => true,
             'show_category' => true,
             'show_prayer_request_button' => true,
             'prayers_per_page' => 5,
@@ -218,6 +220,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         $show_date = (bool) $settings['show_date'];
         $show_acknowledgment_count = (bool) $settings['show_acknowledgment_count'];
         $show_acknowledgment_button = (bool) $settings['show_acknowledgment_button'];
+        $show_reply_button = (bool) $settings['show_reply_button'];
+        $show_share_button = (bool) $settings['show_share_button'];
         $show_category = (bool) $settings['show_category'];
         $selected_category = $settings['prayer_category'] ?? 'all';
 
@@ -269,30 +273,33 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
                 echo '</div>';
 
-                $hasFooterLeft = $show_acknowledgment_button;
-                $hasFooterRight = $show_phone || $show_email;
+                $hasFooterLeft = $show_acknowledgment_button || $show_share_button || $show_reply_button;
+                $hasFooterRight = ($show_phone && !empty($prayer['phone']))
+                    || ($show_email && !empty($prayer['email']));
 
                 if ($hasFooterLeft || $hasFooterRight) {
                     echo '<div class="brz-ministryBrandsPrayerWall__card-footer">';
 
-                    if ($show_acknowledgment_button) {
-                        $ackLink = $prayer['ackLink'] ?? '#';
-                        $ackLinkEsc = self::escapeHtml($ackLink);
-                        $prayerId = self::escapeHtml($prayer['uuid']);
-                        $ackCount = (int) ($prayer['ackCount'] ?? 0);
-
+                    if ($hasFooterLeft) {
                         echo '<div class="brz-ministryBrandsPrayerWall__footer-left">';
 
-                        $this->renderAckButtonHtml(
-                            $prayer['uuid'],
-                            $ackCount,
-                            $ackLink,
-                            $show_acknowledgment_count,
-                            false
-                        );
+                        if ($show_acknowledgment_button) {
+                            $this->renderAckButtonHtml(
+                                $prayer['uuid'],
+                                (int) ($prayer['ackCount'] ?? 0),
+                                $prayer['ackLink'] ?? '#',
+                                $show_acknowledgment_count,
+                                false
+                            );
+                        }
 
-                        echo self::renderShareDropdown($prayer);
-                        echo self::renderReplyButton($prayer);
+                        if ($show_share_button) {
+                            echo self::renderShareDropdown($prayer);
+                        }
+
+                        if ($show_reply_button) {
+                            echo self::renderReplyButton($prayer);
+                        }
 
                         echo '</div>';
                     }
