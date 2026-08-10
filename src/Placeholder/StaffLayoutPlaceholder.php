@@ -5,9 +5,91 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class StaffLayoutPlaceholder extends PlaceholderAbstract
+class StaffLayoutPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_staff_layout';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_group_filter' => true,
+            'show_search' => true,
+            'show_images' => true,
+            'show_title' => true,
+            'show_position' => true,
+            'show_groups' => true,
+            'show_phone_work' => false,
+            'show_phone_cell' => false,
+            'show_email' => false,
+            'show_facebook' => false,
+            'show_twitter' => false,
+            'show_website' => false,
+            'show_instagram' => false,
+            'show_meta_headings' => false,
+            'show_full_email' => false,
+            'show_res' => false,
+            'detail_page_button_text' => 'Read More',
+            'detail_page' => '',
+            'show_meta_icons' => false,
+            'search_placeholder' => 'Search',
+            'group_filter_heading' => 'Group',
+            'howmany' => 9,
+            'show_pagination' => true,
+            'series' => '',
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $series_filter = ($settings['series'] && $settings['series'] != '') ? $settings['series'] : false;
+
+        $queries = [];
+
+        if ($settings['show_group_filter']) {
+            $groups_queryArr = [
+                'module' => 'group',
+                'display' => 'list',
+            ];
+
+            if ($series_filter) {
+                $groups_queryArr['find_series'] = $series_filter;
+            }
+
+            $queries[] = $groups_queryArr;
+        }
+
+        if (isset($_GET['mc-search_term'])) {
+            $queries[] = [
+                'module' => 'member',
+                'display' => 'list',
+                'order' => 'position',
+                'emailencode' => 'no',
+                'restrict' => 'no',
+            ];
+        } else {
+            $queryArr = [
+                'module' => 'member',
+                'display' => 'list',
+                'order' => 'position',
+                'emailencode' => 'no',
+                'restrict' => 'no',
+            ];
+
+            $group_filter = isset($_GET['mc-group']) ? $_GET['mc-group'] : '';
+
+            if ($group_filter) {
+                $queryArr['find_group'] = $group_filter;
+            }
+
+            if ($series_filter) {
+                $queryArr['find_group_series'] = $series_filter;
+                $queryArr['groupby'] = 'none';
+            }
+
+            $queries[] = $queryArr;
+        }
+
+        return $queries;
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

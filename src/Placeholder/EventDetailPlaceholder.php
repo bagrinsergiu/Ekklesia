@@ -8,9 +8,63 @@ use Kigkonsult\Icalcreator\Vcalendar;
 use DateTime;
 use DateTimeZone;
 
-class EventDetailPlaceholder extends PlaceholderAbstract
+class EventDetailPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_event_detail';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_image'             => false,
+            'show_title'             => false,
+            'show_date'              => false,
+            'show_category'          => false,
+            'show_group'             => false,
+            'show_meta_headings'     => false,
+            'show_location'          => false,
+            'show_room'              => false,
+            'show_coordinator'       => false,
+            'show_coordinator_email' => false,
+            'show_coordinator_phone' => false,
+            'show_cost'              => false,
+            'show_website'           => false,
+            'show_registration'      => false,
+            'show_description'       => false,
+            'events_recent'          => false,
+            'previous_page'          => false,
+            'show_subscribe_to_event'=> false,
+            'subscribe_to_event_button_text' => '',
+            'show_meta_icons'        => false,
+            'date_format'            => 'g:i a'
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        if (isset($_GET['mc-slug'])) {
+            $slug = $_GET['mc-slug'];
+        } elseif ($settings['events_recent']) {
+            $slug = $settings['events_recent'];
+        } else {
+            return [
+                [
+                    'module'      => 'event',
+                    'display'     => 'list',
+                    'order'       => 'recent',
+                    'emailencode' => 'no',
+                    'howmany'     => 1,
+                ],
+            ];
+        }
+
+        return [
+            [
+                'module'      => 'event',
+                'display'     => 'detail',
+                'emailencode' => 'no',
+                'find'        => $slug,
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

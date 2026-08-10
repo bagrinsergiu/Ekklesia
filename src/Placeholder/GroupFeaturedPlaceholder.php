@@ -5,9 +5,75 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class GroupFeaturedPlaceholder extends PlaceholderAbstract
+class GroupFeaturedPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_group_featured';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_title'              => false,
+            'show_image'              => false,
+            'show_category'           => false,
+            'show_group'              => false,
+            'show_day'                => false,
+            'show_times'              => false,
+            'show_status'             => false,
+            'show_childcare'          => false,
+            'show_resourcelink'       => false,
+            'show_preview'            => false,
+            'group_latest'            => false,
+            'group_recent_list'       => false,
+            'group_slug'              => false,
+            'category'                => 'all',
+            'group'                   => 'all',
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
+            'slug'                    => false,
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $group_recent_list = $settings['group_recent_list'] != 'none' ? $settings['group_recent_list'] : '';
+        $category          = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group             = $settings['group'] != 'all' ? $settings['group'] : '';
+
+        $queries = [];
+        $slug    = $settings['slug'];
+
+        if ($settings['group_latest']) {
+            $queries[] = [
+                'module'        => 'smallgroup',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'howmany'       => 1,
+                'find_category' => $category,
+                'find_group'    => $group,
+                'emailencode'   => 'no',
+                'show'          => "__endtime format='g:ia'__",
+            ];
+        } else {
+            if ($settings['group_slug']) {
+                $slug = $settings['group_slug'];
+            } elseif ($group_recent_list != '') {
+                $slug = $group_recent_list;
+            }
+        }
+
+        if (!empty($slug)) {
+            $queries[] = [
+                'module'      => 'smallgroup',
+                'display'     => 'detail',
+                'find'        => $slug,
+                'emailencode' => 'no',
+                'show'        => "__endtime format='g:ia'__",
+            ];
+        }
+
+        return $queries;
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

@@ -5,9 +5,59 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class StaffFeaturedPlaceholder extends PlaceholderAbstract
+class StaffFeaturedPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_staff_featured';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $settings = array_merge([
+            'staff_slug'         => '',
+            'show_latest_staff'  => false,
+            'show_image'         => true,
+            'show_title'         => true,
+            'show_position'      => true,
+            'show_groups'        => false,
+            'show_phone_work'    => false,
+            'show_phone_cell'    => false,
+            'show_email'         => true,
+            'show_facebook'      => true,
+            'show_twitter'       => true,
+            'show_instagram'     => false,
+            'show_website'       => false,
+            'show_rss'           => false,
+            'show_meta_headings' => true,
+            'show_about'         => true,
+            'show_meta_icons'    => false,
+            'show_full_email'    => false,
+            'show_previous_page' => false,
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
+        ], $placeholder->getAttributes());
+
+        if (!$settings['staff_slug']) {
+            return [
+                [
+                    'module'      => 'member',
+                    'display'     => 'list',
+                    'order'       => 'position',
+                    'howmany'     => 1,
+                    'emailencode' => 'no',
+                    'restrict'    => 'no',
+                ],
+            ];
+        }
+
+        return [
+            [
+                'module'      => 'member',
+                'display'     => 'profile',
+                'emailencode' => 'no',
+                'restrict'    => 'no',
+                'find'        => $settings['staff_slug'],
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

@@ -5,9 +5,65 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class SermonDetailPlaceholder extends PlaceholderAbstract
+class SermonDetailPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_sermon_detail';
+
+	public function getPrefetchQueries( ContentPlaceholder $placeholder ): array
+	{
+		$options = [
+			'show_image'                => false,
+			'show_video'                => false,
+			'show_audio'                => false,
+			'show_inline_video'         => false,
+			'show_inline_audio'         => false,
+			'show_media_links_video'    => false,
+			'show_media_links_audio'    => false,
+			'show_media_links_download' => false,
+			'show_media_links_notes'    => false,
+			'show_title'                => false,
+			'show_date'                 => false,
+			'show_category'             => false,
+			'show_group'                => false,
+			'show_series'               => false,
+			'show_preacher'             => false,
+			'show_passage'              => false,
+			'show_meta_headings'        => false,
+			'show_preview'              => false,
+			'sermons_recent'            => '',
+			'previous_page'             => false,
+			'show_meta_icons'           => false
+		];
+
+		$settings = array_merge( $options, $placeholder->getAttributes() );
+
+		if ( ! empty( $_GET['mc-slug'] ) ) {
+			$slug = $_GET['mc-slug'];
+		} elseif ( $settings['sermons_recent'] ) {
+			$slug = $settings['sermons_recent'];
+		} else {
+			return [
+				[
+					'module'      => 'sermon',
+					'display'     => 'list',
+					'order'       => 'recent',
+					'howmany'     => 1,
+					'emailencode' => 'no',
+					'show'        => "__audioplayer__",
+				],
+			];
+		}
+
+		return [
+			[
+				'module'      => 'sermon',
+				'display'     => 'detail',
+				'find'        => $slug,
+				'emailencode' => 'no',
+				'show'        => "__audioplayer__",
+			],
+		];
+	}
 
 	public function echoValue( ContextInterface $context, ContentPlaceholder $placeholder )
 	{

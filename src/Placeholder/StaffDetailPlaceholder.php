@@ -5,9 +5,58 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class StaffDetailPlaceholder extends PlaceholderAbstract
+class StaffDetailPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_staff_detail';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $settings = array_merge([
+            'staff_recent'       => '',
+            'show_image'         => true,
+            'show_title'         => true,
+            'show_position'      => true,
+            'show_groups'        => false,
+            'show_phone_work'    => false,
+            'show_phone_cell'    => false,
+            'show_email'         => true,
+            'show_facebook'      => true,
+            'show_twitter'       => true,
+            'show_instagram'     => false,
+            'show_website'       => false,
+            'show_rss'           => false,
+            'show_meta_headings' => true,
+            'show_about'         => true,
+            'show_meta_icons'    => false,
+            'show_previous_page' => false,
+            'show_full_email'    => false,
+        ], $placeholder->getAttributes());
+
+        $slug = isset($_GET['mc-slug']) ? $_GET['mc-slug'] : $settings['staff_recent'];
+
+        if (!$slug) {
+            return [
+                [
+                    'module'      => 'member',
+                    'display'     => 'list',
+                    'order'       => 'position',
+                    'howmany'     => 1,
+                    'emailencode' => 'no',
+                    'restrict'    => 'no',
+                ],
+            ];
+        }
+
+        return [
+            [
+                'module'      => 'member',
+                'display'     => 'profile',
+                'emailencode' => 'no',
+                'restrict'    => 'no',
+                'find'        => $slug,
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

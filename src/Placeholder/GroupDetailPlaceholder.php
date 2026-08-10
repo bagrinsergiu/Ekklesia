@@ -5,9 +5,58 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class GroupDetailPlaceholder extends PlaceholderAbstract
+class GroupDetailPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
 	const NAME = 'ekk_group_detail';
+
+	public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+	{
+		$options = [
+			'show_image'         => false,
+			'show_title'         => false,
+			'show_category'      => false,
+			'show_group'         => false,
+			'show_meta_headings' => false,
+			'show_day'           => false,
+			'show_times'         => false,
+			'show_status'        => false,
+			'show_childcare'     => false,
+			'show_resourcelink'  => false,
+			'show_content'       => false,
+			'groups_recent'      => false,
+			'previous_page'      => false,
+            'show_meta_icons'    => false,
+			'date_format' 		 => 'g:i a'
+		];
+
+		$settings = array_merge($options, $placeholder->getAttributes());
+
+		if (isset($_GET['mc-slug'])) {
+			$slug = $_GET['mc-slug'];
+		} elseif ($settings['groups_recent']) {
+			$slug = $settings['groups_recent'];
+		} else {
+			return [
+				[
+					'module'      => 'smallgroup',
+					'display'     => 'list',
+					'order'       => 'recent',
+					'howmany'     => 1,
+					'emailencode' => 'no',
+				],
+			];
+		}
+
+		return [
+			[
+				'module'      => 'smallgroup',
+				'display'     => 'detail',
+				'find'        => $slug,
+				'show'        => "__endtime format='g:ia'__",
+				'emailencode' => 'no',
+			],
+		];
+	}
 
 	public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
 	{

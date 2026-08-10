@@ -6,11 +6,99 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class SermonFeaturedPlaceholder extends PlaceholderAbstract
+class SermonFeaturedPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_sermon_featured';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_image'              => false,
+            'show_video'              => false,
+            'show_audio'              => false,
+            'show_inline_video'       => false,
+            'show_inline_audio'       => false,
+            'show_title'              => false,
+            'show_date'               => false,
+            'show_category'           => false,
+            'show_group'              => false,
+            'show_series'             => false,
+            'show_preacher'           => false,
+            'show_passage'            => false,
+            'show_meta_headings'      => false,
+            'show_content'            => false,
+            'sermon_latest'           => false,
+            'sermon_recent_list'      => 'none',
+            'sermon_slug'             => false,
+            'category'                => 'all',
+            'group'                   => 'all',
+            'series'                  => 'all',
+            'features'                => '',
+            'nonfeatures'             => '',
+            'show_media_links'        => false,
+            'show_preview'            => false,
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
+            'show_meta_icons'         => false
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $sermon_recent_list = $settings['sermon_recent_list'] != 'none' ? $settings['sermon_recent_list'] : '';
+        $category           = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group              = $settings['group'] != 'all' ? $settings['group'] : '';
+        $series             = $settings['series'] != 'all' ? $settings['series'] : '';
+        $features           = $settings['features'];
+        $nonfeatures        = $settings['nonfeatures'];
+        $slug               = false;
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        if ($settings['sermon_latest']) {
+            return [
+                [
+                    'module'        => 'sermon',
+                    'display'       => 'list',
+                    'order'         => 'recent',
+                    'howmany'       => 1,
+                    'find_category' => $category,
+                    'find_group'    => $group,
+                    'find_series'   => $series,
+                    'features'      => $features,
+                    'nonfeatures'   => $nonfeatures,
+                    'emailencode'   => 'no',
+                    'show'          => "__audioplayer__",
+                ],
+            ];
+        }
+
+        if ($settings['sermon_slug']) {
+            $slug = $settings['sermon_slug'];
+        } elseif ($sermon_recent_list != '') {
+            $slug = $sermon_recent_list;
+        }
+
+        if ($slug) {
+            return [
+                [
+                    'module'      => 'sermon',
+                    'display'     => 'detail',
+                    'find'        => $slug,
+                    'emailencode' => 'no',
+                    'show'        => "__videoplayer fullscreen='true'__",
+                    'show'        => "__audioplayer__",
+                ],
+            ];
+        }
+
+        return [];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

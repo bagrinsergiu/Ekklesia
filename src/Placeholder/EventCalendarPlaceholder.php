@@ -8,12 +8,62 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 
-class EventCalendarPlaceholder extends PlaceholderAbstract
+class EventCalendarPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_event_calendar';
 
     private $time = false;
     private $timeFormat = '24';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'category'                      => 'all',
+            'group'                         => 'all',
+            'features'                      => '',
+            'nonfeatures'                   => '',
+            'detail_page'                   => false,
+            'howmanymonths'                 => 3,
+            'time'                          => false,
+            'time_format'                   => '24',
+            'showSubscribeToCalendarButton' => false,
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $category      = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group         = $settings['group'] != 'all' ? $settings['group'] : '';
+        $calendarStart = date('Y-m-d');
+        $calendarEnd   = date('Y-m-d', strtotime("+{$settings['howmanymonths']} months"));
+        $date1         = new DateTime($calendarStart);
+        $date2         = new DateTime($calendarEnd);
+        $diff          = $date1->diff($date2, true);
+        $calendarDays  = $diff->format('%a');
+        $features      = $settings['features'];
+        $nonfeatures   = $settings['nonfeatures'];
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        return [
+            [
+                'module'        => 'event',
+                'display'       => 'list',
+                'emailencode'   => 'no',
+                'recurring'     => 'yes',
+                'repeatevent'   => 'yes',
+                'groupby'       => 'day',
+                'howmanydays'   => $calendarDays,
+                'find_category' => $category,
+                'find_group'    => $group,
+                'features'      => $features,
+                'nonfeatures'   => $nonfeatures,
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

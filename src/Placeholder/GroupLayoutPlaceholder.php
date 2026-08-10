@@ -6,11 +6,101 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class GroupLayoutPlaceholder extends PlaceholderAbstract
+class GroupLayoutPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_group_layout';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_category'                   => true,
+            'parent_category'                 => '',
+            'show_category_filter'            => true,
+            'category_filter_parent'          => true,
+            'category_filter_heading'         => 'Category',
+            'show_category_filter_add1'       => false,
+            'category_filter_parent_add1'     => '',
+            'category_filter_heading_add1'    => 'Category',
+            'show_category_filter_add2'       => false,
+            'category_filter_parent_add2'     => '',
+            'category_filter_heading_add2'    => 'Category',
+            'show_category_filter_add3'       => true,
+            'category_filter_parent_add3'     => '',
+            'category_filter_heading_add3'    => 'Category',
+            'show_group_filter'               => true,
+            'group_filter_heading'            => 'Group',
+            'show_search'                     => true,
+            'search_placeholder'              => 'Search',
+            'show_pagination'                 => true,
+            'howmany'                         => 9,
+            'column_count'                    => 3,
+            'column_count_tablet'             => 2,
+            'column_count_mobile'             => 1,
+            'show_images'                     => true,
+            'show_day'                        => true,
+            'show_times'                      => true,
+            'show_group'                      => true,
+            'show_status'                     => true,
+            'show_childcare'                  => true,
+            'show_resourcelink'               => true,
+            'show_preview'                    => true,
+            'detail_page_button_text'         => false,
+            'sticky_space'                    => 0,
+            'detail_page'                     => false,
+            'show_meta_icons'                 => false,
+            'date_format'                     => 'g:i a',
+            'group_slug'                      => ''
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $requestGroup = $_GET['mc-group'] ?? false;
+
+        $queries = [
+            [
+                'module'     => 'smallgroup',
+                'display'    => 'categories',
+                'find_group' => $settings['group_slug'] ?: $requestGroup
+            ],
+            [
+                'module'          => 'smallgroup',
+                'display'         => 'categories',
+                'parent_category' => $settings['parent_category'],
+            ],
+            [
+                'module'  => 'smallgroup',
+                'display' => 'list',
+                'groupby' => 'group'
+            ],
+        ];
+
+        if (isset($_GET['mc-search'])) {
+            $queries[] = [
+                'module'        => 'search',
+                'display'       => 'results',
+                'howmany'       => '100',
+                'find_category' => $settings['parent_category'],
+                'keywords'      => $_GET['mc-search'],
+                'find_module'   => 'smallgroup',
+                'hide_module'   => 'media',
+            ];
+        } else {
+            $queries[] = [
+                'module'        => 'smallgroup',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'emailencode'   => 'no',
+                'howmany'       => '100',
+                'find_category' => $settings['parent_category'],
+                'find_group'    => $settings['group_slug'] ?: $requestGroup,
+                'show'          => "__endtime format='g:ia'__",
+            ];
+        }
+
+        return $queries;
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

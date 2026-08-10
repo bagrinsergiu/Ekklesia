@@ -5,9 +5,21 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class PrayerPlaceholder extends PlaceholderAbstract
+class PrayerPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_prayer';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        return [
+            [
+                'module'  => 'fmsform',
+                'display' => 'detail',
+                'find'    => 'prayer-request',
+                'show'    => '__embedhtml__'
+            ]
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

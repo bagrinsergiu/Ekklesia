@@ -6,11 +6,94 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class ArticleLayoutPlaceholder extends PlaceholderAbstract
+class ArticleLayoutPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_article_layout';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_category'                => false,
+            'parent_category'              => 'articles',
+            'show_category_filter'         => true,
+            'category_filter_parent'       => 'childrens-ministry',
+            'category_filter_heading'      => 'Category',
+            'show_category_filter_add1'    => false,
+            'category_filter_parent_add1'  => '',
+            'category_filter_heading_add1' => 'Category',
+            'show_category_filter_add2'    => false,
+            'category_filter_parent_add2'  => '',
+            'category_filter_heading_add2' => 'Category',
+            'show_category_filter_add3'    => false,
+            'category_filter_parent_add3'  => '',
+            'category_filter_heading_add3' => 'Category',
+            'show_group_filter'            => true,
+            'group_filter_heading'         => 'Group',
+            'show_search'                  => true,
+            'search_placeholder'           => 'Search',
+            'show_pagination'              => true,
+            'show_series_filter'           => true,
+            'series_filter_heading'        => 'Series',
+            'show_author_filter'           => true,
+            'author_filter_heading'        => 'Author',
+            'howmany'                      => 3,
+            'show_images'                  => true,
+            'show_video'                   => false,
+            'show_audio'                   => false,
+            'show_media_links'             => false,
+            'show_title'                   => true,
+            'show_date'                    => false,
+            'show_group'                   => false,
+            'show_series'                  => false,
+            'show_author'                  => false,
+            'show_meta_headings'           => false,
+            'show_preview'                 => false,
+            'detail_page_button_text'      => '',
+            'detail_page'                  => '',
+            'show_meta_icons'        => false
+        ];
+
+        $settings        = array_merge($options, $placeholder->getAttributes());
+        $parent_category = $settings['parent_category'];
+
+        $queries = [
+            ['module' => 'article', 'display' => 'categories'],
+            ['module' => 'article', 'display' => 'categories', 'parent_category' => $parent_category,],
+            ['module' => 'article', 'display' => 'list', 'groupby' => 'group', 'find_parent_category' => $parent_category,],
+            ['module' => 'article', 'display' => 'list', 'groupby' => 'series', 'find_parent_category' => $parent_category,],
+            ['module' => 'article', 'display' => 'list', 'groupby' => 'author', 'find_parent_category' => $parent_category,],
+        ];
+
+        if (isset($_GET['mc-search_term'])) {
+            $queries[] = [
+                'module'        => 'search',
+                'display'       => 'results',
+                'howmany'       => '100',
+                'find_category' => $parent_category,
+                'keywords'      => $_GET['mc-search_term'],
+                'find_module'   => 'article',
+                'hide_module'   => 'media',
+            ];
+        } else {
+            $queries[] = [
+                'module'               => 'article',
+                'display'              => 'list',
+                'order'                => 'recent',
+                'emailencode'          => 'no',
+                'howmany'              => '100',
+                'find_parent_category' => $parent_category,
+                'find_group'           => isset($_GET['mc-group']) ? $_GET['mc-group'] : '',
+                'find_series'          => isset($_GET['mc-series']) ? $_GET['mc-series'] : '',
+                'find_author'          => isset($_GET['mc-author']) ? $_GET['mc-author'] : '',
+                'show'                 => "__videoplayer fullscreen='true'__",
+                'show'                 => "__audioplayer__",
+            ];
+        }
+
+        return $queries;
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

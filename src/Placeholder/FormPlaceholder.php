@@ -5,9 +5,33 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class FormPlaceholder extends PlaceholderAbstract
+class FormPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_form';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $atts = $placeholder->getAttributes();
+
+        if (empty($atts['form'])) {
+            return [];
+        }
+
+        $isEditor = strpos($_SERVER['REQUEST_URI'], 'placeholders_bulks') || (isset($_POST['action']) && $_POST['action'] == 'brizy_placeholders_content');
+
+        if ($isEditor) {
+            return [];
+        }
+
+        return [
+            [
+                'module'  => 'fmsform',
+                'display' => 'detail',
+                'find_id' => $atts['form'],
+                'show'    => '__embedhtml__'
+            ]
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

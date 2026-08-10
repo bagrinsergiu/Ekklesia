@@ -6,11 +6,58 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class ArticleListPlaceholder extends PlaceholderAbstract
+class ArticleListPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_article_list';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'category'                => '',
+            'group'                   => '',
+            'series'                  => '',
+            'howmany'                 => 3,
+            'show_pagination'         => false,
+            'features'                => '',
+            'nonfeatures'             => '',
+            'show_images'             => true,
+            'show_video'              => false,
+            'show_audio'              => false,
+            'show_media_links'        => false,
+            'show_title'              => true,
+            'show_date'               => false,
+            'show_category'           => false,
+            'show_group'              => false,
+            'show_series'             => false,
+            'show_author'             => false,
+            'show_meta_headings'      => false,
+            'show_preview'            => false,
+            'detail_page_button_text' => '',
+            'detail_page'             => '',
+            'show_meta_icons'         => false,
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        return [
+            [
+                'module'        => 'article',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'emailencode'   => 'no',
+                'howmany'       => $settings['howmany'],
+                'page'          => isset($_GET['mc-page']) ? $_GET['mc-page'] : 1,
+                'find_category' => $settings['category'] != 'all' ? $settings['category'] : '',
+                'find_group'    => $settings['group'] != 'all' ? $settings['group'] : '',
+                'find_series'   => $settings['series'] != 'all' ? $settings['series'] : '',
+                'features'      => $settings['nonfeatures'] ? '' : $settings['features'],
+                'nonfeatures'   => $settings['features'] ? '' : $settings['nonfeatures'],
+                'after_show'    => '__pagination__',
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

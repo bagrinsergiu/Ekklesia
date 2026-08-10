@@ -5,9 +5,56 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class ArticleDetailPlaceholder extends PlaceholderAbstract
+class ArticleDetailPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_article_detail';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $settings = array_merge([
+            'show_image'                => true,
+            'show_video'                => false,
+            'show_audio'                => false,
+            'show_media_links_video'    => false,
+            'show_media_links_audio'    => false,
+            'show_media_links_download' => false,
+            'show_media_links_notes'    => false,
+            'show_title'                => true,
+            'show_date'                 => true,
+            'show_category'             => true,
+            'show_group'                => false,
+            'show_series'               => false,
+            'show_author'               => true,
+            'show_meta_headings'        => false,
+            'show_content'              => false,
+            'articles_recent'           => '',
+            'previous_page'             => false,
+            'show_meta_icons'           => false,
+        ], $placeholder->getAttributes());
+
+        $slug = empty($_GET['mc-slug']) ? $settings['articles_recent'] : $_GET['mc-slug'];
+
+        if (!$slug) {
+            return [
+                [
+                    'module'      => 'article',
+                    'display'     => 'list',
+                    'order'       => 'recent',
+                    'howmany'     => 1,
+                    'emailencode' => 'no',
+                ],
+            ];
+        }
+
+        return [
+            [
+                'module'      => 'article',
+                'display'     => 'detail',
+                'find'        => $slug,
+                'emailencode' => 'no',
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

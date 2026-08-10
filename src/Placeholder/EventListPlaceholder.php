@@ -6,11 +6,70 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class EventListPlaceholder extends PlaceholderAbstract
+class EventListPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_event_list';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_images'             => false,
+            'show_title'              => false,
+            'show_date'               => false,
+            'show_category'           => false,
+            'show_group'              => false,
+            'show_meta_headings'      => false,
+            'category'                => 'all',
+            'group'                   => 'all',
+            'features'                => '',
+            'nonfeatures'             => '',
+            'show_preview'            => false,
+            'detail_page_button_text' => '',
+            'detail_page'             => false,
+            'howmany'                 => 9,
+            'column_count'            => 3,
+            'column_count_tablet'     => 2,
+            'column_count_mobile'     => 1,
+            'show_pagination'         => false,
+            'show_location'           => false,
+            'show_registration'       => false,
+            'sticky_space'            => 0,
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $category    = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group       = $settings['group'] != 'all' ? $settings['group'] : '';
+        $page        = isset($_GET['mc-page']) ? $_GET['mc-page'] : 1;
+        $features    = $settings['features'];
+        $nonfeatures = $settings['nonfeatures'];
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        return [
+            [
+                'module'        => 'event',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'emailencode'   => 'no',
+                'howmany'       => $settings['howmany'],
+                'page'          => $page,
+                'find_category' => $category,
+                'find_group'    => $group,
+                'features'      => $features,
+                'nonfeatures'   => $nonfeatures,
+                'after_show'    => '__pagination__'
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

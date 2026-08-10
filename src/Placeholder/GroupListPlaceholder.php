@@ -6,11 +6,57 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class GroupListPlaceholder extends PlaceholderAbstract
+class GroupListPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_group_list';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_image'                      => false,
+            'show_category'                   => false,
+            'show_group'                      => false,
+            'show_coordinator'                => false,
+            'category'                        => 'all',
+            'group'                           => 'all',
+            'show_preview'                    => false,
+            'detail_page_button_text'         => '',
+            'detail_page'                     => '',
+            'howmany'                         => 9,
+            'column_count'                    => 3,
+            'column_count_tablet'             => 2,
+            'column_count_mobile'             => 1,
+            'show_pagination'                 => false,
+            'show_images'                     => false,
+            'show_day'                        => false,
+            'show_times'                      => false,
+            'show_status'                     => false,
+            'show_childcare'                  => false,
+            'show_resourcelink'               => false,
+            'sticky_space'                    => 0,
+            'show_meta_icons'                 => false,
+            'date_format'                     => 'g:i a'
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        return [
+            [
+                'module'        => 'smallgroup',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'emailencode'   => 'no',
+                'howmany'       => $settings['howmany'],
+                'page'          => isset($_GET['mc-page']) ? $_GET['mc-page'] : 1,
+                'find_category' => $settings['category'] == 'all' ? '' : $settings['category'],
+                'find_group'    => $settings['group'] == 'all' ? '' : $settings['group'],
+                'show'          => "__endtime format='g:ia'__",
+                'after_show'    => '__pagination__'
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

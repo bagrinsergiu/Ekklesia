@@ -70,6 +70,11 @@ abstract class PlaceholderAbstract extends AbstractPlaceholder
         return $this->group;
     }
 
+    public function getMonkCms(): MonkCms
+    {
+        return $this->monkCMS;
+    }
+
 	public function getConfigStructure()
 	{
 		// TODO: Implement getConfigStructure() method.

@@ -6,11 +6,94 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class EventFeaturedPlaceholder extends PlaceholderAbstract
+class EventFeaturedPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_event_featured';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_image'              => false,
+            'show_title'              => false,
+            'show_date'               => false,
+            'show_category'           => false,
+            'show_group'              => false,
+            'show_meta_headings'      => false,
+            'show_location'           => false,
+            'show_room'               => false,
+            'show_coordinator'        => false,
+            'show_coordinator_email'  => false,
+            'show_coordinator_phone'  => false,
+            'show_cost'               => false,
+            'show_website'            => false,
+            'show_registration'       => false,
+            'show_description'        => false,
+            'show_preview'            => false,
+            'show_latest_events'      => false,
+            'recentEvents'            => '',
+            'event_slug'              => false,
+            'category'                => 'all',
+            'group'                   => 'all',
+            'features'                => '',
+            'nonfeatures'             => '',
+            'detail_page_button_text' => false,
+            'detail_page'             => false,
+            'show_meta_icons'         => false,
+            'date_format'             => 'g:i a'
+        ];
+
+        $settings = array_merge($options, $placeholder->getAttributes());
+
+        $recentEvents = $settings['recentEvents'] != '' ? $settings['recentEvents'] : '';
+        $category     = $settings['category'] != 'all' ? $settings['category'] : '';
+        $group        = $settings['group'] != 'all' ? $settings['group'] : '';
+        $features     = $settings['features'];
+        $nonfeatures  = $settings['nonfeatures'];
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        if ($settings['show_latest_events']) {
+            return [
+                [
+                    'module'        => 'event',
+                    'display'       => 'list',
+                    'order'         => 'recent',
+                    'howmany'       => 1,
+                    'find_category' => $category,
+                    'find_group'    => $group,
+                    'features'      => $features,
+                    'nonfeatures'   => $nonfeatures,
+                    'emailencode'   => 'no',
+                ],
+            ];
+        }
+
+        $slug = false;
+        if ($settings['event_slug']) {
+            $slug = $settings['event_slug'];
+        } elseif ($recentEvents != '') {
+            $slug = $recentEvents;
+        }
+
+        if ($slug) {
+            return [
+                [
+                    'module'      => 'event',
+                    'display'     => 'detail',
+                    'find'        => $slug,
+                    'emailencode' => 'no',
+                ],
+            ];
+        }
+
+        return [];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

@@ -5,9 +5,41 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class SermonListPlaceholder extends PlaceholderAbstract
+class SermonListPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_sermon_list';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $attributes = $placeholder->getAttributes();
+
+        $features    = empty($attributes['features']) ? '' : 'features';
+        $nonfeatures = empty($attributes['nonfeatures']) ? '' : 'nonfeatures';
+
+        if ($features) {
+            $nonfeatures = '';
+        } elseif ($nonfeatures) {
+            $features = '';
+        }
+
+        return [
+            [
+                'module'        => 'sermon',
+                'display'       => 'list',
+                'order'         => 'recent',
+                'emailencode'   => 'no',
+                'howmany'       => isset($attributes['howmany']) ? intval(round($attributes['howmany'])) : 9,
+                'page'          => isset($_GET['mc-page']) ? $_GET['mc-page'] : 1,
+                'find_category' => (isset($attributes['category']) && $attributes['category'] != 'all') ? $attributes['category'] : '',
+                'find_group'    => (isset($attributes['group']) && $attributes['group'] != 'all') ? $attributes['group'] : '',
+                'find_series'   => (isset($attributes['series']) && $attributes['series'] != 'all') ? $attributes['series'] : '',
+                'features'      => $features,
+                'nonfeatures'   => $nonfeatures,
+                'show'          => "__audioplayer__",
+                'after_show'    => '__pagination__',
+            ],
+        ];
+    }
 
     public function getValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

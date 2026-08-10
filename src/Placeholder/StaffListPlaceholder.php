@@ -5,9 +5,45 @@ namespace BrizyEkklesia\Placeholder;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class StaffListPlaceholder extends PlaceholderAbstract
+class StaffListPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     const NAME = 'ekk_staff_list';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $settings = array_merge([
+            'group' => '',
+            'show_images' => true,
+            'show_title' => true,
+            'show_position' => true,
+            'show_groups' => false,
+            'show_phone_work' => false,
+            'show_phone_cell' => false,
+            'show_email' => false,
+            'show_facebook' => false,
+            'show_twitter' => false,
+            'show_website' => false,
+            'show_instagram' => false,
+            'show_meta_headings' => false,
+            'show_meta_icons' => false,
+            'howmany' => 9,
+            'detail_page_button_text' => '',
+            'detail_page' => '',
+            'show_full_email' => false,
+            'show_pagination' => true,
+        ], $placeholder->getAttributes());
+
+        return [
+            [
+                'module' => 'member',
+                'display' => 'list',
+                'order' => 'position',
+                'emailencode' => 'no',
+                'restrict' => 'no',
+                'find_group' => $settings['group'],
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

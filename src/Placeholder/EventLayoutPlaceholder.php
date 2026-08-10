@@ -11,11 +11,177 @@ use DateTime;
 use Exception;
 use ArrayIterator;
 
-class EventLayoutPlaceholder extends PlaceholderAbstract
+class EventLayoutPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_event_layout';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $options = [
+            'show_featured_view'           => true,
+            'view_order_featured'          => 1,
+            'view_featured_heading'        => 'Featured Events',
+            'howmanyfeatured'              => 9,
+            'column_count_featured'        => 3,
+            'column_count_featured_tablet' => 2,
+            'column_count_featured_mobile' => 1,
+            'show_images_featured'         => true,
+            'show_title_featured'          => true,
+            'show_date_featured'           => true,
+            'show_preview_featured'        => true,
+            'show_list_view'               => true,
+            'view_order_list'              => 2,
+            'view_list_heading'            => 'Events List',
+            'show_calendar_view'           => true,
+            'view_order_calendar'          => 3,
+            'view_calendar_heading'        => 'Full Calendar',
+            'howmanymonths'                => 1,
+            'detail_page'                  => false,
+            'detail_page_button_text'      => '',
+            'sticky_space'                 => 0,
+            'parent_category'              => '',
+            'category_filter_list'         => '',
+            'category_filter_list_add1'    => '',
+            'category_filter_list_add2'    => '',
+            'category_filter_list_add3'    => '',
+            'show_category_filter'         => true,
+            'category_filter_parent'       => '',
+            'category_filter_heading'      => 'Category',
+            'show_category_filter_add1'    => false,
+            'category_filter_parent_add1'  => '',
+            'category_filter_heading_add1' => 'Category',
+            'show_category_filter_add2'    => false,
+            'category_filter_parent_add2'  => '',
+            'category_filter_heading_add2' => 'Category',
+            'show_category_filter_add3'    => true,
+            'category_filter_parent_add3'  => '',
+            'category_filter_heading_add3' => 'Category',
+            'show_group_filter'            => false,
+            'group_filter_heading'         => 'Group',
+            'show_search'                  => true,
+            'search_placeholder'           => 'Search',
+            'featuredActive'               => '',
+            'listActive'                   => '',
+            'calendarActive'               => '',
+            'date_format'                  => 'g:i a',
+            'group_slug'                   => '',
+        ];
+
+        $attrs    = $placeholder->getAttributes();
+        $settings = array_merge($options, $attrs);
+
+        $parent_category = $settings['parent_category'] ? [$settings['parent_category']] : [];
+        $calendarStart   = date('Y-m-d');
+        $calendarEnd     = date('Y-m-d', strtotime("+{$settings['howmanymonths']} months"));
+        $date1           = new DateTime($calendarStart);
+        $date2           = new DateTime($calendarEnd);
+        $diff            = $date1->diff($date2, true);
+        $calendarDays    = $diff->format('%a');
+        $requestGroup    = $_GET['mc-group'] ?? false;
+
+        if ($settings['category_filter_list']) {
+            $category_filter_list = preg_replace("/\s+/", "", $settings['category_filter_list']);
+            $category_filter_list = explode(",", $category_filter_list);
+            array_push($parent_category, ...$category_filter_list);
+        }
+
+        if ($settings['category_filter_list_add1']) {
+            $category_filter_list_add1 = preg_replace("/\s+/", "", $settings['category_filter_list_add1']);
+            $category_filter_list_add1 = explode(",", $category_filter_list_add1);
+            array_push($parent_category, ...$category_filter_list_add1);
+        }
+
+        if ($settings['category_filter_list_add2']) {
+            $category_filter_list_add2 = preg_replace("/\s+/", "", $settings['category_filter_list_add2']);
+            $category_filter_list_add2 = explode(",", $category_filter_list_add2);
+            array_push($parent_category, ...$category_filter_list_add2);
+        }
+
+        if ($settings['category_filter_list_add3']) {
+            $category_filter_list_add3 = preg_replace("/\s+/", "", $settings['category_filter_list_add3']);
+            $category_filter_list_add3 = explode(",", $category_filter_list_add3);
+            array_push($parent_category, ...$category_filter_list_add3);
+        }
+
+        $parent_category = $parent_category ? implode(",", $parent_category) : '';
+
+        if (isset($_GET['mc-view'])) {
+            $view = $_GET['mc-view'];
+        } else {
+            $orderArr = [];
+            if ($settings['show_featured_view']) {
+                $orderArr[$settings['view_order_featured']] = "featured";
+            }
+            if ($settings['show_list_view']) {
+                $orderArr[$settings['view_order_list']] = "list";
+            }
+            if ($settings['show_calendar_view']) {
+                $orderArr[$settings['view_order_calendar']] = "calendar";
+            }
+            ksort($orderArr);
+            $orderArr = array_unique($orderArr);
+            $view     = reset($orderArr);
+        }
+
+        $queries = [];
+
+        $queries[] = [
+            'module'     => 'event',
+            'display'    => 'categories',
+            'find_group' => $settings['group_slug'] ?: $requestGroup,
+        ];
+
+        $queries[] = [
+            'module'          => 'event',
+            'display'         => 'categories',
+            'parent_category' => $parent_category,
+        ];
+
+        if ($settings['show_group_filter']) {
+            $queries[] = [
+                'module'  => 'group',
+                'display' => 'list',
+            ];
+        }
+
+        if (isset($_GET['mc-search'])) {
+            $queries[] = [
+                'module'        => 'search',
+                'display'       => 'results',
+                'howmany'       => $settings['howmanyfeatured'],
+                'find_category' => $parent_category,
+                'keywords'      => $_GET['mc-search'],
+                'find_module'   => 'event',
+                'hide_module'   => 'media',
+                'after_show'    => '__pagination__',
+            ];
+        } elseif ($view == "featured") {
+            $queries[] = [
+                'module'               => 'event',
+                'display'              => 'list',
+                'emailencode'          => 'no',
+                'features'             => 'features',
+                'howmany'              => $settings['howmanyfeatured'],
+                'find_parent_category' => $parent_category,
+            ];
+        } else {
+            $queries[] = [
+                'module'               => 'event',
+                'display'              => 'list',
+                'emailencode'          => 'no',
+                'recurring'            => 'yes',
+                'repeatevent'          => 'yes',
+                'groupby'              => 'day',
+                'howmanydays'          => $calendarDays,
+                'find_parent_category' => $parent_category,
+                'find_group'           => $settings['group_slug'] ?: $requestGroup,
+            ];
+        }
+
+        return $queries;
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {

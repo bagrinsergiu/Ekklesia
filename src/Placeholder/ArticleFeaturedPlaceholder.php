@@ -6,11 +6,67 @@ use BrizyEkklesia\HelperTrait;
 use BrizyPlaceholders\ContentPlaceholder;
 use BrizyPlaceholders\ContextInterface;
 
-class ArticleFeaturedPlaceholder extends PlaceholderAbstract
+class ArticleFeaturedPlaceholder extends PlaceholderAbstract implements PrefetchableInterface
 {
     use HelperTrait;
 
     const NAME = 'ekk_article_featured';
+
+    public function getPrefetchQueries(ContentPlaceholder $placeholder): array
+    {
+        $settings = array_merge([
+            'show_image'              => true,
+            'show_video'              => false,
+            'show_audio'              => false,
+            'show_media_links'        => false,
+            'show_title'              => true,
+            'show_date'               => true,
+            'show_category'           => true,
+            'show_group'              => false,
+            'show_series'             => false,
+            'show_author'             => true,
+            'show_meta_headings'      => false,
+            'show_meta_icons'         => false,
+            'show_preview'            => false,
+            'show_content'            => false,
+            'detail_page_button_text' => '',
+            'detail_page'             => '',
+            'article_slug'            => '',
+            'recentArticles'          => '',
+            'features'                => '',
+            'nonfeatures'             => '',
+            'series'                  => 'all',
+            'category'                => 'all',
+            'group'                   => 'all',
+            'show_latest_articles'    => true,
+        ], $placeholder->getAttributes());
+
+        if ($settings['show_latest_articles']) {
+            return [
+                [
+                    'module'        => 'article',
+                    'display'       => 'list',
+                    'order'         => 'recent',
+                    'howmany'       => 1,
+                    'find_category' => $settings['category'] != 'all' ? $settings['category'] : '',
+                    'find_group'    => $settings['group'] != 'all' ? $settings['group'] : '',
+                    'find_series'   => $settings['series'] != 'all' ? $settings['series'] : '',
+                    'features'      => $settings['nonfeatures'] ? '' : $settings['features'],
+                    'nonfeatures'   => $settings['features'] ? '' : $settings['nonfeatures'],
+                    'emailencode'   => 'no',
+                ],
+            ];
+        }
+
+        return [
+            [
+                'module'      => 'article',
+                'display'     => 'detail',
+                'find'        => $settings['recentArticles'] ?: $settings['article_slug'],
+                'emailencode' => 'no',
+            ],
+        ];
+    }
 
     public function echoValue(ContextInterface $context, ContentPlaceholder $placeholder)
     {
