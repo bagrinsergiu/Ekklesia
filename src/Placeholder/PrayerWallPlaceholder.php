@@ -43,6 +43,32 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8');
     }
 
+    /**
+     * Format a US phone number as 555-555-5555.
+     *
+     * Submitters type phone numbers freely, so anything that isn't a plain US
+     * number (short numbers, international, extensions) is returned untouched
+     * rather than reshaped into something misleading.
+     *
+     * @param string $phone
+     * @return string
+     */
+    private static function formatPhone($phone)
+    {
+        $digits = preg_replace('/\D/', '', (string) $phone);
+
+        // Strip the US country code so +1 (555) 555-5555 formats like the rest.
+        if (strlen($digits) === 11 && $digits[0] === '1') {
+            $digits = substr($digits, 1);
+        }
+
+        if (strlen($digits) !== 10) {
+            return (string) $phone;
+        }
+
+        return substr($digits, 0, 3) . '-' . substr($digits, 3, 3) . '-' . substr($digits, 6);
+    }
+
     private function buildPlaceholderString(array $settings): string
     {
         $attrs = [];
@@ -74,6 +100,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
             'show_date' => true,
             'show_acknowledgment_count' => true,
             'show_acknowledgment_button' => true,
+            'show_reply_button' => true,
+            'show_share_button' => true,
             'show_category' => true,
             'show_prayer_request_button' => true,
             'prayers_per_page' => 5,
@@ -94,7 +122,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
         $prayers = [];
         $totalPages = 1;
-        $currentPage = $settings['page'];
+        $currentPage = max(1, (int) $settings['page']);
+        $isLazyLoad = $overflow_behavior === 'lazy_load';
 
         if ($this->prayerCloudApi !== null && $this->prayerCloudApi->isConnected()) {
             $prayersData = $this->prayerCloudApi->getPrayers(
@@ -112,7 +141,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                     $dateStr = '';
                     if (isset($item->meta->posted_at->date)) {
                         $dateObj = date_create($item->meta->posted_at->date);
-                        $dateStr = $dateObj ? date_format($dateObj, 'F j, Y - g:i a') : $item->meta->posted_at->date;
+                        // Abbreviated month and day only, e.g. "Aug 30".
+                        $dateStr = $dateObj ? date_format($dateObj, 'M j') : $item->meta->posted_at->date;
                     }
 
                     $categoryNames = [];
@@ -160,18 +190,37 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         }
 
         echo '<div class="brz-ministryBrandsPrayerWall__container">';
-        echo '<div class="brz-ministryBrandsPrayerWall__cards">';
-        $this->renderPrayerCards($prayers, $settings, $privacy_settings, $placeholderString);
+
+        // Loading overlay. A sibling of `__cards` (not a child) so the lazy-load
+        // swap, which selects `.__cards > *`, never picks it up. It reveals
+        // itself while any element inside the container carries htmx-request —
+        // the clicked pagination link or the Show Next button — via the
+        // `:has(.htmx-request)` rule in the SCSS.
+        echo '<div class="brz-ministryBrandsPrayerWall__loading-overlay">';
+        echo '<div class="brz-ministryBrandsPrayerWall__loading-overlay-content">';
+        echo '<span class="brz-ministryBrandsPrayerWall__loading-spinner"></span>';
+        echo '</div>';
         echo '</div>';
 
-        if ($totalPages > 1) {
-            $this->renderPagination(
+        echo '<div class="brz-ministryBrandsPrayerWall__cards">';
+        $this->renderPrayerCards($prayers, $settings, $privacy_settings, $placeholderString);
+
+        // The lazy load button lives inside the card list, because it swaps
+        // itself for the next page's cards followed by the next button. That
+        // keeps each response to a single page instead of re-sending every
+        // prayer loaded so far.
+        if ($isLazyLoad && $totalPages > 1) {
+            $this->renderLazyLoadPagination(
                 $totalPages,
                 $currentPage,
                 $prayers_per_page,
-                $overflow_behavior,
                 $settings
             );
+        }
+        echo '</div>';
+
+        if (!$isLazyLoad && $totalPages > 1) {
+            $this->renderPagination($totalPages, $currentPage, $settings);
         }
 
         echo '</div>';
@@ -218,6 +267,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         $show_date = (bool) $settings['show_date'];
         $show_acknowledgment_count = (bool) $settings['show_acknowledgment_count'];
         $show_acknowledgment_button = (bool) $settings['show_acknowledgment_button'];
+        $show_reply_button = (bool) $settings['show_reply_button'];
+        $show_share_button = (bool) $settings['show_share_button'];
         $show_category = (bool) $settings['show_category'];
         $selected_category = $settings['prayer_category'] ?? 'all';
 
@@ -236,26 +287,38 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                 echo '<div class="brz-ministryBrandsPrayerWall__card">';
                 echo '<div class="brz-ministryBrandsPrayerWall__card-body">';
 
+                $categories = [];
                 if ($show_category) {
                     $categories = !empty($prayer['categories']) ? $prayer['categories'] : (!empty($prayer['category']) ? [$prayer['category']] : []);
+                }
+
+                // Name, date and category share a single row, with the category
+                // pushed to the right edge rather than sitting on its own line.
+                if ($show_name || $show_date || !empty($categories)) {
+                    echo '<div class="brz-ministryBrandsPrayerWall__title">';
+
+                    // Name and date are grouped so narrow screens can stack them
+                    // as a unit instead of letting a long name wrap mid-row.
+                    if ($show_name || ($show_date && !empty($prayer['date']))) {
+                        echo '<div class="brz-ministryBrandsPrayerWall__meta">';
+
+                        if ($show_name) {
+                            echo '<span class="brz-ministryBrandsPrayerWall__name">' . self::escapeHtml($displayName) . '</span>';
+                        }
+
+                        if ($show_date && !empty($prayer['date'])) {
+                            echo '<span class="brz-ministryBrandsPrayerWall__date">' . self::escapeHtml($prayer['date']) . '</span>';
+                        }
+
+                        echo '</div>';
+                    }
+
                     if (!empty($categories)) {
                         echo '<div class="brz-ministryBrandsPrayerWall__category">';
                         foreach ($categories as $catName) {
                             echo '<span class="brz-ministryBrandsPrayerWall__badge">' . self::escapeHtml($catName) . '</span>';
                         }
                         echo '</div>';
-                    }
-                }
-
-                if ($show_name || (bool) $settings['show_date']) {
-                    echo '<div class="brz-ministryBrandsPrayerWall__title">';
-
-                    if ($show_name) {
-                        echo '<span class="brz-ministryBrandsPrayerWall__name">' . self::escapeHtml($displayName) . '</span>';
-                    }
-
-                    if ($show_date && !empty($prayer['date'])) {
-                        echo '<span class="brz-ministryBrandsPrayerWall__date">' . self::escapeHtml($prayer['date']) . '</span>';
                     }
 
                     echo '</div>';
@@ -269,30 +332,33 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
                 echo '</div>';
 
-                $hasFooterLeft = $show_acknowledgment_button;
-                $hasFooterRight = $show_phone || $show_email;
+                $hasFooterLeft = $show_acknowledgment_button || $show_share_button || $show_reply_button;
+                $hasFooterRight = ($show_phone && !empty($prayer['phone']))
+                    || ($show_email && !empty($prayer['email']));
 
                 if ($hasFooterLeft || $hasFooterRight) {
                     echo '<div class="brz-ministryBrandsPrayerWall__card-footer">';
 
-                    if ($show_acknowledgment_button) {
-                        $ackLink = $prayer['ackLink'] ?? '#';
-                        $ackLinkEsc = self::escapeHtml($ackLink);
-                        $prayerId = self::escapeHtml($prayer['uuid']);
-                        $ackCount = (int) ($prayer['ackCount'] ?? 0);
-
+                    if ($hasFooterLeft) {
                         echo '<div class="brz-ministryBrandsPrayerWall__footer-left">';
 
-                        $this->renderAckButtonHtml(
-                            $prayer['uuid'],
-                            $ackCount,
-                            $ackLink,
-                            $show_acknowledgment_count,
-                            false
-                        );
+                        if ($show_acknowledgment_button) {
+                            $this->renderAckButtonHtml(
+                                $prayer['uuid'],
+                                (int) ($prayer['ackCount'] ?? 0),
+                                $prayer['ackLink'] ?? '#',
+                                $show_acknowledgment_count,
+                                false
+                            );
+                        }
 
-                        echo self::renderShareDropdown($prayer);
-                        echo self::renderReplyButton($prayer);
+                        if ($show_share_button) {
+                            echo self::renderShareDropdown($prayer);
+                        }
+
+                        if ($show_reply_button) {
+                            echo self::renderReplyButton($prayer);
+                        }
 
                         echo '</div>';
                     }
@@ -303,7 +369,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                         if ($show_phone && !empty($prayer['phone'])) {
                             echo '<span class="brz-ministryBrandsPrayerWall__phone">';
                             echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brz-ministryBrandsPrayerWall__contact-icon" fill="currentColor"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>';
-                            echo self::escapeHtml($prayer['phone']);
+                            echo self::escapeHtml(self::formatPhone($prayer['phone']));
                             echo '</span>';
                         }
 
@@ -325,26 +391,14 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         }
     }
 
-    private function renderPagination(
-        int $totalPages,
-        int $currentPage,
-        int $prayers_per_page,
-        string $overflow_behavior,
-        array $settings
-    ) {
+    /**
+     * Numbered pagination only — the lazy load button is rendered inside the
+     * card list instead, so it can swap itself for the next page.
+     */
+    private function renderPagination(int $totalPages, int $currentPage, array $settings)
+    {
         echo '<div class="brz-ministryBrandsPrayerWall__pagination">';
-
-        if ($overflow_behavior === 'lazy_load') {
-            $this->renderLazyLoadPagination(
-                $totalPages,
-                $currentPage,
-                $prayers_per_page,
-                $settings
-            );
-        } else {
-            $this->renderRegularPagination($totalPages, $currentPage, $settings);
-        }
-
+        $this->renderRegularPagination($totalPages, $currentPage, $settings);
         echo '</div>';
     }
 
@@ -364,11 +418,14 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
         );
         $url = $this->buildHtmxUrl($nextPlaceholder, $nextPage);
 
+        // Replaces itself with the next page's cards plus that page's own
+        // button, so previously loaded prayers are left untouched. On the last
+        // page the response carries no button and this one simply disappears.
         echo '<button
             class="brz-ministryBrandsPrayerWall__load-more-btn"
             hx-get="' . self::escapeAttr($url) . '"
-            hx-target="closest .brz-ministryBrandsPrayerWall__container"
-            hx-select=".brz-ministryBrandsPrayerWall__container"
+            hx-target="this"
+            hx-select=".brz-ministryBrandsPrayerWall__cards > *"
             hx-swap="outerHTML"
         >Show Next ' . $prayers_per_page . '</button>';
     }
@@ -391,9 +448,9 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
         echo '<li class="brz-ministryBrandsPrayerWall__pagination-item">';
         if ($currentPage > 1) {
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage - 1) . '>&laquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage - 1) . '>&lsaquo;</button>';
         } else {
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&laquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&lsaquo;</button>';
         }
         echo '</li>';
 
@@ -411,9 +468,9 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
         echo '<li class="brz-ministryBrandsPrayerWall__pagination-item">';
         if ($currentPage < $totalPages) {
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage + 1) . '>&raquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" ' . $htmxAttrs($currentPage + 1) . '>&rsaquo;</button>';
         } else {
-            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&raquo;</button>';
+            echo '<button class="brz-ministryBrandsPrayerWall__pagination-link" disabled>&rsaquo;</button>';
         }
         echo '</li>';
 
@@ -423,7 +480,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
     private function renderAckButtonHtml(string $prayerId, int $ackCount, string $ackRequestUrl, bool $showCount, bool $acknowledged = false): void
     {
-        echo '<a id="ack-btn-' . self::escapeAttr($prayerId) . '" href="#" class="brz-ministryBrandsPrayerWall__ack-button"';
+        echo '<a id="ack-btn-' . self::escapeAttr($prayerId) . '" class="brz-ministryBrandsPrayerWall__ack-button"';
         echo ' data-link="' . self::escapeAttr($ackRequestUrl) . '"';
         echo '>';
         echo '<svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__ack-icon" viewBox="0 0 16 12.891" fill="currentColor">';
@@ -451,8 +508,8 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
                 class="brz-ministryBrandsPrayerWall__share-button"
                 type="button"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__share-icon" viewBox="0 0 448 512" fill="currentColor"><path d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>
-                Share
+                <span>Share</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__share-icon" viewBox="0 0 448 512" fill="currentColor"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>
             </button>
             <ul class="brz-ministryBrandsPrayerWall__share-menu">
                 <li><a class="brz-ministryBrandsPrayerWall__share-item" href="https://www.facebook.com/dialog/feed?app_id=184683071273&link=' . $encodedUrl . '&name=Prayer&caption=' . $encodedText . '&redirect_uri=http%3A%2F%2Fwww.facebook.com%2F" target="_blank" rel="noopener">Facebook</a></li>
