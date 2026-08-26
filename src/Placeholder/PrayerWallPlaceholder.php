@@ -532,7 +532,7 @@ class PrayerWallPlaceholder extends PlaceholderAbstract
 
         return '
         <a class="brz-ministryBrandsPrayerWall__reply-button" href="' . $mailto . '">
-            <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__reply-icon" viewBox="0 0 512 512" fill="currentColor"><path d="M205 34.8c11.5 5.1 19 16.6 19 29.2l0 64 112 0C399.4 128 448 176.6 448 240l0 48c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-48c0-26.5-21.5-48-48-48l-112 0 0 64c0 12.6-7.4 24.1-19 29.2s-25 3-34.4-5.4l-160-144C3.9 129.5 0 121 0 112s3.9-17.5 10.6-23.8l160-144c9.4-8.5 22.9-10.6 34.4-5.4z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="brz-ministryBrandsPrayerWall__reply-icon" viewBox="0 0 16 14.857" fill="none"><path d="M6.406.157C6.75.312 7 .688 7 1.063v2h3.501A5.51 5.51 0 0 1 16 8.562c0 3.562-2.562 5.126-3.157 5.469-.062.032-.155.032-.249.032a.576.576 0 0 1-.594-.594c0-.25.126-.469.281-.625.313-.281.719-.811.719-1.75a3 3 0 0 0-3-3H7v2a1.04 1.04 0 0 1-.594.906 1.02 1.02 0 0 1-1.094-.187l-5-4.501C.094 6.126 0 5.875 0 5.562c0-.281.094-.531.312-.719l5-4.499A1.02 1.02 0 0 1 6.406.157" fill="currentColor"/></svg>
             <span>Reply</span>
         </a>';
     }
